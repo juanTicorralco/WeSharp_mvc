@@ -332,8 +332,7 @@
                 nextArrow: "<a href='#'><i class='fa fa-angle-down'></i></a>",
                 asNavFor: '.ps-product__gallery',
                 vertical: vertical,
-                responsive: [
-                    {
+                responsive: [{
                         breakpoint: 1200,
                         settings: {
                             arrows: second.data('arrow'),
@@ -717,8 +716,8 @@
         masonry('.ps-masonry');
         productFilterToggle();
         tabs();
-        slickConfig();     
-        productLightbox();        
+        slickConfig();
+        productLightbox();
         rating();
         backToTop();
         stickyHeader();
@@ -741,11 +740,11 @@
 
     $(window).on('load', function() {
         $('body').addClass('loaded');
-        subscribePopup();
+        // subscribePopup();
     });
 
     $.scrollUp({
-        scrollText:'',
+        scrollText: '',
         scrollSpeed: 1000
     })
 
