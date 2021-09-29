@@ -1,14 +1,26 @@
-<div class="ps-block--promotion-header bg--cover" style="background: url(img/banner/top/header-promotion.jpg);">
+<?php 
+   // http://api.WeSharp2.com/subcategories?linkTo=id_category_subcategory&equalTo=1
+    $randomId= rand(1, $totalProducts);
+    $url= CurlController::api()."relations?rel=products,categories&type=product,category&linkTo=id_product&equalTo=$randomId";
+    $method="GET";
+    $field=array();
+    $header=array();
+
+    $randomProduct= CurlController::request($url, $method, $field, $header)->result[0];
+    $topBanner= json_decode( $randomProduct->top_banner_product, true);
+?>
+
+<div class="ps-block--promotion-header bg--cover" style="background: url(img/products/<?php echo $randomProduct->url_category; ?>/top/<?php echo $topBanner["IMG tag"]; ?>);">
         <div class="container">
             <div class="ps-block__left">
-                <h3>20%</h3>
+                <h3>  <?php echo $topBanner["H3 tag"]; ?>  </h3>
                 <figure>
-                    <p>Discount</p>
-                    <h4>For Books Of March</h4>
+                    <p><?php echo $topBanner["P1 tag"]; ?></p>
+                    <h4> <?php echo $topBanner["H4 tag"]; ?> </h4>
                 </figure>
             </div>
             <div class="ps-block__center">
-                <p>Enter Promotion<span>Sale2019</span></p>
-            </div><a class="ps-btn ps-btn--sm" href="#">Shop now</a>
+                <p> <?php echo $topBanner["P2 tag"]; ?> <span><?php echo $topBanner["Span tag"]; ?></span></p>
+            </div><a class="ps-btn ps-btn--sm" href="<?php echo $randomProduct->url_product; ?>"><?php echo $topBanner["Button tag"]; ?></a>
         </div>
     </div>
