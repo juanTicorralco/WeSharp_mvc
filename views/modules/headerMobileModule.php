@@ -66,8 +66,9 @@
 
                                 <ul class="ps-list--categories">
 
+                                <!-- filter the categories and subcategories -->
                                 <?php foreach($menuCategories as $key => $value): ?>
-                                    <li class="current-menu-item menu-item-has-children"><a href="<?php echo $value->url_category; ?>"> <?php echo $value->name_category; ?>  </a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
+                                    <li class="current-menu-item menu-item-has-children"><a href="<?php echo $path.$value->url_category; ?>"> <?php echo $value->name_category; ?>  </a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
                                         <ul class="sub-menu" style="display: none;">
                                         <?php
                                     
@@ -80,7 +81,7 @@
                                         ?>
                                         <?php foreach($menuSubcategories as $key => $value):?>
 
-                                            <li class="current-menu-item "><a href="<?php echo $value->url_subcategory; ?>">  <?php echo $value->name_subcategory; ?> </a>
+                                            <li class="current-menu-item "><a href="<?php echo $path.$value->url_subcategory; ?>">  <?php echo $value->name_subcategory; ?> </a>
                                             </li>
                                         
                                         <?php endforeach; ?>

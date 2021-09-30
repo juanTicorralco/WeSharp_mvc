@@ -106,6 +106,7 @@
     ======================================-->
 
     <div class="ps-footer__links">
+        <!-- filter the categories and subcategories -->
         <?php foreach($menuCategories as $key => $value): ?>
         <p>
             <strong> <?php echo $value->name_category;?> </strong>
@@ -119,7 +120,7 @@
             $menuSubcategories=CurlController::request($url, $method, $field, $header)->result;
             ?>
              <?php foreach($menuSubcategories as $key => $value): ?>
-            <a href="<?php echo $value->url_subcategory;?>"> <?php echo $value->name_subcategory;?> </a>
+            <a href="<?php echo $path.$value->url_subcategory;?>"> <?php echo $value->name_subcategory;?> </a>
             <?php endforeach; ?>
         </p>
         <?php endforeach; ?>

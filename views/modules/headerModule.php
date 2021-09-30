@@ -88,9 +88,10 @@ Header Content
 
                             <?php foreach ($menuCategories as $key => $value) : ?>
                                 <li class="menu-item-has-children has-mega-menu">
-                                    <a href="<?php echo $value->url_category; ?> "><i class="<?php echo $value->icon_category; ?> "></i>
+                                    <a href="<?php echo $path.$value->url_category; ?> "><i class="<?php echo $value->icon_category; ?> "></i>
                                         <?php echo $value->name_category; ?> </a>
                                     <div class="mega-menu">
+
                                         <?php $title_list = json_decode($value->title_list_category); ?>
                                         <?php foreach ($title_list as $key => $value) : ?>
                                             <div class="mega-menu__column">
@@ -108,7 +109,7 @@ Header Content
                                                     ?>
 
                                                     <?php foreach ($menuSubcategories as $key => $value) : ?>
-                                                        <li><a href="<?php echo $value->url_subcategory; ?>">
+                                                        <li><a href="<?php echo $path.$value->url_subcategory; ?>">
                                                                 <?php echo $value->name_subcategory; ?> </a>
                                                         </li>
                                                     <?php endforeach; ?>
