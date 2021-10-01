@@ -29,8 +29,6 @@ if(count($promotionToday)>10){
 
 }
 
-echo '<pre>'; print_r(count( $promotionToday)); echo '</pre>';
-
 ?>
 
 <div class="ps-deal-hot">
@@ -73,7 +71,9 @@ echo '<pre>'; print_r(count( $promotionToday)); echo '</pre>';
                             Product Deal Home
                             ======================================-->
 
-                            <?php foreach($promotionToday as $key => $value): ?>
+                            <?php foreach($promotionToday as $key => $value): 
+                                //echo '<pre>'; print_r($value); echo '</pre>';?>
+                                
                                 <div class="ps-product--detail ps-product--hot-deal">
 
                                     <div class="ps-product__header">
@@ -85,29 +85,26 @@ echo '<pre>'; print_r(count( $promotionToday)); echo '</pre>';
                                                 <div class="ps-wrapper">
 
                                                     <div class="ps-product__gallery" data-arrow="true">
-
+                                                    <?php 
+                                                    $galeriProducts= json_decode( $value->gallery_product);
+                                                    
+                                                     foreach($galeriProducts as $key2 => $value2):
+                                                    ?>
                                                         <div class="item">
-                                                            <a href="img/products/deal-hot/a-1.jpg">
-                                                                <img src="img/products/deal-hot/a-1.jpg" alt="">
+                                                            <a href="img/products/<?php echo $value->url_category;?>/gallery/<?php echo $value2;?>">
+                                                                <img src="img/products/<?php echo $value->url_category;?>/gallery/<?php echo $value2;?>" alt="<?php echo $value->name_category;?>">
                                                             </a>
                                                         </div>
 
-                                                        <div class="item">
-                                                            <a href="img/products/deal-hot/a-2.jpg">
-                                                                <img src="img/products/deal-hot/a-2.jpg" alt="">
-                                                            </a>
-                                                        </div>
-
-                                                        <div class="item">
-                                                            <a href="img/products/deal-hot/a-3.jpg">
-                                                                <img src="img/products/deal-hot/a-3.jpg" alt="">
-                                                            </a>
-                                                        </div>
+                                                    <?php endforeach; ?>
 
                                                     </div>
 
+                                                    <!-- offer of product -->
+                                                    <?php $offer = json_decode($value->offer_product);?>
+                                                    
                                                     <div class="ps-product__badge">
-                                                        <span>Save <br> $280.000</span>
+                                                        <span>Save <br> $<?php echo TemplateController::SavePrice($value->price_product, $offer[1], $offer[0] ) ;?></span>
                                                     </div>
 
                                                 </div>
@@ -116,44 +113,63 @@ echo '<pre>'; print_r(count( $promotionToday)); echo '</pre>';
 
                                             <div class="ps-product__variants" data-item="4" data-md="3" data-sm="3"
                                                 data-arrow="false">
-
+                                                <?php
+                                                foreach($galeriProducts as $key3 => $value3):
+                                                ?>
                                                 <div class="item">
-                                                    <img src="img/products/deal-hot/a-1.jpg" alt="">
+                                                    <img src="img/products/<?php echo $value->url_category;?>/gallery/<?php echo $value3;?>" alt="<?php echo $value->name_category;?>">
                                                 </div>
-                                                <div class="item">
-                                                    <img src="img/products/deal-hot/a-2.jpg" alt="">
-                                                </div>
-                                                <div class="item">
-                                                    <img src="img/products/deal-hot/a-3.jpg" alt="">
-                                                </div>
-
+                                                <?php endforeach; ?>
                                             </div>
 
                                         </div>
 
                                         <div class="ps-product__info">
 
-                                            <h5>Clothing & Apparel</h5>
+                                            <h5><?php echo $value->name_category;?></h5>
 
-                                            <h3 class="ps-product__name">Herschel Leather Duffle Bag In Brown Color</h3>
+                                            <h3 class="ps-product__name">
+                                                <a href="<?php echo $path.$value->url_product;?>">
+                                                <strong><?php echo $value->name_product;?></strong>
+                                            </a>
+                                            </h3>
 
                                             <div class="ps-product__meta">
 
-                                                <h4 class="ps-product__price sale">$36.78 <del> $56.99</del></h4>
+                                                <h4 class="ps-product__price sale">$<?php echo TemplateController::offerPrice($value->price_product, $offer[1], $offer[0]) ;?> <del> <?php echo $value->price_product;?></del></h4>
 
                                                 <div class="ps-product__rating">
 
+                                                <?php $reviews= TemplateController::calificationStars(json_decode($value->reviews_product, true));
+                                                //echo '<pre>'; print_r($reviews); echo '</pre>'?>
+
                                                     <select class="ps-rating" data-read-only="true">
 
-                                                        <option value="1">1</option>
-                                                        <option value="1">2</option>
-                                                        <option value="1">3</option>
-                                                        <option value="1">4</option>
-                                                        <option value="2">5</option>
+                                                    <?php 
+                                                    if($reviews>0){
+                                                        for($i=0;$i<5;$i++){
+                                                            if($reviews<($i+1)){
+                                                                echo '<option value="1">' . $i+1 . '</option>';
+                                                            }else{
+                                                                echo '<option value="2">' . $i+1 . '</option>';
+                                                            }
+                                                        }
+                                                    }else{
+                                                        echo '<option value="0">0</option>';
+                                                        for($i=0;$i<5;$i++){
+                                                            echo '<option value="1">' . $i+1 . '</option>';
+                                                        }
+                                                    }
+                                                   ?>
 
                                                     </select>
 
-                                                    <span>(1 review)</span>
+                                                    <span>(<?php 
+                                                    if($value->reviews_product!=null){
+                                                    echo count(json_decode($value->reviews_product, true));}else{
+                                                        echo "0";
+                                                    }
+                                                     ?> review)</span>
 
                                                 </div>
 
@@ -169,7 +185,7 @@ echo '<pre>'; print_r(count( $promotionToday)); echo '</pre>';
 
                                                 <p>Expires In</p>
 
-                                                <ul class="ps-countdown" data-time="July 21, 2020 23:00:00">
+                                                <ul class="ps-countdown" data-time="<?php echo $offer[2]; ?>">
 
                                                     <li><span class="days"></span>
                                                         <p>Days</p>
@@ -193,11 +209,11 @@ echo '<pre>'; print_r(count( $promotionToday)); echo '</pre>';
 
                                             <div class="ps-product__processs-bar">
 
-                                                <div class="ps-progress" data-value="10">
+                                                <div class="ps-progress" data-value="<?php echo $value->stock_product;?>">
                                                     <span class="ps-progress__value"></span>
                                                 </div>
 
-                                                <p><strong>4/79</strong> Sold</p>
+                                                <p><strong><?php echo $value->stock_product;?>/100</strong> Sold</p>
 
                                             </div>
 
