@@ -7,6 +7,7 @@ $field=array();
 $header=array();
 
 $promotionToday=CurlController::request($url, $method, $field, $header)->result;
+$salesProduct= $promotionToday;
 
 foreach($promotionToday as $key=>$value){
     /* we ask if the product bring offer and stock */
@@ -21,14 +22,11 @@ foreach($promotionToday as $key=>$value){
         }
     }
 }
-
 /* if more than 10 products come to be displayed */
 if(count($promotionToday)>10){
     $random= rand(0, (count($promotionToday)-10));
     $promotionToday= array_slice($promotionToday, $random, 10);
-
 }
-
 ?>
 
 <div class="ps-deal-hot">
@@ -237,6 +235,21 @@ if(count($promotionToday)>10){
             Column Top 20 Best Seller
             ======================================-->
 
+            <?php 
+                $url= CurlController::api()."relations?rel=products,categories&type=product,category&orderBy=sales_product&orderMode=DESC&startAt=0&endAt=20";
+                $methos="GET";
+                $field=array();
+                $header=array();
+
+                $bestSales= CurlController::request($url, $method, $field, $header)->result;
+                $topSales=array();
+                
+                /* organized blocks of 5 products */
+                for ($i=0 ; $i < ceil(count($bestSales)/4)  ; $i++ ) { 
+                    array_push($topSales, array_slice($bestSales, $i*4, 4));
+                }
+            ?>
+
             <div class="col-xl-3 col-12 ">
 
                 <aside class="widget widget_best-sale" data-mh="dealhot">
@@ -250,312 +263,42 @@ if(count($promotionToday)>10){
                             data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1"
                             data-owl-duration="1000" data-owl-mousedrag="on">
 
+                            <?php foreach($topSales as $key => $value): ?>
                             <div class="ps-product-group">
 
                                 <!--=====================================
                                 Product
                                 ======================================-->
+                                <?php foreach($value as $key2 => $value2): 
+                                    //echo '<pre>'; print_r($value2); echo '</pre>';?>
+                                    <div class="ps-product--horizontal">
 
-                                <div class="ps-product--horizontal">
+                                        <div class="ps-product__thumbnail">
 
-                                    <div class="ps-product__thumbnail">
-                                        <a href="product-default.html">
-                                            <img src="img/products/technology/1.jpg" alt="">
-                                        </a>
-                                    </div>
-
-                                    <div class="ps-product__content">
-
-                                        <a class="ps-product__title" href="product-default.html">Sound Intone I65
-                                            Earphone White Version</a>
-
-                                        <div class="ps-product__rating">
-
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select>
-
-                                            <span>01</span>
+                                            <a href="<?php echo $path.$value2->url_product; ?>">
+                                                <img src="img/products/<?php echo $value2->url_category; ?>/<?php echo $value2->image_product; ?>" alt="">
+                                            </a>
 
                                         </div>
 
-                                        <p class="ps-product__price">105.30</p>
+                                        <div class="ps-product__content">
 
-                                    </div>
-
-                                </div><!-- End Product -->
-
-                                <!--=====================================
-                                Product
-                                ======================================-->
-
-                                <div class="ps-product--horizontal">
-
-                                    <div class="ps-product__thumbnail">
-
-                                        <a href="product-default.html">
-                                            <img src="img/products/technology/2.jpg" alt="">
-                                        </a>
-
-                                    </div>
-
-                                    <div class="ps-product__content">
-
-                                        <a class="ps-product__title" href="product-default.html">Beat Spill 2.0
-                                            Wireless Speaker – White</a>
-
-                                        <div class="ps-product__rating">
-
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select>
-                                            <span>01</span>
-
+                                            <a class="ps-product__title" href="<?php echo $path.$value2->url_product; ?>"><?php echo $value2->name_product; ?></a>
+                                            <?php if($value2->offer_product!=null):?>
+                                                <p class="ps-product__price sale">$<?php echo TemplateController::offerPrice($value2->price_product, json_decode($value2->offer_product, true)[1], json_decode($value2->offer_product, true)[0]) ; ?> <del>$<?php echo $value2->price_product; ?></del></p>
+                                            <?php else: ?>
+                                                <p class="ps-product__price">$<?php echo $value2->price_product; ?></p>
+                                            <?php endif; ?>
                                         </div>
 
-                                        <p class="ps-product__price">$125.00 <del>$135.00 </del></p>
-
-                                    </div>
-
-                                </div><!-- End Product -->
-
-                                <!--=====================================
-                                Product
-                                ======================================-->
-
-                                <div class="ps-product--horizontal">
-
-                                    <div class="ps-product__thumbnail">
-
-                                        <a href="product-default.html">
-                                            <img src="img/products/technology/3.jpg" alt="">
-                                        </a>
-
-                                    </div>
-
-                                    <div class="ps-product__content">
-
-                                        <a class="ps-product__title" href="product-default.html">ASUS Chromebook
-                                            Flip – 10.2 Inch</a>
-
-                                        <div class="ps-product__rating">
-
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select>
-                                            <span>02</span>
-
-                                        </div>
-
-                                        <p class="ps-product__price sale">$990.00 <del>$1250.00 </del></p>
-
-                                    </div>
-
-                                </div><!-- End Product -->
-
-                                <!--=====================================
-                                Product
-                                ======================================-->
-
-                                <div class="ps-product--horizontal">
-
-                                    <div class="ps-product__thumbnail">
-                                        <a href="product-default.html">
-                                            <img src="img/products/technology/4.jpg" alt="">
-                                        </a>
-                                    </div>
-
-                                    <div class="ps-product__content">
-                                        <a class="ps-product__title" href="product-default.html">Apple Macbook
-                                            Retina Display 12”</a>
-
-                                        <div class="ps-product__rating">
-
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select>
-
-                                            <span>04</span>
-
-                                        </div>
-
-                                        <p class="ps-product__price">$1090.00 <del>$1550.00 </del></p>
-
-                                    </div>
-
-                                </div><!-- End Product -->
-
-                            </div><!-- End Product Group -->
-
-                            <div class="ps-product-group">
-
-                                <!--=====================================
-                                Product
-                                ======================================-->
-
-                                <div class="ps-product--horizontal">
-
-                                    <div class="ps-product__thumbnail">
-                                        <a href="product-default.html"><img src="img/products/technology/3.jpg"
-                                                alt=""></a>
-                                    </div>
-
-                                    <div class="ps-product__content">
-
-                                        <a class="ps-product__title" href="product-default.html">ASUS Chromebook
-                                            Flip – 10.2 Inch</a>
-
-                                        <div class="ps-product__rating">
-
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select>
-
-                                            <span>02</span>
-
-                                        </div>
-
-                                        <p class="ps-product__price sale">$990.00 <del>$1250.00 </del></p>
-
-                                    </div>
-
-                                </div><!-- End Product -->
-
-                                <!--=====================================
-                                Product
-                                ======================================-->
-
-                                <div class="ps-product--horizontal">
-
-                                    <div class="ps-product__thumbnail">
-
-                                        <a href="product-default.html">
-                                            <img src="img/products/technology/4.jpg" alt="">
-                                        </a>
-
-                                    </div>
-
-                                    <div class="ps-product__content">
-
-                                        <a class="ps-product__title" href="product-default.html">Apple Macbook
-                                            Retina Display 12”</a>
-
-                                        <div class="ps-product__rating">
-
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select>
-
-                                            <span>04</span>
-                                        </div>
-
-                                        <p class="ps-product__price">$1090.00 <del>$1550.00 </del></p>
-
-                                    </div>
-
-                                </div><!-- End Product -->
-
-                                <!--=====================================
-                                Product
-                                ======================================-->
-
-                                <div class="ps-product--horizontal">
-
-                                    <div class="ps-product__thumbnail">
-
-                                        <a href="product-default.html">
-                                            <img src="img/products/technology/5.jpg" alt="">
-                                        </a>
-
-                                    </div>
-
-                                    <div class="ps-product__content">
-                                        <a class="ps-product__title" href="product-default.html">Samsung Gear VR
-                                            Virtual Reality Headset</a>
-
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select>
-                                            <span>01</span>
-                                        </div>
-
-                                        <p class="ps-product__price">$85.00</p>
-
-                                    </div>
-
-                                </div><!-- End Product -->
-
-                                <!--=====================================
-                                Product
-                                ======================================-->
-
-                                <div class="ps-product--horizontal">
-
-                                    <div class="ps-product__thumbnail">
-                                        <a href="product-default.html">
-                                            <img src="img/products/technology/6.jpg" alt="">
-                                        </a>
-                                    </div>
-
-                                    <div class="ps-product__content">
-                                        <a class="ps-product__title" href="product-default.html">Apple iPhone Retina
-                                            6s Plus 64GB</a>
-
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-
-                                        <p class="ps-product__price">$950.60</p>
-
-                                    </div>
-
-                                </div><!-- End Product -->
-
-                            </div><!-- End Product Group -->
-
+                                        </div><!-- End Product -->
+                                        <?php endforeach; ?>
+                                    </div><!-- End Product Group -->
+                                <?php endforeach; ?>
                         </div>
-
                     </div>
-
                 </aside><!-- End Aside -->
-
             </div><!-- End Columns -->
-
         </div>
 
     </div>
