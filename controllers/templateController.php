@@ -2,13 +2,12 @@
 
 class TemplateController
 {
-
     /* we bring the main view of the controller */
     public function index()
     {
 
         include 'views/template.php';
-    }
+    } 
 
     /* Route Principal Or Domine from site */
     static public function path()
@@ -54,4 +53,14 @@ class TemplateController
             return 0;
         }
     }
+
+     /* Controller offer */
+     static public function percentOffer($price, $offer, $type)
+     {
+         if ($type == "Discount") {
+             return $offer;
+         } else if ($type == "Fixed") {
+            return round(($offer*100)/$price);
+         }
+     }
 }
