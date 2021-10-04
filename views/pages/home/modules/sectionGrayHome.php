@@ -117,22 +117,22 @@
 
                                             <select class="ps-rating" data-read-only="true">
 
-                                            <?php 
-                                            if($reviews>0){
-                                                for($i=0;$i<5;$i++){
-                                                    if($reviews<($i+1)){
+                                                <?php 
+                                                if($reviews>0){
+                                                    for($i=0;$i<5;$i++){
+                                                        if($reviews<($i+1)){
+                                                            echo '<option value="1">' . $i+1 . '</option>';
+                                                        }else{
+                                                            echo '<option value="2">' . $i+1 . '</option>';
+                                                        }
+                                                    }
+                                                }else{
+                                                    echo '<option value="0">0</option>';
+                                                    for($i=0;$i<5;$i++){
                                                         echo '<option value="1">' . $i+1 . '</option>';
-                                                    }else{
-                                                        echo '<option value="2">' . $i+1 . '</option>';
                                                     }
                                                 }
-                                            }else{
-                                                echo '<option value="0">0</option>';
-                                                for($i=0;$i<5;$i++){
-                                                    echo '<option value="1">' . $i+1 . '</option>';
-                                                }
-                                            }
-                                            ?>
+                                                ?>
 
                                             </select>
 

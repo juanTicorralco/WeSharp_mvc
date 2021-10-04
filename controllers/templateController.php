@@ -60,7 +60,7 @@ class TemplateController
          if ($type == "Discount") {
              return $offer;
          } else if ($type == "Fixed") {
-            return round(($offer*100)/$price);
+            return 100 - round(($offer*100)/$price);
          }
      }
 }
