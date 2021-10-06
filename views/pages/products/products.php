@@ -1,4 +1,17 @@
 <?php 
+    /* valdate if there is pagination */
+    if(isset($urlParams[1])){
+        if(is_numeric($urlParams[1])){
+            $starAt= ($urlParams[1]*24) - 24;
+        }else{
+            echo '<script> 
+                window.location= "'.$path.$urlParams[1].'"
+            </script>';   
+        }
+    }else{
+        $starAt=0;
+    }
+
     /* Bring the products of categories */
     $url=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0]."&orderBy=id_category&startAt=0&endAt=7";
     $method="GET";

@@ -708,6 +708,36 @@
         $('.ps-datepicker').datepicker();
     }
 
+    function pagination() {
+        var target = $('.pagination');
+        if (target.length > 0) {
+
+            target.each(function() {
+                var el = $(this),
+                    totalPages = el.data("total-page"),
+                    currentPage = el.data("current-page"),
+                    urlPage = el.data("url-page");
+
+                el.twbsPagination({
+                    totalPages: totalPages,
+                    startPage: currentPage,
+                    visiblePages: 3,
+                    first: '</i><i class="fas fa-chevron-left"></i><i class="fas fa-reply fas fa-chevron-right">',
+                    last: '<i class="fas fa-share fas fa-chevron-left"></i><i class="fas fa-chevron-right"></i>',
+                    prev: '<i class="fas fa-reply"></i>',
+                    next: '<i class="fas fa-share"></i>'
+                }).on("page", function(evt, page) {
+                    if (urlPage.includes("&", 1)) {
+                        urlPage = urlPage.replace("&" + currentPage, "&" + page);
+                        window.location = urlPage;
+                    } else {
+                        window.location = urlPage + "&" + page;
+                    }
+                })
+            })
+        }
+    }
+
     $(function() {
         backgroundImage();
         owlCarouselConfig();
@@ -736,6 +766,7 @@
         carouselNavigation();
         dateTimePicker();
         $('[data-toggle="tooltip"]').tooltip();
+        pagination();
     });
 
     $(window).on('load', function() {

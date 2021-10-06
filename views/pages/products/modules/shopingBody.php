@@ -1,10 +1,10 @@
 <?php  
     /* Bring the products of categories */
-    $url4=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0]."&orderBy=id_product&orderMode=DESC&startAt=0&endAt=7";
+    $url4=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0]."&orderBy=id_product&orderMode=DESC&startAt=".$starAt."&endAt=24";
     $totalResultProducts= CurlController::request($url4, $method, $field, $header)->result;
     if(  $totalResultProducts =="no found"){
         /* Bring the products of categories */
-        $url4=CurlController::api()."relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory&equalTo=".$urlParams[0]."&orderBy=id_product&orderMode=DESC&startAt=0&endAt=7";
+        $url4=CurlController::api()."relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory&equalTo=".$urlParams[0]."&orderBy=id_product&orderMode=DESC&startAt=".$starAt."&endAt=24";
         $totalResultProducts= CurlController::request($url4, $method, $field, $header)->result;
     }
 ?>
@@ -146,12 +146,13 @@
         </div>
 
         <div class="ps-pagination">
-
-            <ul class="pagination">
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">Next Page<i class="icon-chevron-right"></i></a></li>
+            <?php if(isset($urlParams[1])){
+                $CurrentPage= $urlParams[1];
+            }else{
+                $CurrentPage=1;
+            } ?>
+        
+            <ul class="pagination" data-total-page="<?php echo ceil($totalProducts/24) ?>" data-current-page="<?php echo $CurrentPage; ?>" data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">   
             </ul>
 
         </div>
@@ -272,13 +273,7 @@
 
         <div class="ps-pagination">
 
-            <ul class="pagination">
-
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">Next Page<i class="icon-chevron-right"></i></a></li>
-
+            <ul class="pagination" data-total-page="<?php echo ceil($totalProducts/6) ?>" data-current-page="<?php echo $CurrentPage; ?>" data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">   
             </ul>
 
         </div>

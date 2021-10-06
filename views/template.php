@@ -185,6 +185,10 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- Chart -->
     <script src="js/plugins/Chart.min.js"></script>
 
+    <!-- pagination -->
+    <script src="js/plugins/twbs-pagination.min.js"></script>
+
+
 </head>
 
 <body>
