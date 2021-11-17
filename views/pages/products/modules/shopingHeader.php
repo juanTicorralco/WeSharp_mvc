@@ -1,32 +1,60 @@
 <div class="ps-shopping__header">
 
-    <p><strong><?php echo $totalProducts;?></strong> Products found</p>
+    <p>Total Procuctos: <strong><?php echo $totalProducts; ?></strong></p>
 
     <div class="ps-shopping__actions">
 
-        <select class="ps-select" data-placeholder="Sort Items">
+        <select class="ps-select" data-placeholder="Sort Items" onchange="sortProduct(event)">
 
-            <option>Sort by latest</option>
-            <option>Sort by popularity</option>
-            <option>Sort by average rating</option>
-            <option>Sort by price: low to high</option>
-            <option>Sort by price: high to low</option>
+            <?php if (isset($urlParams[2])) : ?>
 
+                <?php if ($urlParams[2] == "new") : ?>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+new">Ordenar por: Mas nuevo</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+latets">Ordenar por: Mas viejo</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+low">Ordenar por: Precio bajo a Precio alto</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+higt">Ordenar por: Precio alto a Precio bajo</option>
+                <?php endif; ?>
+                <?php if ($urlParams[2] == "latets") : ?>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+latets">Ordenar por: Mas viejo</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+new">Ordenar por: Mas nuevo</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+low">Ordenar por: Precio bajo a Precio alto</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+higt">Ordenar por: Precio alto a Precio bajo</option>
+                <?php endif; ?>
+                <?php if ($urlParams[2] == "low") : ?>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+low">Ordenar por: Precio bajo a Precio alto</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+new">Ordenar por: Mas nuevo</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+latets">Ordenar por: Mas viejo</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+higt">Ordenar por: Precio alto a Precio bajo</option>
+                <?php endif; ?>
+                <?php if ($urlParams[2] == "higt") : ?>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+higt">Ordenar por: Precio alto a Precio bajo</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+new">Ordenar por: Mas nuevo</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+latets">Ordenar por: Mas viejo</option>
+                    <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+low">Ordenar por: Precio bajo a Precio alto</option>
+
+                <?php endif; ?>
+
+            <?php else : ?>
+                <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+new">Ordenar por: Mas nuevo</option>
+                <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+latets">Ordenar por: Mas viejo</option>
+                <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+low">Ordenar por: Precio bajo a Precio alto</option>
+                <option value="<?php echo $_SERVER["REQUEST_URI"]; ?>+higt">Ordenar por: Precio alto a Precio bajo</option>
+            <?php endif; ?>
         </select>
 
         <div class="ps-shopping__view">
 
-            <p>View</p>
+            <p>VER</p>
 
             <ul class="ps-tab-list">
 
-                <li class="active">
+                <li class="active" type="grid">
                     <a href="#tab-1">
                         <i class="icon-grid"></i>
                     </a>
                 </li>
 
-                <li>
+                <li type="list">
                     <a href="#tab-2">
                         <i class="icon-list4"></i>
                     </a>

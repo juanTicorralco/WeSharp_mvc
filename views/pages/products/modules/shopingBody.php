@@ -1,10 +1,11 @@
 <?php  
     /* Bring the products of categories */
-    $url4=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0]."&orderBy=id_product&orderMode=DESC&startAt=".$starAt."&endAt=24";
+    /* aqui tambien se cambai la paginacion */
+    $url4=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
     $totalResultProducts= CurlController::request($url4, $method, $field, $header)->result;
     if(  $totalResultProducts =="no found"){
         /* Bring the products of categories */
-        $url4=CurlController::api()."relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory&equalTo=".$urlParams[0]."&orderBy=id_product&orderMode=DESC&startAt=".$starAt."&endAt=24";
+        $url4=CurlController::api()."relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory&equalTo=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
         $totalResultProducts= CurlController::request($url4, $method, $field, $header)->result;
     }
 ?>
@@ -62,9 +63,7 @@
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist">
                                             <i class="icon-heart"></i>
                                         </a>
-                                    </li>
-
-                                    
+                                    </li>                                 
 
                                 </ul>
 
@@ -152,7 +151,11 @@
                 $CurrentPage=1;
             } ?>
         
-            <ul class="pagination" data-total-page="<?php echo ceil($totalProducts/24) ?>" data-current-page="<?php echo $CurrentPage; ?>" data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">   
+            <ul 
+            class="pagination" 
+            data-total-page="<?php echo ceil($totalProducts/24) ?>" 
+            data-current-page="<?php echo $CurrentPage; ?>" 
+            data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">   
             </ul>
 
         </div>
@@ -272,8 +275,17 @@
         </div>
 
         <div class="ps-pagination">
-
-            <ul class="pagination" data-total-page="<?php echo ceil($totalProducts/6) ?>" data-current-page="<?php echo $CurrentPage; ?>" data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">   
+        <?php if(isset($urlParams[1])){
+                $CurrentPage= $urlParams[1];
+            }else{
+                $CurrentPage=1;
+            } ?>
+            
+            <ul 
+            class="pagination" 
+            data-total-page="<?php echo ceil($totalProducts/24) ?>" 
+            data-current-page="<?php echo $CurrentPage; ?>" 
+            data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">   
             </ul>
 
         </div>

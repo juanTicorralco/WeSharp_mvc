@@ -291,6 +291,7 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 	======================================-->
 
     <script src="js/main.js"></script>
+    <script src="js/funcionesjs.js"></script>
 
 </body>
 

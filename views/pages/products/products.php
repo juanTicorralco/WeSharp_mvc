@@ -2,6 +2,7 @@
     /* valdate if there is pagination */
     if(isset($urlParams[1])){
         if(is_numeric($urlParams[1])){
+            /* aqui se cambia la paginacion */
             $starAt= ($urlParams[1]*24) - 24;
         }else{
             echo '<script> 
@@ -10,6 +11,39 @@
         }
     }else{
         $starAt=0;
+    }
+
+    /* validar que haya parametros de orden */
+    if(isset($urlParams[2])){
+        if(is_string($urlParams[2])){
+            if($urlParams[2]=="new"){
+                $orderBy="id_product";
+                $orderMode="DESC";
+            }
+            else if($urlParams[2]=="latets"){
+                $orderBy="id_product";
+                $orderMode="ASC";
+            }
+            else if($urlParams[2]=="low"){
+                $orderBy="price_product";
+                $orderMode="ASC";
+            }
+            else if($urlParams[2]=="higt"){
+                $orderBy="price_product";
+                $orderMode="DESC";
+            }else{
+                echo '<script> 
+                window.location= "'.$path.$urlParams[0].'";
+            </script>';
+            }
+        }else{
+            echo '<script> 
+            window.location= "'.$path.$urlParams[0].'";
+        </script>';
+        }
+    }else{
+        $orderBy="id_product";
+        $orderMode="DESC";
     }
 
     /* Bring the products of categories */
