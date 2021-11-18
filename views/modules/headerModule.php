@@ -133,7 +133,7 @@ Header Content
         ======================================-->
 
             <div class="header__content-center">
-                <form class="ps-form--quick-search" action="index.html" method="get">
+                <form class="ps-form--quick-search">
                    <!--  <div class="form-group--icon">
                         <i class="icon-chevron-down"></i>
                         <select class="form-control">
@@ -143,8 +143,8 @@ Header Content
                             <option value="1">Technology toys</option>
                         </select>
                     </div> -->
-                    <input class="form-control" type="text" placeholder="I'm shopping for...">
-                    <button>Search</button>
+                    <input class="form-control inputSearch" type="text" placeholder="I'm shopping for...">
+                    <button type="button" class="btnSearch" path="<?php echo $path; ?>">Search</button>
                 </form>
             </div>
 

@@ -15,7 +15,16 @@
     Grid View
     ======================================--> 
 
-    <div class="ps-tab active" id="tab-1">
+    <!-- checkar si hay una cookie -->
+    <?php if(isset($_COOKIE["tab"])): ?>
+        <?php if($_COOKIE["tab"]=="grid"): ?>
+            <div class="ps-tab active" id="tab-1">
+        <?php else: ?>
+            <div class="ps-tab" id="tab-1">
+        <?php endif; ?>
+    <?php else: ?>
+        <div class="ps-tab active" id="tab-1">     
+    <?php endif; ?>
 
         <div class="ps-shopping-product">
 
@@ -165,8 +174,17 @@
     <!--=====================================
     List View
     ======================================--> 
-
-    <div class="ps-tab" id="tab-2">
+    
+    <!-- checkar si hay una cookie -->
+    <?php if(isset($_COOKIE["tab"])): ?>
+        <?php if($_COOKIE["tab"]=="list"): ?>
+            <div class="ps-tab active" id="tab-2">
+        <?php else: ?>
+            <div class="ps-tab" id="tab-2">
+        <?php endif; ?>
+    <?php else: ?>
+        <div class="ps-tab" id="tab-2">  
+    <?php endif; ?>
 
         <div class="ps-shopping-product">
 

@@ -48,13 +48,32 @@
 
             <ul class="ps-tab-list">
 
-                <li class="active" type="grid">
+                <!-- checkar si hay una cookie -->
+                <?php if(isset($_COOKIE["tab"])): ?>
+                <?php if($_COOKIE["tab"]=="grid"): ?>
+                    <li class="active" type="grid">
+                <?php else: ?>
+                    <li class="" type="grid">
+                <?php endif; ?>
+                <?php else: ?>
+                    <li class="active" type="grid">  
+                <?php endif; ?>
+
                     <a href="#tab-1">
                         <i class="icon-grid"></i>
                     </a>
                 </li>
 
-                <li type="list">
+                <!-- checkar si hay una cookie -->
+                <?php if(isset($_COOKIE["tab"])): ?>
+                <?php if($_COOKIE["tab"]=="list"): ?>
+                    <li class="active" type="list">
+                <?php else: ?>
+                    <li class="" type="list">
+                <?php endif; ?>
+                <?php else: ?>
+                    <li class="" type="list">  
+                <?php endif; ?>
                     <a href="#tab-2">
                         <i class="icon-list4"></i>
                     </a>

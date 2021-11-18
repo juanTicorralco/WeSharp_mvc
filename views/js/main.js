@@ -729,9 +729,9 @@
                 }).on("page", function(evt, page) {
                     if (urlPage.includes("&", 1)) {
                         urlPage = urlPage.replace("&" + currentPage, "&" + page);
-                        window.location = urlPage;
+                        window.location = urlPage+"#showCase";
                     } else {
-                        window.location = urlPage + "&" + page;
+                        window.location = urlPage + "&" + page+"#showCase";
                     }
                 })
             })

@@ -62,10 +62,30 @@
         /* Bring all subcategories */
         $url2=CurlController::api()."relations?rel=products,subcategories,stores&type=product,subcategory,store&linkTo=url_subcategory&equalTo=".$urlParams[0];
         $totalProducts = CurlController::request($url2, $method, $field, $header)->total;
+
+         /* actualizar las vistas de subcategorias */
+         $views= $productRelation[0]->views_subcategory+1;
+
+         $url123= CurlController::api()."subcategories?id=1&nameId=id_subcategory";
+         $method123= "PUT";
+         $field123= "views_subcategory=".$views;
+         $header123=array();
+ 
+         $upDateSubCategory= CurlController::request($url123,$method123,$field123, $header123); 
     }else{
         /* Bring all categories */
         $url2=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0];
         $totalProducts = CurlController::request($url, $method, $field, $header)->total;
+
+      /* actualizar las vistas de categorias */
+        $views= $productRelation[0]->views_category+1;
+
+        $url123= CurlController::api()."categories?id=1&nameId=id_category";
+        $method123= "PUT";
+        $field123= "views_category=".$views;
+        $header123=array();
+
+        $upDateCategory= CurlController::request($url123,$method123,$field123, $header123); 
     }
 
     /* Bring the best sales of categories */
@@ -127,7 +147,7 @@ Categories Content
                 Products found
                 ======================================--> 
 
-                <div class="ps-shopping ps-tab-root">
+                <div id="showCase" class="ps-shopping ps-tab-root">
 
                     <!--=====================================
                     Shoping Header
