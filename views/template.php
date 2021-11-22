@@ -34,6 +34,132 @@ if (!empty($urlParams[0])) {
             $header = array();
 
             $urlProduct = CurlController::request($url, $method, $field, $header);
+
+            if($urlProduct->status==404){
+                
+                    /* valdate if there is pagination */
+                    if(isset($urlParams[1])){
+                        if(is_numeric($urlParams[1])){
+                            /* aqui se cambia la paginacion */
+                            $starAt= ($urlParams[1]*24) - 24;
+                        }else{
+                            echo '<script> 
+                                window.location= "'.$path.$urlParams[1].'"
+                            </script>';   
+                        }
+                    }else{
+                        $starAt=0;
+                    }
+
+                    /* validar que haya parametros de orden */
+                    if(isset($urlParams[2])){
+                        if(is_string($urlParams[2])){
+                            if($urlParams[2]=="new"){
+                                $orderBy="id_product";
+                                $orderMode="DESC";
+                            }
+                            else if($urlParams[2]=="latets"){
+                                $orderBy="id_product";
+                                $orderMode="ASC";
+                            }
+                            else if($urlParams[2]=="low"){
+                                $orderBy="price_product";
+                                $orderMode="ASC";
+                            }
+                            else if($urlParams[2]=="higt"){
+                                $orderBy="price_product";
+                                $orderMode="DESC";
+                            }else{
+                                echo '<script> 
+                                window.location= "'.$path.$urlParams[0].'";
+                            </script>';
+                            }
+                        }else{
+                            echo '<script> 
+                            window.location= "'.$path.$urlParams[0].'";
+                        </script>';
+                        }
+                    }else{
+                        $orderBy="id_product";
+                        $orderMode="DESC";
+                    }
+
+                /* filtrar por busqueda nombre */
+                $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=name_product&search=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
+                $method = "GET";
+                $field = array();
+                $header = array();
+    
+                $urlSearch = CurlController::request($url, $method, $field, $header);     
+
+                if($urlSearch->status==404){
+
+                    /* filtrar busqueda por titulo de lista */
+                    $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=title_list_product&search=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
+                    $method = "GET";
+                    $field = array();
+                    $header = array();
+    
+                    $urlSearch = CurlController::request($url, $method, $field, $header);  
+                       
+                    if($urlSearch->status==404){
+
+                        /* filtrar busqueda por tag */
+                        $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=tags_product&search=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
+                        $method = "GET";
+                        $field = array();
+                        $header = array();
+        
+                        $urlSearch = CurlController::request($url, $method, $field, $header);    
+                        
+                        if($urlSearch->status==404){
+
+                            /* filtrar busqueda por resumen del producto */
+                            $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=summary_product&search=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
+                            $method = "GET";
+                            $field = array();
+                            $header = array();
+            
+                            $urlSearch = CurlController::request($url, $method, $field, $header);   
+                            
+                            if($urlSearch->status==200){
+                                /* total de productos por resumen del producto */
+                                $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=summary_product&search=".$urlParams[0];
+                                $method = "GET";
+                                $field = array();
+                                $header = array();
+                
+                                $totalSearch = CurlController::request($url, $method, $field, $header)->total;  
+                            }
+                        }else{
+                            /* total de productos encontrados por tag */
+                            $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=tags_product&search=".$urlParams[0];
+                            $method = "GET";
+                            $field = array();
+                            $header = array();
+            
+                            $totalSearch = CurlController::request($url, $method, $field, $header)->total;  
+                        }
+                    }else{
+                        /* total de productos encontrados por titulo de lista */
+                        $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=title_list_product&search=".$urlParams[0];
+                        $method = "GET";
+                        $field = array();
+                        $header = array();
+        
+                        $totalSearch = CurlController::request($url, $method, $field, $header)->total;  
+                    }
+                }else{
+
+                    /* total de productos encontrados por nombre */
+                    $url2 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=name_product&search=".$urlParams[0];
+                    $method2 = "GET";
+                    $field2 = array();
+                    $header2 = array();
+        
+                    $totalSearch = CurlController::request($url2, $method2, $field2, $header2)->total;   
+                }
+            }
         }
     }
 }
@@ -231,7 +357,10 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
             include "pages/products/products.php";
         } else if ($urlProduct->status == 200) {
             include "pages/product/product.php";
-        }else{
+        }else if($urlSearch->status==200){
+            include "pages/search/search.php";
+        }
+        else{
             include "pages/404/404.php";
         }
     } else {

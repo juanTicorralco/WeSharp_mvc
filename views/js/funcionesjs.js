@@ -28,7 +28,7 @@ $(document).on("click", ".btnSearch", function(e){
     let match= /^[a-z0-9ñÑáéíóú ]*$/;
 
     if(match.test(search)){
-        let searchTest=search.replace(/[ ]/g, "-");
+        let searchTest=search.replace(/[ ]/g, "_");
         searchTest=searchTest.replace(/[ñ]/g, "n");
         searchTest=searchTest.replace(/[á]/g, "a");
         searchTest=searchTest.replace(/[é]/g, "e");
@@ -43,22 +43,19 @@ $(document).on("click", ".btnSearch", function(e){
 })
 
 /* funcion para buscador con enter */
-
-let inputSearch = $(".inutSearch");
+let inputSearch = $(".inputSearch");
 let btnSearch = $(".btnSearch");
 
 for(let i=0;i<inputSearch.length;i++){
     $(inputSearch[i]).keyup(function(e){
         e.preventDefault();
-        
         if(e.keyCode==13 && $(inputSearch[i]).val() != ""){
-            console.log($(this).val());
             let path= $(btnSearch[i]).attr("path");
             let search= $(this).val().toLowerCase();
             let match= /^[a-z0-9ñÑáéíóú ]*$/;
 
             if(match.test(search)){
-                let searchTest=search.replace(/[ ]/g, "-");
+                let searchTest=search.replace(/[ ]/g, "_");
                 searchTest=searchTest.replace(/[ñ]/g, "n");
                 searchTest=searchTest.replace(/[á]/g, "a");
                 searchTest=searchTest.replace(/[é]/g, "e");
