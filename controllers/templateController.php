@@ -63,4 +63,10 @@ class TemplateController
             return 100 - round(($offer*100)/$price);
          }
      }
+
+     /* funcion para mayuscula inicial */
+     static public function capitalize($value){
+         $text= str_replace("_"," ",$value);
+         return ucwords($text);
+     }
 }

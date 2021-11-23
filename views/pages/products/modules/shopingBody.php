@@ -45,6 +45,7 @@
                                     <img src="img/products/<?php echo $value->url_category; ?>/<?php echo $value->image_product; ?>" alt="<?php echo $value->name_product; ?>">
                                 </a>
 
+                                <!-- precio -->
                                 <?php if($value->stock_product!=0): ?>
                                 <?php if($value->offer_product!=null ):?>
                                 
