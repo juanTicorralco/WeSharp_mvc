@@ -94,8 +94,7 @@
         <!-- especificaciones del producto -->
         <?php $spect = json_decode($producter->specifications_product, true); ?>
 
-        <?php foreach ($spect as $key => $value) :
-            //echo '<pre>'; print_r(array_keys( $value)[0]); echo '</pre>';?>
+        <?php foreach ($spect as $key => $value) :?>
             <?php if( !empty( array_keys($value)[0])): ?>
             <figure>
 
@@ -189,7 +188,7 @@
 
             <div class="form-group--number quantity">
 
-                <button class="up" onclick="changeQualyty($('.quantity input').val(), 'up')">
+                <button class="up" onclick="changeQualyty($('.quantity input').val(), 'up', <?php echo $producter->stock_product ?> )">
                     <i class="fa fa-plus"></i>
                 </button>
 
@@ -227,14 +226,20 @@
 
             <strong> Categories:</strong>
 
-            <a href="#">Consumer Electronics</a>,<a href="#"> Refrigerator</a>,<a href="#">Babies & Moms</a>
+            <a href="<?php echo $path.$producter->url_category; ?>"><?php echo $producter->name_category; ?></a>,
+            <a href="<?php echo $path.$producter->url_subcategory; ?>"><?php echo $producter->name_subcategory; ?></a>,
+            <a href="<?php echo $path.$producter->title_list_product; ?>"><?php echo $producter->title_list_product; ?></a>
 
         </p>
 
         <p class="tags"><strong> Tags</strong>
+        <?php 
+        $tags= json_decode($producter->tags_product, true);
+         //echo '<pre>'; print_r($tags); echo '</pre>'; 
+        foreach($tags as $key => $value):  ?>
 
-            <a href="#">sofa</a>
-
+            <a href="<?php echo $path.$value; ?>"><?php echo $value; ?></a>
+        <?php endforeach; ?>
         </p>
 
     </div>

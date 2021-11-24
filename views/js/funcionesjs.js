@@ -72,10 +72,14 @@ for(let i=0;i<inputSearch.length;i++){
 }
 
 /* funcion para cambiar la cantidad del carrito */
-function  changeQualyty(quantity, move){
+function  changeQualyty(quantity, move, stock){
     let number=1;
-    if(move=="up"){
-        number = Number(quantity)+1;
+    if(Number(quantity) > stock-1){
+        quantity= stock -1;
+    }
+    if(move=="up" ){
+            number = Number(quantity)+1;
+        
     }
     if(move == "down" && Number(quantity)>1){
         number=Number(quantity)-1;

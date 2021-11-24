@@ -7,7 +7,7 @@
             <article class="ps-product--header-sticky">
 
                 <div class="ps-product__thumbnail">
-
+                    <!-- imagen del producto -->
                     <img src="img/products/<?php echo $producter->url_category; ?>/<?php echo $producter->image_product; ?>" alt="<?php echo $producter->name_product ?>">
 
                 </div>
