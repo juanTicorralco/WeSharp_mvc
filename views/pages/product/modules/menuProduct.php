@@ -1,290 +1,244 @@
+<?php if ($producter->reviews_product != null) {
+    $allReview = json_decode($producter->reviews_product, true);
+} else {
+    $allReview = 0;
+}
+?>
+
 <ul class="ps-tab-list">
 
-<li class="active"><a href="#tab-1">Description</a></li>
-<li><a href="#tab-2">Specification</a></li>
-<li><a href="#tab-3">Vendor</a></li>
-<li><a href="#tab-4">Reviews (1)</a></li>
-<li><a href="#tab-5">Questions and Answers</a></li>
-<li><a href="#tab-6">More Offers</a></li>
+    <li class="active"><a href="#tab-1">Descripcion</a></li>
+    <li><a href="#tab-2">Detalles</a></li>
+    <li><a href="#tab-3">Vendedor</a></li>
+    <li><a href="#tab-4">Reseñas (<?php
+                                    if ($producter->reviews_product != null) {
+                                        echo count(json_decode($producter->reviews_product, true));
+                                    } else {
+                                        echo "0";
+                                    }
+                                    ?>)</a></li>
+    <li><a href="#tab-5">Preguntas y respuestas</a></li>
 
 </ul>
 
 <div class="ps-tabs">
 
-<div class="ps-tab active" id="tab-1">
+    <div class="ps-tab active" id="tab-1">
 
-    <div class="ps-document">
-
-        <h5>Embodying the Raw, Wayward Spirit of Rock 'N' Roll</h5>
-
-        <p>Embodying the raw, wayward spirit of rock ‘n’ roll, the Kilburn portable active stereo speaker takes the unmistakable look and sound of Marshall, unplugs the chords, and takes the show on the road.</p>
-
-        <p>Weighing in under 7 pounds, the Kilburn is a lightweight piece of vintage styled engineering. Setting the bar as one of the loudest speakers in its class, the Kilburn is a compact, stout-hearted hero with a well-balanced audio which boasts a clear midrange and extended highs for a sound that is both articulate and pronounced. The analogue knobs allow you to fine tune the controls to your personal preferences while the guitar-influenced leather strap enables easy and stylish travel.</p>
-
-        <img class="mb-30" src="img/products/detail/content/description.jpg" alt="">
-
-        <h5>What do you get</h5>
-
-        <p>Sound of Marshall, unplugs the chords, and takes the show on the road.</p>
-
-        <p>Weighing in under 7 pounds, the Kilburn is a lightweight piece of vintage styled engineering. Setting the bar as one of the loudest speakers in its class, the Kilburn is a compact, stout-hearted hero with a well-balanced audio which boasts a clear midrange and extended highs for a sound that is both articulate and pronounced. The analogue knobs allow you to fine tune the controls to your personal preferences while the guitar-influenced leather strap enables easy and stylish travel.</p>
-
-        <p>The FM radio is perhaps gone for good, the assumption apparently being that the jury has ruled in favor of streaming over the internet. The IR blaster is another feature due for retirement – the S6 had it, then the Note5 didn’t, and now with the S7 the trend is clear.</p>
-
-        <h5>Perfectly Done</h5>
-
-        <p>Meanwhile, the IP68 water resistance has improved from the S5, allowing submersion of up to five feet for 30 minutes, plus there’s no annoying flap covering the charging port</p>
-        
-        <ul class="pl-0">
-            <li>No FM radio (except for T-Mobile units in the US, so far)</li>
-            <li>No IR blaster</li>
-            <li>No stereo speakers</li>
-        </ul>
-
-        <p>If you’ve taken the phone for a plunge in the bath, you’ll need to dry the charging port before plugging in. Samsung hasn’t reinvented the wheel with the design of the Galaxy S7, but it didn’t need to. The Gala S6 was an excellently styled device, and the S7 has managed to improve on that.</p>
+        <div class="ps-document">
+            <?php echo $producter->description_product; ?>
+        </div>
 
     </div>
 
-</div>
+    <div class="ps-tab" id="tab-2">
 
-<div class="ps-tab" id="tab-2">
+        <div class="table-responsive">
 
-    <div class="table-responsive">
+            <table class="table table-bordered ps-table ps-table--specification">
 
-        <table class="table table-bordered ps-table ps-table--specification">
+                <tbody>
+                    <?php $details = json_decode($producter->details_product, true); ?>
+                    <?php foreach ($details as $key => $value) : ?>
+                        <tr>
+                            <td><?php echo $value["title"]; ?></td>
+                            <td><?php echo $value["value"]; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
 
-            <tbody>
+            </table>
 
-                <tr>
-                    <td>Color</td>
-                    <td>Black, Gray</td>
-                </tr>
-                <tr>
-                    <td>Style</td>
-                    <td>Ear Hook</td>
-                </tr>
-                <tr>
-                    <td>Wireless</td>
-                    <td>Yes</td>
-                </tr>
-                <tr>
-                    <td>Dimensions</td>
-                    <td>5.5 x 5.5 x 9.5 inches</td>
-                </tr>
-                <tr>
-                    <td>Weight</td>
-                    <td>6.61 pounds</td>
-                </tr>
-                <tr>
-                    <td>Battery Life</td>
-                    <td>20 hours</td>
-                </tr>
-                <tr>
-                    <td>Bluetooth</td>
-                    <td>Yes</td>
-                </tr>
-
-            </tbody>
-
-        </table>
+        </div>
 
     </div>
 
-</div>
+    <div class="ps-tab" id="tab-3">
 
-<div class="ps-tab" id="tab-3">
+        <div class="media mb-5">
+            <img class="mr-5 mt-1 rounded-circle" style="width: 120px;" src="img/stores/<?php echo $producter->url_store; ?>/<?php echo $producter->logo_store; ?>" alt="<?php echo $producter->name_store; ?>">
+            <div class="media-body ml-3 ">
+                <h5 class="mt-0"><?php echo $producter->name_store; ?></h5>
+                <p> <?php echo $producter->about_store; ?></p>
+            </div>
+        </div>
 
-    <h4>GoPro</h4>
+        <a class="mt-3" href="<?php echo $path . $producter->url_store; ?>">Mas productos de la tienda</a>
 
-    <p>Digiworld US, New York’s no.1 online retailer was established in May 2012 with the aim and vision to become the one-stop shop for retail in New York with implementation of best practices both online</p>
+    </div>
 
-    <a href="#">More Products from gopro</a>
+    <!-- RESEÑAS GLOBALES -->
 
-</div>
+    <div class="ps-tab" id="tab-4">
 
-<div class="ps-tab" id="tab-4">
+        <div class="row">
 
-    <div class="row">
+            <div class="col-lg-5 col-12 ">
 
-        <div class="col-lg-5 col-12 ">
+                <div class="ps-block--average-rating">
 
-            <div class="ps-block--average-rating">
+                    <div class="ps-block__header">
 
-                <div class="ps-block__header">
+                        <?php $promReview = TemplateController::calificationStars(json_decode($producter->reviews_product, true)); ?>
 
-                    <h3>4.00</h3>
+                        <h3><?php echo $promReview; ?>.00</h3>
 
-                    <select class="ps-rating" data-read-only="true">
+                        <select class="ps-rating" data-read-only="true">
 
-                        <option value="1">1</option>
-                        <option value="1">2</option>
-                        <option value="1">3</option>
-                        <option value="1">4</option>
-                        <option value="2">5</option>
+                            <!-- reseñas en estrellas -->
+                            <?php
+                            if ($reviews > 0) {
+                                for ($i = 0; $i < 5; $i++) {
+                                    if ($reviews < ($i + 1)) {
+                                        echo '<option value="1">' . $i + 1 . '</option>';
+                                    } else {
+                                        echo '<option value="2">' . $i + 1 . '</option>';
+                                    }
+                                }
+                            } else {
+                                echo '<option value="0">0</option>';
+                                for ($i = 0; $i < 5; $i++) {
+                                    echo '<option value="1">' . $i + 1 . '</option>';
+                                }
+                            }
+                            ?>
 
-                    </select>
+                        </select>
 
-                    <span>1 Review</span>
-
-                </div>
-
-                <div class="ps-block__star">
-
-                    <span>5 Star</span>
-
-                    <div class="ps-progress" data-value="100">
-
-                        <span></span>
-
-                    </div>
-
-                    <span>100%</span>
-
-                </div>
-
-                <div class="ps-block__star">
-
-                    <span>4 Star</span>
-
-                    <div class="ps-progress" data-value="0">
-
-                        <span></span>
-
-                    </div>
-
-                    <span>0</span>
-
-                </div>
-
-                <div class="ps-block__star">
-
-                    <span>3 Star</span>
-
-                    <div class="ps-progress" data-value="0">
-
-                        <span></span>
+                        <!-- numero de reviciones -->
+                        <span>(<?php
+                                if ($producter->reviews_product != null) {
+                                    echo count(json_decode($producter->reviews_product, true));
+                                } else {
+                                    echo "0";
+                                }
+                                ?> reseñas)
+                        </span>
 
                     </div>
 
-                    <span>0</span>
+                    <!-- bloque de las estrellas -->
+                    <?php if (count($allReview) > 0) {
+                        /* bloque donde se almacenaran las estrellas */
+                        $blockStart= array(
+                            "1" => 0,
+                            "2" => 0,
+                            "3" => 0,
+                            "4" => 0,
+                            "5" => 0
+                        );
+                        $repReviews= array();
+                        /* separamos las estrellas repetidas */
+                        foreach ($allReview as $key => $value) {
+                            array_push($repReviews, $value["review"]);
+                            
+                        }
+
+                        /* se unen las estrellas */
+                        foreach($blockStart as $key => $value){
+                            if(!empty(array_count_values($repReviews)[$key])){
+                                $blockStart[$key]= array_count_values($repReviews)[$key]; 
+                            }
+                        }
+                    } ?>
+
+                    <?php for ($i = 5; $i > 0; $i--) : ?>
+                        <div class="ps-block__star">
+
+                            <span><?php echo $i; ?> Star</span>
+
+                            <div class="ps-progress" data-value="<?php echo round($blockStart[$i]*100/count($allReview)); ?>">
+
+                                <span></span>
+
+                            </div>
+
+                            <span><?php echo round($blockStart[$i]*100/count($allReview)); ?>%</span>
+
+                        </div>
+                    <?php endfor; ?>
 
                 </div>
 
-                <div class="ps-block__star">
+                <hr class="mt-5">
 
-                    <span>2 Star</span>
+                <div class="my-5">
+                    <form class="ps-form--review">
 
-                    <div class="ps-progress" data-value="0">
-                        <span></span>
+                        <h4>Submit Your Review</h4>
+
+                        <p>Your email address will not be published. Required fields are marked<sup>*</sup></p>
+
+                        <div class="form-group form-group__rating">
+
+                            <label>Your rating of this product</label>
+
+                            <select class="ps-rating" data-read-only="false">
+
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <textarea class="form-control" rows="6" placeholder="Write your review here">
+
+                        </textarea>
+
+                        </div>
+
+                        <div class="form-group submit">
+
+                            <button class="ps-btn">Submit Review</button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12 ">
+                <!-- tomar 4 reseñas aleatoriamente -->
+                <div class="media border p-3 mb-3">
+                    <img class="mr-5 mt-1 rounded-circle" style="width: 120px;" src="img/users/default/default.png" alt="<?php echo $producter->name_user; ?>">
+                    <div class="media-body ml-3 ">
+                        <h4 class="mt-0"><?php echo $producter->name_store; ?></h4>
+                        <p> <?php echo $producter->about_store; ?></p>
                     </div>
-
-                    <span>0</span>
-
                 </div>
+            </div>
 
-                <div class="ps-block__star">
+        </div>
 
-                    <span>1 Star</span>
+    </div>
 
-                    <div class="ps-progress" data-value="0">
-                        <span></span>
-                    </div>
+    <div class="ps-tab" id="tab-5">
 
-                    <span>0</span>
+        <div class="ps-block--questions-answers">
 
-                </div>
+            <h3>Questions and Answers</h3>
+
+            <div class="form-group">
+
+                <input class="form-control" type="text" placeholder="Have a question? Search for answer?">
 
             </div>
 
         </div>
 
-        <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12 ">
-
-            <form class="ps-form--review" action="index.html" method="get">
-
-                <h4>Submit Your Review</h4>
-
-                <p>Your email address will not be published. Required fields are marked<sup>*</sup></p>
-
-                <div class="form-group form-group__rating">
-
-                    <label>Your rating of this product</label>
-
-                    <select class="ps-rating" data-read-only="false">
-
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-
-                    </select>
-
-                </div>
-
-                <div class="form-group">
-
-                    <textarea class="form-control" rows="6" placeholder="Write your review here">
-                        
-                    </textarea>
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col-md-6 col-sm-12">
-
-                        <div class="form-group">
-                            <input class="form-control" type="text" placeholder="Your Name">
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-6 col-sm-12">
-
-                        <div class="form-group">
-                            <input class="form-control" type="email" placeholder="Your Email">
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="form-group submit">
-
-                    <button class="ps-btn">Submit Review</button>
-
-                </div>
-
-            </form>
-
-        </div>
-
     </div>
 
-</div>
+    <div class="ps-tab active" id="tab-6">
 
-<div class="ps-tab" id="tab-5">
-
-    <div class="ps-block--questions-answers">
-
-        <h3>Questions and Answers</h3>
-
-        <div class="form-group">
-
-            <input class="form-control" type="text" placeholder="Have a question? Search for answer?">
-        
-        </div>
+        <p>Sorry no more offers available</p>
 
     </div>
-
-</div>
-
-<div class="ps-tab active" id="tab-6">
-
-    <p>Sorry no more offers available</p>
-
-</div>
 
 </div>

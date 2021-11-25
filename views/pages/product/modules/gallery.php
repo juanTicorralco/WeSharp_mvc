@@ -1,4 +1,4 @@
-<div class="ps-product__thumbnail" data-vertical="true">
+<div class="ps-product__thumbnail col-lg-5 col-12 " data-vertical="true">
 
     <figure>
 
@@ -38,3 +38,4 @@
     </div>
 
 </div><!-- End Gallery -->
+

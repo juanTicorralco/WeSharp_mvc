@@ -13,6 +13,7 @@
 
             <select class="ps-rating" data-read-only="true">
 
+            <!-- reseñas en estrellas -->
                 <?php
                 if ($reviews > 0) {
                     for ($i = 0; $i < 5; $i++) {
@@ -30,9 +31,9 @@
                 }
                 ?>
 
-
             </select>
 
+            <!-- numero de reviciones -->
             <span>(<?php
                     if ($producter->reviews_product != null) {
                         echo count(json_decode($producter->reviews_product, true));
@@ -235,7 +236,6 @@
         <p class="tags"><strong> Tags</strong>
         <?php 
         $tags= json_decode($producter->tags_product, true);
-         //echo '<pre>'; print_r($tags); echo '</pre>'; 
         foreach($tags as $key => $value):  ?>
 
             <a href="<?php echo $path.$value; ?>"><?php echo $value; ?></a>
