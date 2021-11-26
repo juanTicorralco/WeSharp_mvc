@@ -19,12 +19,12 @@ if ($totalResultProducts == "no found") {
     <?php if (isset($_COOKIE["tab"])) : ?>
         <?php if ($_COOKIE["tab"] == "grid") : ?>
             <div class="ps-tab active" id="tab-1">
-            <?php else : ?>
+        <?php else : ?>
                 <div class="ps-tab" id="tab-1">
-                <?php endif; ?>
-            <?php else : ?>
-                <div class="ps-tab active" id="tab-1">
-                <?php endif; ?>
+        <?php endif; ?>
+    <?php elseif(!isset($_COOKIE["tab"])):?>
+        <div class="ps-tab active" id="tab-1">
+    <?php endif; ?>
 
                 <div class="ps-shopping-product">
 

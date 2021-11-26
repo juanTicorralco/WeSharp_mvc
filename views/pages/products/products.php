@@ -66,7 +66,7 @@
          /* actualizar las vistas de subcategorias */
          $views= $productRelation[0]->views_subcategory+1;
 
-         $url123= CurlController::api()."subcategories?id=1&nameId=id_subcategory";
+         $url123= CurlController::api()."subcategories?id=".$productRelation[0]->id_subcategory."&nameId=id_subcategory";
          $method123= "PUT";
          $field123= "views_subcategory=".$views;
          $header123=array();
@@ -80,7 +80,7 @@
       /* actualizar las vistas de categorias */
         $views= $productRelation[0]->views_category+1;
 
-        $url123= CurlController::api()."categories?id=1&nameId=id_category";
+        $url123= CurlController::api()."categories?id=".$productRelation[0]->id_category."&nameId=id_category";
         $method123= "PUT";
         $field123= "views_category=".$views;
         $header123=array();

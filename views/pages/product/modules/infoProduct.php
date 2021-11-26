@@ -2,18 +2,19 @@
 
     <h1><?php echo $producter->name_product; ?></h1>
 
+
+
     <div class="ps-product__meta">
 
         <p>Por: <a href="shop-default.html">WeSharp</a></p>
 
         <div class="ps-product__rating">
 
-            <?php $reviews = TemplateController::calificationStars(json_decode($producter->reviews_product, true));
-            ?>
+            <?php $reviews = TemplateController::calificationStars(json_decode($producter->reviews_product, true)); ?>
 
             <select class="ps-rating" data-read-only="true">
 
-            <!-- reseñas en estrellas -->
+                <!-- reseñas en estrellas -->
                 <?php
                 if ($reviews > 0) {
                     for ($i = 0; $i < 5; $i++) {
@@ -95,52 +96,48 @@
         <!-- especificaciones del producto -->
         <?php $spect = json_decode($producter->specifications_product, true); ?>
 
-        <?php foreach ($spect as $key => $value) :?>
-            <?php if( !empty( array_keys($value)[0])): ?>
-            <figure>
+        <?php foreach ($spect as $key => $value) : ?>
+            <?php if (!empty(array_keys($value)[0])) : ?>
+                <figure>
 
-                <figcaption>Elige: <strong><?php echo array_keys($value)[0]; ?></strong></figcaption>
+                    <figcaption>Elige: <strong><?php echo array_keys($value)[0]; ?></strong></figcaption>
 
-                <?php foreach ($value as $key3 => $value3) : ?>
-                    <?php foreach ($value3 as $key4 => $value4) : ?>
-                        <?php if (array_keys($value)[0] == "Color") : ?>
-                            <div class="ps-variant round-circle mr-3" style="background-color:<?php echo $value4; ?>;
+                    <?php foreach ($value as $key3 => $value3) : ?>
+                        <?php foreach ($value3 as $key4 => $value4) : ?>
+                            <?php if (array_keys($value)[0] == "Color") : ?>
+                                <div class="ps-variant round-circle mr-3" style="background-color:<?php echo $value4; ?>;
                         width:30px;
                         height:30px;
                         cursor:pointer;
                         border:1px solid #bbb;">
-                                <span class="ps-variant__tooltip"><?php echo $value4; ?></span>
-                            </div>
-                        <?php elseif (array_keys($value)[0] == "Talla") : ?>
-                            <div class="ps-variant ps-variant--size">
-                                <span class="ps-variant__tooltip"><?php echo $value4; ?></span>
-                                <span class="ps-variant__size"><?php echo $value4; ?></span>
-                            </div>
-                            <?php elseif (array_keys($value)[0] == "Numero") : ?>
-                            <div class="ps-variant ps-variant--size">
-                                <span class="ps-variant__tooltip"><?php echo $value4; ?></span>
-                                <span class="ps-variant__size"><?php echo $value4; ?></span>
-                            </div>
-                        <?php endif; ?>
+                                    <span class="ps-variant__tooltip"><?php echo $value4; ?></span>
+                                </div>
+                            <?php else : ?>
+                                <div class="ps-variant ps-variant--size">
+                                    <span class="ps-variant__tooltip"><?php echo $value4; ?></span>
+                                    <span class="ps-variant__size"><?php echo substr($value4, 0, 3); ?></span>
+                                </div>
+
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     <?php endforeach; ?>
-                <?php endforeach; ?>
-            </figure>
+                </figure>
             <?php endif; ?>
         <?php endforeach; ?>
 
     </div>
 
     <!-- validar el tablero de ofertas -->
-    <?php  
-    $today= date("Y-m-d");
-    if( $producter->offer_product != null && $producter->stock_product !=0 && $today < date(json_decode($producter->offer_product,true)[2])): ?>
+    <?php
+    $today = date("Y-m-d");
+    if ($producter->offer_product != null && $producter->stock_product != 0 && $today < date(json_decode($producter->offer_product, true)[2])) : ?>
         <div class="ps-product__countdown">
 
             <figure>
 
                 <figcaption> ¡No te lo pierdas! Esta promoción caducará en</figcaption>
 
-                <ul class="ps-countdown" data-time="<?php echo json_decode($producter->offer_product,true)[2]; ?>">
+                <ul class="ps-countdown" data-time="<?php echo json_decode($producter->offer_product, true)[2]; ?>">
 
                     <li><span class="days"></span>
                         <p>Dias</p>
@@ -179,7 +176,7 @@
         </div>
     <?php endif; ?>
 
-    
+
 
     <div class="ps-product__shopping">
 
@@ -193,7 +190,7 @@
                     <i class="fa fa-plus"></i>
                 </button>
 
-                <button class="down"  onclick="changeQualyty($('.quantity input').val(), 'down')">
+                <button class="down" onclick="changeQualyty($('.quantity input').val(), 'down')">
                     <i class="fa fa-minus"></i>
                 </button>
 
@@ -227,19 +224,19 @@
 
             <strong> Categories:</strong>
 
-            <a href="<?php echo $path.$producter->url_category; ?>"><?php echo $producter->name_category; ?></a>,
-            <a href="<?php echo $path.$producter->url_subcategory; ?>"><?php echo $producter->name_subcategory; ?></a>,
-            <a href="<?php echo $path.$producter->title_list_product; ?>"><?php echo $producter->title_list_product; ?></a>
+            <a href="<?php echo $path . $producter->url_category; ?>"><?php echo $producter->name_category; ?></a>,
+            <a href="<?php echo $path . $producter->url_subcategory; ?>"><?php echo $producter->name_subcategory; ?></a>,
+            <a href="<?php echo $path . $producter->title_list_product; ?>"><?php echo $producter->title_list_product; ?></a>
 
         </p>
 
         <p class="tags"><strong> Tags</strong>
-        <?php 
-        $tags= json_decode($producter->tags_product, true);
-        foreach($tags as $key => $value):  ?>
+            <?php
+            $tags = json_decode($producter->tags_product, true);
+            foreach ($tags as $key => $value) :  ?>
 
-            <a href="<?php echo $path.$value; ?>"><?php echo $value; ?></a>
-        <?php endforeach; ?>
+                <a href="<?php echo $path . $value; ?>"><?php echo $value; ?></a>
+            <?php endforeach; ?>
         </p>
 
     </div>

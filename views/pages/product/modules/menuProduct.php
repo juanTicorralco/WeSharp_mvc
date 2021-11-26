@@ -117,47 +117,47 @@
 
                     </div>
 
-                    <!-- bloque de las estrellas -->
-                    <?php if (count($allReview) > 0) {
-                        /* bloque donde se almacenaran las estrellas */
-                        $blockStart= array(
-                            "1" => 0,
-                            "2" => 0,
-                            "3" => 0,
-                            "4" => 0,
-                            "5" => 0
-                        );
-                        $repReviews= array();
-                        /* separamos las estrellas repetidas */
-                        foreach ($allReview as $key => $value) {
-                            array_push($repReviews, $value["review"]);
-                            
-                        }
-
-                        /* se unen las estrellas */
-                        foreach($blockStart as $key => $value){
-                            if(!empty(array_count_values($repReviews)[$key])){
-                                $blockStart[$key]= array_count_values($repReviews)[$key]; 
+                    <?php if ($producter->reviews_product != null) : ?>
+                        <!-- bloque de las estrellas -->
+                        <?php if (count($allReview) > 0) {
+                            /* bloque donde se almacenaran las estrellas */
+                            $blockStart = array(
+                                "1" => 0,
+                                "2" => 0,
+                                "3" => 0,
+                                "4" => 0,
+                                "5" => 0
+                            );
+                            $repReviews = array();
+                            /* separamos las estrellas repetidas */
+                            foreach ($allReview as $key => $value) {
+                                array_push($repReviews, $value["review"]);
                             }
-                        }
-                    } ?>
 
-                    <?php for ($i = 5; $i > 0; $i--) : ?>
-                        <div class="ps-block__star">
+                            /* se unen las estrellas */
+                            foreach ($blockStart as $key => $value) {
+                                if (!empty(array_count_values($repReviews)[$key])) {
+                                    $blockStart[$key] = array_count_values($repReviews)[$key];
+                                }
+                            }
+                        } ?>
 
-                            <span><?php echo $i; ?> Star</span>
+                        <?php for ($i = 5; $i > 0; $i--) : ?>
+                            <div class="ps-block__star">
 
-                            <div class="ps-progress" data-value="<?php echo round($blockStart[$i]*100/count($allReview)); ?>">
+                                <span><?php echo $i; ?> Star</span>
 
-                                <span></span>
+                                <div class="ps-progress" data-value="<?php echo round($blockStart[$i] * 100 / count($allReview)); ?>">
+
+                                    <span></span>
+
+                                </div>
+
+                                <span><?php echo round($blockStart[$i] * 100 / count($allReview)); ?>%</span>
 
                             </div>
-
-                            <span><?php echo round($blockStart[$i]*100/count($allReview)); ?>%</span>
-
-                        </div>
-                    <?php endfor; ?>
-
+                        <?php endfor; ?>
+                    <?php endif; ?>
                 </div>
 
                 <hr class="mt-5">
@@ -206,13 +206,48 @@
 
             <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12 ">
                 <!-- tomar 4 reseñas aleatoriamente -->
-                <div class="media border p-3 mb-3">
-                    <img class="mr-5 mt-1 rounded-circle" style="width: 120px;" src="img/users/default/default.png" alt="<?php echo $producter->name_user; ?>">
-                    <div class="media-body ml-3 ">
-                        <h4 class="mt-0"><?php echo $producter->name_store; ?></h4>
-                        <p> <?php echo $producter->about_store; ?></p>
-                    </div>
-                </div>
+                <?php if ($producter->reviews_product != null) : ?>
+                    <?php
+                    $rand = array_rand($allReview, 4);
+                    foreach ($rand as $key => $value) : ?>
+
+                        <div class="media border p-3 mb-3">
+                            <?php if (empty($allReview[$value]["user"])) : ?>
+                                <img class="mr-5 mt-1 rounded-circle" style="width: 120px;" src="img/users/default/default.png" alt="<?php echo $producter->name_user; ?>">
+                            <?php endif; ?>
+                            <div class="media-body ml-3 ">
+
+                                <?php if (empty($allReview[$value]["user"])) : ?>
+                                    <h4 class="mt-0"><?php echo $producter->name_store; ?></h4>
+                                <?php endif; ?>
+                                <select class="ps-rating" data-read-only="true">
+
+                                    <!-- reseñas en estrellas -->
+                                    <?php
+                                    if ($allReview[$value]["review"] > 0) {
+                                        for ($i = 0; $i < 5; $i++) {
+                                            if ($allReview[$value]["review"] < ($i + 1)) {
+                                                echo '<option value="1">' . $i + 1 . '</option>';
+                                            } else {
+                                                echo '<option value="2">' . $i + 1 . '</option>';
+                                            }
+                                        }
+                                    } else {
+                                        echo '<option value="0">0</option>';
+                                        for ($i = 0; $i < 5; $i++) {
+                                            echo '<option value="1">' . $i + 1 . '</option>';
+                                        }
+                                    }
+                                    ?>
+
+                                </select>
+
+                                <p> <?php echo $allReview[$value]["comment"]; ?></p>
+                            </div>
+                        </div>
+
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
 
         </div>
