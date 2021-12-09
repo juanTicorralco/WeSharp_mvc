@@ -1,11 +1,11 @@
 <?php
 /* Bring the products of categories */
 /* aqui tambien se cambai la paginacion */
-$url4 = CurlController::api() . "relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=" . $urlParams[0] . "&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24";
+$url4 = CurlController::api() . "relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=" . $urlParams[0] . "&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product,summary_product";
 $totalResultProducts = CurlController::request($url4, $method, $field, $header)->result;
 if ($totalResultProducts == "no found") {
     /* Bring the products of categories */
-    $url4 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory&equalTo=" . $urlParams[0] . "&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24";
+    $url4 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory&equalTo=" . $urlParams[0] . "&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product,summary_product";
     $totalResultProducts = CurlController::request($url4, $method, $field, $header)->result;
 }
 ?>
@@ -22,7 +22,7 @@ if ($totalResultProducts == "no found") {
         <?php else : ?>
                 <div class="ps-tab" id="tab-1">
         <?php endif; ?>
-    <?php elseif(!isset($_COOKIE["tab"])):?>
+    <?php else:?>
         <div class="ps-tab active" id="tab-1">
     <?php endif; ?>
 

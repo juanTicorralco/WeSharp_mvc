@@ -1,5 +1,5 @@
 <?php
-$url10 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=title_list_product&equalTo=" . $producter->title_list_product;
+$url10 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=title_list_product&equalTo=" . $producter->title_list_product."&select=id_product,url_category,image_product,name_product,url_product,price_product,offer_product,stock_product,name_store,reviews_product";
 $method10 = "GET";
 $field10 = array();
 $header10 = array();

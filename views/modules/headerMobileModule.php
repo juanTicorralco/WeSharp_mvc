@@ -72,7 +72,7 @@
                                         <ul class="sub-menu" style="display: none;">
                                         <?php
                                     
-                                        $url = CurlController::api() . "subcategories?linkTo=id_category_subcategory&equalTo=" . rawurlencode($value->id_category);
+                                        $url = CurlController::api() . "subcategories?linkTo=id_category_subcategory&equalTo=" . rawurlencode($value->id_category)."&select=url_subcategory,name_subcategory";
                                         $method= "GET";
                                         $field=array();
                                         $header=array();

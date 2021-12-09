@@ -1,6 +1,6 @@
 <?php 
     $aleatorProduct= rand(0, ($totalProducts-4));
-    $url = "http://api.WeSharp2.com/relations?rel=products,categories&type=product,category&orderBy=Id_product&orderMode=ASC&startAt=$aleatorProduct&endAt=2";
+    $url = "http://api.WeSharp2.com/relations?rel=products,categories&type=product,category&orderBy=Id_product&orderMode=ASC&startAt=$aleatorProduct&endAt=2&select=url_product,default_banner_product,name_product,url_category";
     $method= "GET";
     $field=array();
     $header=array();

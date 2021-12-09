@@ -2,7 +2,7 @@
     /* choose a ramdom id for the banner */
     $randomId= rand(1, $totalProducts);
     /* request to the api about the product banner */
-    $url= CurlController::api()."relations?rel=products,categories&type=product,category&linkTo=id_product&equalTo=$randomId";
+    $url= CurlController::api()."relations?rel=products,categories&type=product,category&linkTo=id_product&equalTo=".$randomId."&select=top_banner_product,url_category";
     $method="GET";
     $field=array();
     $header=array();

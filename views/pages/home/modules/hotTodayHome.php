@@ -1,7 +1,7 @@
 <?php
 /* bring all the products */
 $today = date("Y-m-d");
-$url = CurlController::api() . "relations?rel=products,categories&type=product,category";
+$url = CurlController::api() . "relations?rel=products,categories&type=product,category&select=offer_product,stock_product,gallery_product,url_category,name_category,price_product,url_product,reviews_product,name_product";
 $method = "GET";
 $field = array();
 $header = array();
@@ -45,7 +45,7 @@ if (count($promotionToday) > 10) {
 
                     <div class="ps-block__header">
 
-                        <h3>Deal hot today</h3>
+                        <h3>Ofertas del dia</h3>
 
                         <div class="ps-block__navigation">
                             <a class="ps-carousel__prev" href=".ps-carousel--deal-hot">
@@ -99,10 +99,6 @@ if (count($promotionToday) > 10) {
                                                     <!-- offer of product -->
                                                     <?php $offer = json_decode($value->offer_product); ?>
 
-                                                    <div class="ps-product__badge">
-                                                        <span>Save <br> $<?php echo TemplateController::SavePrice($value->price_product, $offer[1], $offer[0]); ?></span>
-                                                    </div>
-
                                                 </div>
 
                                             </figure>
@@ -115,9 +111,12 @@ if (count($promotionToday) > 10) {
                                                         <img src="img/products/<?php echo $value->url_category; ?>/gallery/<?php echo $value3; ?>" alt="<?php echo $value->name_category; ?>">
                                                     </div>
                                                 <?php endforeach; ?>
+
                                             </div>
 
+                                            
                                         </div>
+                                        
 
                                         <div class="ps-product__info">
 
@@ -165,14 +164,14 @@ if (count($promotionToday) > 10) {
                                                             } else {
                                                                 echo "0";
                                                             }
-                                                            ?> review)
+                                                            ?> reseñas)
                                                     </span>
 
                                                 </div>
 
                                                 <div class="ps-product__specification">
 
-                                                    <p>Status:<strong class="in-stock"> In Stock</strong></p>
+                                                    <p>Status:<strong class="in-stock"> Disponible</strong></p>
 
                                                 </div>
 
@@ -180,24 +179,24 @@ if (count($promotionToday) > 10) {
 
                                             <div class="ps-product__expires">
 
-                                                <p>Expires In</p>
+                                                <p>Expira en</p>
 
                                                 <ul class="ps-countdown" data-time="<?php echo $offer[2]; ?>">
 
                                                     <li><span class="days"></span>
-                                                        <p>Days</p>
+                                                        <p>Dias</p>
                                                     </li>
 
                                                     <li><span class="hours"></span>
-                                                        <p>Hours</p>
+                                                        <p>Horas</p>
                                                     </li>
 
                                                     <li><span class="minutes"></span>
-                                                        <p>Minutes</p>
+                                                        <p>Minutos</p>
                                                     </li>
 
                                                     <li><span class="seconds"></span>
-                                                        <p>Seconds</p>
+                                                        <p>Segundos</p>
                                                     </li>
 
                                                 </ul>
@@ -210,9 +209,13 @@ if (count($promotionToday) > 10) {
                                                     <span class="ps-progress__value"></span>
                                                 </div>
 
-                                                <p><strong><?php echo $value->stock_product; ?>/100</strong> Sold</p>
+                                                <p><strong><?php echo $value->stock_product; ?>/100</strong> Vendidos</p>
 
                                             </div>
+
+                                            <div class="ps-product__badge">
+                                                        <span>Ahorra <br> $<?php echo TemplateController::SavePrice($value->price_product, $offer[1], $offer[0]); ?></span>
+                                                    </div>
 
                                         </div>
 
@@ -235,7 +238,7 @@ if (count($promotionToday) > 10) {
             ======================================-->
 
             <?php
-            $url = CurlController::api() . "relations?rel=products,categories&type=product,category&orderBy=sales_product&orderMode=DESC&startAt=0&endAt=20";
+            $url = CurlController::api() . "relations?rel=products,categories&type=product,category&orderBy=sales_product&orderMode=DESC&startAt=0&endAt=20&select=image_product,url_product,url_category,name_product,price_product,offer_product";
             $methos = "GET";
             $field = array();
             $header = array();
@@ -253,7 +256,7 @@ if (count($promotionToday) > 10) {
 
                 <aside class="widget widget_best-sale" data-mh="dealhot">
 
-                    <h3 class="widget-title">Top 20 Best Seller</h3>
+                    <h3 class="widget-title">Top 20 Mas Vendidos</h3>
 
                     <div class="widget__content">
 

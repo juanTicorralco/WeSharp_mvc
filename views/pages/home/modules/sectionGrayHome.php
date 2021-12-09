@@ -1,5 +1,5 @@
 <?php
-    $url= CurlController::api()."categories?orderBy=views_category&orderMode=DESC&startAt=0&endAt=6";
+    $url= CurlController::api()."categories?orderBy=views_category&orderMode=DESC&startAt=0&endAt=6&select=name_category,id_category,url_category";
     $method="GET";
     $field=array();
     $header=array();
@@ -28,7 +28,7 @@
                     <ul>
 
                        <?php 
-                            $url= CurlController::api()."subcategories?linkTo=id_category_subcategory&equalTo=".$value->id_category;
+                            $url= CurlController::api()."subcategories?linkTo=id_category_subcategory&equalTo=".$value->id_category."&select=url_subcategory,name_subcategory";
                             $method="GET";
                             $field=array();
                             $header=array();
@@ -41,7 +41,7 @@
                        <?php endforeach;?>
                     </ul>
 
-                    <a class="ps-block__more-link" href="<?php echo $path.$value->url_category; ?>">View All</a>
+                    <a class="ps-block__more-link" href="<?php echo $path.$value->url_category; ?>">Ver todo</a>
 
                 </div>
 
@@ -49,7 +49,7 @@
                 Vertical Slider Category
                 ======================================-->
                     <?php
-                        $url= CurlController::api()."products?linkTo=id_category_product&equalTo=".$value->id_category."&orderBy=views_product&orderMode=DESC&startAt=0&endAt=6";
+                        $url= CurlController::api()."products?linkTo=id_category_product&equalTo=".$value->id_category."&orderBy=views_product&orderMode=DESC&startAt=0&endAt=6&select=url_product,vertical_slider_product,name_product,image_product,offer_product,reviews_product,stock_product,price_product";
                         $method="GET";
                         $field=array();
                         $header=array();
@@ -99,7 +99,7 @@
                                         <div class="ps-product__badge">-<?php echo TemplateController::percentOffer($value3->price_product, json_decode($value3->offer_product, true)[1], json_decode($value3->offer_product, true)[0]) ; ?>%</div>
                                     <?php endif; ?>
                                 <?php else: ?>
-                                    <div class="ps-product__badge out-stock">Out Of Stock</div>
+                                    <div class="ps-product__badge out-stock">Fuera de Stock</div>
                                 <?php endif; ?>
 
                             </div>
@@ -141,7 +141,7 @@
                                             echo count(json_decode($value3->reviews_product, true));}else{
                                                 echo "0";
                                             }
-                                            ?> review)</span>
+                                            ?> reseñas)</span>
 
                                         </div>
                                         <?php if($value3->offer_product!=null):?>

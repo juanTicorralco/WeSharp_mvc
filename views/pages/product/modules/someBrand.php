@@ -1,5 +1,5 @@
 <?php
-$url11 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=id_store_product&equalTo=" . $producter->id_store . "&orderBy=id_product&orderMode=DESC&startAt=0&endAt=4";
+$url11 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=id_store_product&equalTo=" . $producter->id_store . "&orderBy=id_product&orderMode=DESC&startAt=0&endAt=4&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product";
 $method11 = "GET";
 $field11 = array();
 $header11 = array();
@@ -35,7 +35,6 @@ $storeProduct = CurlController::request($url11, $method11, $field11, $header11)-
                     <?php else : ?>
                         <div class="ps-product__badge out-stock">Out Of Stock</div>
                     <?php endif; ?>
-
 
                     <ul class="ps-product__actions">
 

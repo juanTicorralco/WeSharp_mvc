@@ -1,5 +1,5 @@
 <?php
-$url = CurlController::api() . "categories";
+$url = CurlController::api() . "categories?select=url_category,name_category,icon_category,title_list_category,id_category";
 $method = "GET";
 $field = array();
 $header = array();
@@ -99,7 +99,7 @@ Header Content
                                                 <ul class="mega-menu__list">
 
                                                     <?php
-                                                    $url = CurlController::api() . "subcategories?linkTo=title_list_subcategory&equalTo=" . rawurlencode($value);
+                                                    $url = CurlController::api() . "subcategories?linkTo=title_list_subcategory&equalTo=" . rawurlencode($value)."&select=url_subcategory,name_subcategory";
                                                     $method = "GET";
                                                     $field = array();
                                                     $header = array();
@@ -143,8 +143,8 @@ Header Content
                             <option value="1">Technology toys</option>
                         </select>
                     </div> -->
-                    <input class="form-control inputSearch" type="text" placeholder="I'm shopping for...">
-                    <button type="button" class="btnSearch" path="<?php echo $path; ?>">Search</button>
+                    <input class="form-control inputSearch" type="text" placeholder="Buscar por...">
+                    <button type="button" class="btnSearch" path="<?php echo $path; ?>">Buscar</button>
                 </form>
             </div>
 

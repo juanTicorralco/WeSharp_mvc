@@ -1,5 +1,4 @@
 <?php
-
 /* Direction Route  */
 $routesArray = explode("/", $_SERVER['REQUEST_URI']);
 
@@ -10,7 +9,7 @@ if (!empty(array_filter($routesArray)[1])) {
 
 if (!empty($urlParams[0])) {
     /* filter categorys whidt URL paremers */
-    $url = CurlController::api() . "categories?linkTo=url_category&equalTo=" . $urlParams[0];
+    $url = CurlController::api() . "categories?linkTo=url_category&equalTo=" . $urlParams[0] . "&select=url_category";
     $method = "GET";
     $field = array();
     $header = array();
@@ -19,7 +18,7 @@ if (!empty($urlParams[0])) {
 
     if ($urlCategories->status == 404) {
         /* filter subcategorys whidt URL paremers */
-        $url = CurlController::api() . "subcategories?linkTo=url_subcategory&equalTo=" . $urlParams[0];
+        $url = CurlController::api() . "subcategories?linkTo=url_subcategory&equalTo=" . $urlParams[0] . "&select=url_subcategory";
         $method = "GET";
         $field = array();
         $header = array();
@@ -28,136 +27,75 @@ if (!empty($urlParams[0])) {
 
         if ($urlSubcategories->status == 404) {
             /* filter porducts whidt URL paremers */
-            $url = CurlController::api() . "products?linkTo=url_product&equalTo=" . $urlParams[0];
+            $url = CurlController::api() . "products?linkTo=url_product&equalTo=" . $urlParams[0] . "&select=url_product";
             $method = "GET";
             $field = array();
             $header = array();
 
             $urlProduct = CurlController::request($url, $method, $field, $header);
 
-            if($urlProduct->status==404){
-                
-                    /* valdate if there is pagination */
-                    if(isset($urlParams[1])){
-                        if(is_numeric($urlParams[1])){
-                            /* aqui se cambia la paginacion */
-                            $starAt= ($urlParams[1]*24) - 24;
-                        }else{
-                            echo '<script> 
-                                window.location= "'.$path.$urlParams[1].'"
-                            </script>';   
-                        }
-                    }else{
-                        $starAt=0;
-                    }
+            if ($urlProduct->status == 404) {
 
-                    /* validar que haya parametros de orden */
-                    if(isset($urlParams[2])){
-                        if(is_string($urlParams[2])){
-                            if($urlParams[2]=="new"){
-                                $orderBy="id_product";
-                                $orderMode="DESC";
-                            }
-                            else if($urlParams[2]=="latets"){
-                                $orderBy="id_product";
-                                $orderMode="ASC";
-                            }
-                            else if($urlParams[2]=="low"){
-                                $orderBy="price_product";
-                                $orderMode="ASC";
-                            }
-                            else if($urlParams[2]=="higt"){
-                                $orderBy="price_product";
-                                $orderMode="DESC";
-                            }else{
-                                echo '<script> 
-                                window.location= "'.$path.$urlParams[0].'";
+                /* valdate if there is pagination */
+                if (isset($urlParams[1])) {
+                    if (is_numeric($urlParams[1])) {
+                        /* aqui se cambia la paginacion */
+                        $starAt = ($urlParams[1] * 24) - 24;
+                    } else {
+                        echo '<script> 
+                                window.location= "' . $path . $urlParams[1] . '"
                             </script>';
-                            }
-                        }else{
-                            echo '<script> 
-                            window.location= "'.$path.$urlParams[0].'";
-                        </script>';
-                        }
-                    }else{
-                        $orderBy="id_product";
-                        $orderMode="DESC";
                     }
+                } else {
+                    $starAt = 0;
+                }
 
-                /* filtrar por busqueda nombre */
-                $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=name_product&search=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
-                $method = "GET";
-                $field = array();
-                $header = array();
-    
-                $urlSearch = CurlController::request($url, $method, $field, $header);     
+                /* validar que haya parametros de orden */
+                if (isset($urlParams[2])) {
+                    if (is_string($urlParams[2])) {
+                        if ($urlParams[2] == "new") {
+                            $orderBy = "id_product";
+                            $orderMode = "DESC";
+                        } else if ($urlParams[2] == "latets") {
+                            $orderBy = "id_product";
+                            $orderMode = "ASC";
+                        } else if ($urlParams[2] == "low") {
+                            $orderBy = "price_product";
+                            $orderMode = "ASC";
+                        } else if ($urlParams[2] == "higt") {
+                            $orderBy = "price_product";
+                            $orderMode = "DESC";
+                        } else {
+                            echo '<script> 
+                                window.location= "' . $path . $urlParams[0] . '";
+                            </script>';
+                        }
+                    } else {
+                        echo '<script> 
+                            window.location= "' . $path . $urlParams[0] . '";
+                        </script>';
+                    }
+                } else {
+                    $orderBy = "id_product";
+                    $orderMode = "DESC";
+                }
 
-                if($urlSearch->status==404){
+                $linkTo = ["name_product", "title_list_product", "tags_product", "summary_product"];
+                $selecte = "url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product,views_category,name_category,id_category,views_subcategory,name_subcategory,id_subcategory,summary_product";
 
-                    /* filtrar busqueda por titulo de lista */
-                    $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=title_list_product&search=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
+                foreach ($linkTo as $key => $value) {
+
+                    /* filtrar por busqueda con el parametro url de busqueda*/
+                    $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=" . $value . "&search=" . $urlParams[0] . "&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=" . $selecte;
                     $method = "GET";
                     $field = array();
                     $header = array();
-    
-                    $urlSearch = CurlController::request($url, $method, $field, $header);  
-                       
-                    if($urlSearch->status==404){
 
-                        /* filtrar busqueda por tag */
-                        $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=tags_product&search=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
-                        $method = "GET";
-                        $field = array();
-                        $header = array();
-        
-                        $urlSearch = CurlController::request($url, $method, $field, $header);    
-                        
-                        if($urlSearch->status==404){
-
-                            /* filtrar busqueda por resumen del producto */
-                            $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=summary_product&search=".$urlParams[0]."&orderBy=".$orderBy."&orderMode=".$orderMode."&startAt=".$starAt."&endAt=24";
-                            $method = "GET";
-                            $field = array();
-                            $header = array();
-            
-                            $urlSearch = CurlController::request($url, $method, $field, $header);   
-                            
-                            if($urlSearch->status==200){
-                                /* total de productos por resumen del producto */
-                                $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=summary_product&search=".$urlParams[0];
-                                $method = "GET";
-                                $field = array();
-                                $header = array();
-                
-                                $totalSearch = CurlController::request($url, $method, $field, $header)->total;  
-                            }
-                        }else{
-                            /* total de productos encontrados por tag */
-                            $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=tags_product&search=".$urlParams[0];
-                            $method = "GET";
-                            $field = array();
-                            $header = array();
-            
-                            $totalSearch = CurlController::request($url, $method, $field, $header)->total;  
-                        }
-                    }else{
-                        /* total de productos encontrados por titulo de lista */
-                        $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=title_list_product&search=".$urlParams[0];
-                        $method = "GET";
-                        $field = array();
-                        $header = array();
-        
-                        $totalSearch = CurlController::request($url, $method, $field, $header)->total;  
+                    $urlSearch = CurlController::request($url, $method, $field, $header);
+                    if ($urlSearch->status != 404) {
+                        $totalSearch = $urlSearch->total;
+                        break;
                     }
-                }else{
-
-                    /* total de productos encontrados por nombre */
-                    $url2 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=name_product&search=".$urlParams[0];
-                    $method2 = "GET";
-                    $field2 = array();
-                    $header2 = array();
-        
-                    $totalSearch = CurlController::request($url2, $method2, $field2, $header2)->total;   
                 }
             }
         }
@@ -168,16 +106,16 @@ if (!empty($urlParams[0])) {
 $path = TemplateController::path();
 
 /* BRING THE TOTAL OF PRODUCT */
-$url = CurlController::api() . "products";
+$url = CurlController::api() . "products?select=id_product";
 $method = "GET";
 $field = array();
 $header = array();
 
 $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
-//echo '<pre>'; print_r($path); echo '</pre>';
-
+//echo '<pre>'; print_r($totalProducts); echo '</pre>';
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -357,10 +295,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
             include "pages/products/products.php";
         } else if ($urlProduct->status == 200) {
             include "pages/product/product.php";
-        }else if($urlSearch->status==200){
+        } else if ($urlSearch->status == 200) {
             include "pages/search/search.php";
-        }
-        else{
+        } else {
             include "pages/404/404.php";
         }
     } else {
@@ -382,7 +319,7 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
                     <div class="col-xl-5 col-12 ">
                         <div class="ps-form__left">
                             <h3>Newsletter</h3>
-                            <p>Subcribe to get information about products and coupons</p>
+                            <p>Subscribete para recibir cupones y promociones!</p>
                         </div>
                     </div>
 
@@ -392,8 +329,8 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
                             <div class="form-group--nest">
 
-                                <input class="form-control" type="email" placeholder="Email address">
-                                <button class="ps-btn">Subscribe</button>
+                                <input class="form-control" type="email" placeholder="Escribe tu Email">
+                                <button class="ps-btn">Subscribir</button>
 
                             </div>
 

@@ -1,6 +1,6 @@
 <!-- traer toda la informacion del producto -->
 <?php
-$url9 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_product&equalTo=" . $urlParams[0];
+$url9 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_product&equalTo=" . $urlParams[0]."&select=url_category,image_product,name_product,offer_product,price_product,offer_product,views_product,id_product,name_category,url_subcategory,name_subcategory,stock_product,gallery_product,reviews_product,name_store,summary_product,video_product,specifications_product,title_list_product,tags_product,description_product,details_product,about_store,url_store,logo_store,id_store";
 $method9 = "GET";
 $field9 = array();
 $header9 = array();
@@ -10,7 +10,7 @@ $producter = CurlController::request($url9, $method9, $field9, $header9)->result
  /* actualizar las vistas de productos */
  $viewsProduct= $producter->views_product+1;
 
- $url12= CurlController::api()."products?id=".$producter->id_product."&nameId=id_product";
+ $url12= CurlController::api()."products?id=".$producter->id_product."&nameId=id_product&token=no&except=views_product";
  $method12= "PUT";
  $field12= "views_product=".$viewsProduct;
  $header12=array();
@@ -118,8 +118,7 @@ Product Content
         Customers who bought
         ======================================-->
 
-        <?php //include "modules/coustomersWhoBouht.php"; 
-        ?>
+        <?php include "modules/coustomersWhoBouht.php"; ?>
         <!--=====================================
         Related products
         ======================================-->

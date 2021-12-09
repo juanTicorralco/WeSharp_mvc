@@ -10,11 +10,11 @@
 
         <aside class="widget widget_footer widget_contact-us">
 
-            <h4 class="widget-title">Contact us</h4>
+            <h4 class="widget-title">Contactanos</h4>
 
             <div class="widget_content">
 
-                <p>Call us 24/7</p>
+                <p>Llamanos 24/7</p>
                 <h3>1800 97 97 69</h3>
                 <p>502 New Design Str, Melbourne, Australia <br>
                     <a href="mailto:contact@marketplace.co">contact@marketplace.co</a>
@@ -107,12 +107,13 @@
 
     <div class="ps-footer__links">
         <!-- filter the categories and subcategories -->
+        <h5>Categorias</h5>
         <?php foreach($menuCategories as $key => $value): ?>
         <p>
             <strong> <?php echo $value->name_category;?> </strong>
             <?php
                                     
-            $url = CurlController::api() . "subcategories?linkTo=id_category_subcategory&equalTo=" . rawurlencode($value->id_category);
+            $url = CurlController::api() . "subcategories?linkTo=id_category_subcategory&equalTo=" . rawurlencode($value->id_category)."&select=url_subcategory,name_subcategory";
             $method= "GET";
             $field=array();
             $header=array();
@@ -133,10 +134,10 @@
 
     <div class="ps-footer__copyright">
 
-        <p>© 2020 MarketPlace. All Rights Reserved</p>
+        <p>© 2020 WeSharp. Todos los derechos reservados</p>
 
         <p>
-            <span>We Using Safe Payment For:</span>
+            <span>Usamos pagos seguros con:</span>
 
             <a href="#">
                 <img src="img/payment-method/1.jpg" alt="">

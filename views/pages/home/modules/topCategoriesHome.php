@@ -1,5 +1,5 @@
 <?php
-    $url= CurlController::api()."subcategories?orderBy=views_subcategory&orderMode=DESC&startAt=0&endAt=6";
+    $url= CurlController::api()."subcategories?orderBy=views_subcategory&orderMode=DESC&startAt=0&endAt=6&select=url_subcategory,image_subcategory,name_subcategory";
     $method="GET";
     $field=array();
     $header=array();
@@ -10,7 +10,7 @@
 
     <div class="container">
 
-        <h3>Top subcategories of the month</h3>
+        <h3>Top Subcategorias del mes</h3>
 
         <div class="row">
 
