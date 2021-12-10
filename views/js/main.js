@@ -738,6 +738,33 @@
         }
     }
 
+    /*=============================================
+    Función Preload
+    =============================================*/
+
+    function preload(){
+
+        var preloadFalse = $(".preloadFalse");
+        var preloadTrue = $(".preloadTrue");
+
+        if(preloadFalse.length > 0){
+
+            preloadFalse.each(function(i){
+
+                var el = $(this);
+
+                $(el).ready(function(){
+
+                    $(preloadTrue[i]).remove();
+                    $(el).css({"opacity":1,"height":"auto"})
+
+                })
+
+            })
+
+        }
+    }
+
     $(function() {
         backgroundImage();
         owlCarouselConfig();
@@ -767,6 +794,7 @@
         dateTimePicker();
         $('[data-toggle="tooltip"]').tooltip();
         pagination();
+        preload();
     });
 
     $(window).on('load', function() {

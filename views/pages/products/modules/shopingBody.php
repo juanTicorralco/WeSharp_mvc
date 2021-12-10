@@ -17,25 +17,99 @@ if ($totalResultProducts == "no found") {
 
     <!-- checkar si hay una cookie -->
     <?php if (isset($_COOKIE["tab"])) : ?>
-        <?php if ($_COOKIE["tab"] == "grid") : ?>
+        <?php if ($_COOKIE["tab"] == "grid" || $_COOKIE["tab"] == "undefined") : ?>
             <div class="ps-tab active" id="tab-1">
-        <?php else : ?>
+            <?php else : ?>
                 <div class="ps-tab" id="tab-1">
-        <?php endif; ?>
-    <?php else:?>
-        <div class="ps-tab active" id="tab-1">
-    <?php endif; ?>
+                <?php endif; ?>
+            <?php else : ?>
+                <div class="ps-tab active" id="tab-1">
+                <?php endif; ?>
 
                 <div class="ps-shopping-product">
 
                     <div class="row">
 
                         <!--=====================================
-                Product
-                ======================================-->
+                            Product
+                                 ======================================-->
+
+
+                        <div class="container-fluid preloadTrue">
+                            <div class="row">
+                                <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                                    <div class="ph-item">
+                                        <div class="ph-col-12">
+                                            <div class="ph-picture"></div>
+                                        </div>
+
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-12 "></div>
+                                                <div class="ph-col-8 "></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4 "></div>
+                                                <div class="ph-col-8 empty"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                                    <div class="ph-item">
+                                        <div class="ph-col-12">
+                                            <div class="ph-picture"></div>
+                                        </div>
+
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-12 "></div>
+                                                <div class="ph-col-8 "></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4 "></div>
+                                                <div class="ph-col-8 empty"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                                    <div class="ph-item">
+                                        <div class="ph-col-12">
+                                            <div class="ph-picture"></div>
+                                        </div>
+
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-12 "></div>
+                                                <div class="ph-col-8 "></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4 "></div>
+                                                <div class="ph-col-8 empty"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                                    <div class="ph-item">
+                                        <div class="ph-col-12">
+                                            <div class="ph-picture"></div>
+                                        </div>
+
+                                        <div class="ph-col-12">
+                                            <div class="ph-row">
+                                                <div class="ph-col-12 "></div>
+                                                <div class="ph-col-8 "></div>
+                                                <div class="ph-col-4 empty"></div>
+                                                <div class="ph-col-4 "></div>
+                                                <div class="ph-col-8 empty"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <?php foreach ($totalResultProducts as $key => $value) : ?>
-                            <div class="col-lg-2 col-md-4 col-6">
+                            <div class="col-lg-2 col-md-4 col-6  preloadFalse">
 
                                 <div class="ps-product">
 

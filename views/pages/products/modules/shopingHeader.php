@@ -50,7 +50,7 @@
 
                 <!-- checkar si hay una cookie -->
                 <?php if(isset($_COOKIE["tab"])): ?>
-                <?php if($_COOKIE["tab"]=="grid"): ?>
+                <?php if($_COOKIE["tab"]=="grid" || $_COOKIE["tab"] == "undefined"): ?>
                     <li class="active" type="grid">
                 <?php else: ?>
                     <li class="" type="grid">

@@ -41,7 +41,53 @@ if (count($promotionToday) > 10) {
 
             <div class="col-xl-9 col-12 ">
 
-                <div class="ps-block--deal-hot" data-mh="dealhot">
+                <div class="container-fluid preloadTrue">
+                    <div class="ph-item">
+                        <div class="ph-col-6">
+                            <div class="ph-item border-0">
+                                <div class="ph-col-2">
+                                    <div class="ph-picture" style="height:300px"></div>
+                                </div>
+                                <div class="ph-col-10">
+                                    <div class="ph-picture" style="height:300px"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ph-col-6">
+                            <div class="ph-row mt-5">
+                                <div class="ph-col-4 big"></div>
+                                <div class="ph-col-8 empty"></div>
+
+                                <div class="ph-col-6 big"></div>
+                                <div class="ph-col-8 empty"></div>
+
+                                <div class="ph-col-8"></div>
+                                <div class="ph-col-4 empty"></div>
+
+                                <div class="ph-col-12 big"></div>
+
+                                <div class="ph-col-6 big" style="height:70px"></div>
+                                <div class="ph-col-6 empty"></div>
+
+                                <div class="ph-col-8 big"></div>
+                                <div class="ph-col-4 empty"></div>
+
+                                <div class="ph-col-12"></div>
+
+                                <div class="ph-col-8"></div>
+                                <div class="ph-col-4 empty"></div>
+
+                                <div class="ph-col-12 big"></div>
+
+                                <div class="ph-col-12" style="height:70px"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="ps-block--deal-hot preloadFalse" data-mh="dealhot">
 
                     <div class="ps-block__header">
 
@@ -114,9 +160,9 @@ if (count($promotionToday) > 10) {
 
                                             </div>
 
-                                            
+
                                         </div>
-                                        
+
 
                                         <div class="ps-product__info">
 
@@ -214,8 +260,8 @@ if (count($promotionToday) > 10) {
                                             </div>
 
                                             <div class="ps-product__badge">
-                                                        <span>Ahorra <br> $<?php echo TemplateController::SavePrice($value->price_product, $offer[1], $offer[0]); ?></span>
-                                                    </div>
+                                                <span>Ahorra <br> $<?php echo TemplateController::SavePrice($value->price_product, $offer[1], $offer[0]); ?></span>
+                                            </div>
 
                                         </div>
 
@@ -260,7 +306,92 @@ if (count($promotionToday) > 10) {
 
                     <div class="widget__content">
 
-                        <div class="owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="false" data-owl-dots="false" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
+                        <!-- preload  -->
+                        <div class="container-fluid preloadTrue">
+                            <div class="ph-item border-0 p-0 mt-0">
+                                <div class="ph-col-6">
+                                    <div class="ph-picture" style="height:50px"></div>
+                                </div>
+                                <div class="ph-col-6">
+                                    <div class="ph-row">
+                                        <div class="ph-col-8"></div>
+                                        <div class="ph-col-4 empty"></div>
+
+                                        <div class="ph-col-12"></div>
+                                        <div class="ph-col-12"></div>
+
+                                        <div class="ph-col-6"></div>
+                                        <div class="ph-col-6 empty"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- preload  -->
+
+                            <div class="ph-item border-0 p-0 mt-0">
+                                <div class="ph-col-6">
+                                    <div class="ph-picture" style="height:50px"></div>
+                                </div>
+                                <div class="ph-col-6">
+                                    <div class="ph-row">
+                                        <div class="ph-col-8"></div>
+                                        <div class="ph-col-4 empty"></div>
+
+                                        <div class="ph-col-12"></div>
+                                        <div class="ph-col-12"></div>
+
+                                        <div class="ph-col-6"></div>
+                                        <div class="ph-col-6 empty"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- preload  -->
+
+                            <div class="ph-item border-0 p-0 mt-0">
+                                <div class="ph-col-6">
+                                    <div class="ph-picture" style="height:50px"></div>
+                                </div>
+                                <div class="ph-col-6">
+                                    <div class="ph-row">
+                                        <div class="ph-col-8"></div>
+                                        <div class="ph-col-4 empty"></div>
+
+                                        <div class="ph-col-12"></div>
+                                        <div class="ph-col-12"></div>
+
+                                        <div class="ph-col-6"></div>
+                                        <div class="ph-col-6 empty"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- preload  -->
+
+                            <div class="ph-item border-0 p-0 mt-0">
+                                <div class="ph-col-6">
+                                    <div class="ph-picture" style="height:50px"></div>
+                                </div>
+                                <div class="ph-col-6">
+                                    <div class="ph-row">
+                                        <div class="ph-col-8"></div>
+                                        <div class="ph-col-4 empty"></div>
+
+                                        <div class="ph-col-12"></div>
+                                        <div class="ph-col-12"></div>
+
+                                        <div class="ph-col-6"></div>
+                                        <div class="ph-col-6 empty"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="owl-slider preloadFalse" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="false" data-owl-dots="false" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
 
                             <?php foreach ($topSales as $key => $value) : ?>
                                 <div class="ps-product-group">

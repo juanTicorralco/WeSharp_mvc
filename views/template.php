@@ -183,6 +183,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- Market Place 4 -->
     <link rel="stylesheet" href="css/market-place-4.css">
 
+    <!-- Preloader placeholder loading  -->
+    <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
+
     <!--=====================================
 	PLUGINS JS
 	======================================-->
@@ -251,6 +254,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
     <!-- pagination -->
     <script src="js/plugins/twbs-pagination.min.js"></script>
+
+     <!-- Preloader placeholder loader -->
+     <script src="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css"></script>
 
 
 </head>

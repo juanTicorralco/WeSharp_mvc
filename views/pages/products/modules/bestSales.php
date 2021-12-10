@@ -18,7 +18,80 @@
 
     </div>
 
-    <div class="ps-block__content">
+    <div class="container-fluid preloadTrue">
+        <div class="row">
+            <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                <div class="ph-item">
+                    <div class="ph-col-12">
+                        <div class="ph-picture"></div>
+                    </div>
+
+                    <div class="ph-col-12">
+                        <div class="ph-row">
+                            <div class="ph-col-12 "></div>
+                            <div class="ph-col-8 "></div>
+                            <div class="ph-col-4 empty"></div>
+                            <div class="ph-col-4 "></div>
+                            <div class="ph-col-8 empty"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                <div class="ph-item">
+                    <div class="ph-col-12">
+                        <div class="ph-picture"></div>
+                    </div>
+
+                    <div class="ph-col-12">
+                        <div class="ph-row">
+                            <div class="ph-col-12 "></div>
+                            <div class="ph-col-8 "></div>
+                            <div class="ph-col-4 empty"></div>
+                            <div class="ph-col-4 "></div>
+                            <div class="ph-col-8 empty"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                <div class="ph-item">
+                    <div class="ph-col-12">
+                        <div class="ph-picture"></div>
+                    </div>
+
+                    <div class="ph-col-12">
+                        <div class="ph-row">
+                            <div class="ph-col-12 "></div>
+                            <div class="ph-col-8 "></div>
+                            <div class="ph-col-4 empty"></div>
+                            <div class="ph-col-4 "></div>
+                            <div class="ph-col-8 empty"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                <div class="ph-item">
+                    <div class="ph-col-12">
+                        <div class="ph-picture"></div>
+                    </div>
+
+                    <div class="ph-col-12">
+                        <div class="ph-row">
+                            <div class="ph-col-12 "></div>
+                            <div class="ph-col-8 "></div>
+                            <div class="ph-col-4 empty"></div>
+                            <div class="ph-col-4 "></div>
+                            <div class="ph-col-8 empty"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ps-block__content preloadFalse">
 
         <div class="owl-slider" id="recommended1" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="6" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
 

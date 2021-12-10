@@ -45,6 +45,17 @@
         6. CUSTOM
 */
 
+.preloadFalse{
+    opacity:0;
+    height:0;
+}
+  
+.page-item.active .page-link {
+    color: #000 !important;
+    background-color: #fcb800 !important;
+    border-color: #fcb800 !important;
+}
+  
 .masonry-wrapper .grid-item .grid-item__inner,
 .setting .grid-item .grid-item__inner {
     position: relative;
