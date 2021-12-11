@@ -57,7 +57,53 @@ Product Content
                     Product Header
                     ======================================-->
 
-                    <div class="ps-product__header">
+                    <div class="container-fluid preloadTrue">
+                    <div class="ph-item">
+                        <div class="ph-col-6">
+                            <div class="ph-item border-0">
+                                <div class="ph-col-2">
+                                    <div class="ph-picture" style="height:300px"></div>
+                                </div>
+                                <div class="ph-col-10">
+                                    <div class="ph-picture" style="height:300px"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ph-col-6">
+                            <div class="ph-row mt-5">
+                                <div class="ph-col-4 big"></div>
+                                <div class="ph-col-8 empty"></div>
+
+                                <div class="ph-col-6 big"></div>
+                                <div class="ph-col-8 empty"></div>
+
+                                <div class="ph-col-8"></div>
+                                <div class="ph-col-4 empty"></div>
+
+                                <div class="ph-col-12 big"></div>
+
+                                <div class="ph-col-6 big" style="height:70px"></div>
+                                <div class="ph-col-6 empty"></div>
+
+                                <div class="ph-col-8 big"></div>
+                                <div class="ph-col-4 empty"></div>
+
+                                <div class="ph-col-12"></div>
+
+                                <div class="ph-col-8"></div>
+                                <div class="ph-col-4 empty"></div>
+
+                                <div class="ph-col-12 big"></div>
+
+                                <div class="ph-col-12" style="height:70px"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                    <div class="ps-product__header preloadFalse">
 
                         <!--=====================================
                         Gallery

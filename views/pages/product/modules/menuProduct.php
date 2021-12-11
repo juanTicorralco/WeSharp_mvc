@@ -11,17 +11,38 @@
     <li><a href="#tab-2">Detalles</a></li>
     <li><a href="#tab-3">Vendedor</a></li>
     <li><a href="#tab-4">Reseñas (<?php
-                                    if ($producter->reviews_product != null) {
-                                        echo count(json_decode($producter->reviews_product, true));
-                                    } else {
-                                        echo "0";
-                                    }
-                                    ?>)</a></li>
+    if ($producter->reviews_product != null) {
+        echo count(json_decode($producter->reviews_product, true));
+    } else {
+        echo "0";
+    }
+    ?>)</a></li>
     <li><a href="#tab-5">Preguntas y respuestas</a></li>
 
 </ul>
 
-<div class="ps-tabs">
+<div class="container-fluid preloadTrue">
+            <div class="ph-item border-0 p-0 mt-0">
+                <div class="ph-col-6">
+                    <div class="ph-picture" style="height:50px"></div>
+                </div>
+                <div class="ph-col-6">
+                    <div class="ph-row">
+                        <div class="ph-col-8"></div>
+                        <div class="ph-col-4 empty"></div>
+
+                        <div class="ph-col-12"></div>
+                        <div class="ph-col-12"></div>
+
+                        <div class="ph-col-6"></div>
+                        <div class="ph-col-6 empty"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<div class="ps-tabs preloadFalse">
 
     <div class="ps-tab active" id="tab-1">
 

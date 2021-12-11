@@ -6,7 +6,65 @@
 
     </div>
 
-    <div class="ps-section__content">
+    <div class="container-fluid preloadTrue">
+        <div class="row">
+            <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                <div class="ph-item">
+                    <div class="ph-col-12">
+                        <div class="ph-picture"></div>
+                    </div>
+
+                    <div class="ph-col-12">
+                        <div class="ph-row">
+                            <div class="ph-col-12 big"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                <div class="ph-item">
+                    <div class="ph-col-12">
+                        <div class="ph-picture"></div>
+                    </div>
+
+                    <div class="ph-col-12">
+                        <div class="ph-row">
+                            <div class="ph-col-12 big"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                <div class="ph-item">
+                    <div class="ph-col-12">
+                        <div class="ph-picture"></div>
+                    </div>
+
+                    <div class="ph-col-12">
+                        <div class="ph-row">
+                            <div class="ph-col-12 big"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
+                <div class="ph-item">
+                    <div class="ph-col-12">
+                        <div class="ph-picture"></div>
+                    </div>
+
+                    <div class="ph-col-12">
+                        <div class="ph-row">
+                            <div class="ph-col-12 big"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ps-section__content preloadFalse">
 
         <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="6" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
 
@@ -30,7 +88,7 @@
                         <?php else : ?>
                             <div class="ps-product__badge out-stock">Out Of Stock</div>
                         <?php endif; ?>
-                        
+
                         <ul class="ps-product__actions">
 
                             <li><a href="#" data-toggle="tooltip" data-placement="top" title="Read More"><i class="icon-bag2"></i></a></li>

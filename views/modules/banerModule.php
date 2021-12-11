@@ -8,9 +8,15 @@
     $header=array();
 
     $randomProduct= CurlController::request($url, $method, $field, $header)->result[0];
-    $topBanner= json_decode( $randomProduct->top_banner_product, true);
-?>
 
+    if($randomProduct != "n"){
+
+    $topBanner= json_decode( $randomProduct->top_banner_product, true);
+    }else{
+        $topBanner= null;
+    }
+?>
+<?php if(isset($topBanner)): ?>
 <div class="ps-block--promotion-header bg--cover" style="background: url(img/products/<?php echo $randomProduct->url_category; ?>/top/<?php echo $topBanner["IMG tag"]; ?>);">
         <div class="container">
             <div class="ps-block__left">
@@ -26,3 +32,4 @@
             </div><a class="ps-btn ps-btn--sm" href="<?php echo $path.$randomProduct->url_product; ?>"><?php echo $topBanner["Button tag"]; ?></a>
         </div>
     </div>
+    <?php endif; ?>

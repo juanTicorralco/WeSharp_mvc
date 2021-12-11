@@ -1,5 +1,5 @@
 <?php
-$url10 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=title_list_product&equalTo=" . $producter->title_list_product."&select=id_product,url_category,image_product,name_product,url_product,price_product,offer_product,stock_product,name_store,reviews_product";
+$url10 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=title_list_product&equalTo=" . $producter->title_list_product . "&select=id_product,url_category,image_product,name_product,url_product,price_product,offer_product,stock_product,name_store,reviews_product";
 $method10 = "GET";
 $field10 = array();
 $header10 = array();
@@ -11,7 +11,28 @@ $newProduct = CurlController::request($url10, $method10, $field10, $header10)->r
 
         <h4>Frecuentemente se compran juntos</h4>
 
-        <div class="ps-block__content">
+        <div class="container-fluid preloadTrue">
+            <div class="ph-item border-0 p-0 mt-0">
+                <div class="ph-col-6">
+                    <div class="ph-picture" style="height:50px"></div>
+                </div>
+                <div class="ph-col-6">
+                    <div class="ph-row">
+                        <div class="ph-col-8"></div>
+                        <div class="ph-col-4 empty"></div>
+
+                        <div class="ph-col-12"></div>
+                        <div class="ph-col-12"></div>
+
+                        <div class="ph-col-6"></div>
+                        <div class="ph-col-6 empty"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ps-block__content preloadFalse">
 
             <div class="ps-block__items">
 
