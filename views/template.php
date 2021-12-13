@@ -42,9 +42,7 @@ if (!empty($urlParams[0])) {
                         /* aqui se cambia la paginacion */
                         $starAt = ($urlParams[1] * 24) - 24;
                     } else {
-                        echo '<script> 
-                                window.location= "' . $path . $urlParams[1] . '"
-                            </script>';
+                        $starAt = null;
                     }
                 } else {
                     $starAt = 0;
@@ -255,8 +253,8 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- pagination -->
     <script src="js/plugins/twbs-pagination.min.js"></script>
 
-     <!-- Preloader placeholder loader -->
-     <script src="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css"></script>
+    <!-- Preloader placeholder loader -->
+    <script src="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css"></script>
 
 
 </head>
@@ -287,7 +285,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <?php
     /* choose which page to enter */
     if (!empty($urlParams[0])) {
-        if ($urlCategories->status == 200 || $urlSubcategories->status == 200) {
+        if ($urlParams[0] == "acount") {
+            include "pages/" . $urlParams[0] . "/" . $urlParams[0] . ".php";
+        } else if ($urlCategories->status == 200 || $urlSubcategories->status == 200) {
             include "pages/products/products.php";
         } else if ($urlProduct->status == 200) {
             include "pages/product/product.php";

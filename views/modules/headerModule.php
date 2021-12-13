@@ -237,8 +237,8 @@ Header Content
                             <i class="icon-user"></i>
                         </div>
                         <div class="ps-block__right">
-                            <a href="my-account.html">Login</a>
-                            <a href="my-account.html">Register</a>
+                            <a href="<?php echo $path ?>acount&login">Mi cuenta</a>
+                            <a href="<?php echo $path ?>acount&enrollment">Registrarse</a>
                         </div>
                     </div>
 

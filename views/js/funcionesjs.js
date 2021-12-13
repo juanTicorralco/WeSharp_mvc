@@ -87,3 +87,49 @@ function  changeQualyty(quantity, move, stock){
 
     $(".quantity input").val(number);
 }
+
+/* funcion para validar un formiulario */
+function validatejs(e, tipo){
+    if(tipo=="text"){
+        let pattern = /^[A-Za-zñÑáéíóúÁÉÍÓÚ ]{1,}$/;
+    if(!pattern.test(e.target.value)){
+        $(e.target).parent().addClass("was-validated");
+        $(e.target).parent().children(".invalid-feedback").html("No uses numeros ni caracteres especiales");
+        return;
+    }} else if(tipo=="email"){
+        let pattern = /^[^0-9][.a-zA-Z0-9_]+([.][.a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/;
+        if(!pattern.test(e.target.value)){
+            $(e.target).parent().addClass("was-validated");
+            $(e.target).parent().children(".invalid-feedback").html("Solo se acepta un formato email");
+            return;
+        }
+    }else if(tipo=="pass"){
+        let pattern = /^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/;
+        if(!pattern.test(e.target.value)){
+            $(e.target).parent().addClass("was-validated");
+            $(e.target).parent().children(".invalid-feedback").html("No se admiten espacios");
+            e.target.value="";
+            return;
+        }
+    }
+}
+
+/* funcion para validar un formiulario */
+function emailRepeat(e){
+    let settings={
+        "url": $("#urlApi").val()+"users?equalTo="+e.target.value+"&linkTo=email_user&select=email_user",
+        "metod": "GET",
+        "timeaot": 0,
+    };
+
+    $.ajax(settings).done(function(response){
+        if(response.status==200){    
+        $(e.target).parent().addClass("was-validated");
+        $(e.target).parent().children(".invalid-feedback").html("Este email ya esta registrado");
+        e.target.value="";
+        return;
+        }
+    }); 
+
+    validatejs(e, "email");
+}
