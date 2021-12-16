@@ -64,14 +64,12 @@ if (!empty($urlParams[0])) {
                             $orderBy = "price_product";
                             $orderMode = "DESC";
                         } else {
-                            echo '<script> 
-                                window.location= "' . $path . $urlParams[0] . '";
-                            </script>';
+                            $orderBy = "id_product";
+                            $orderMode = "DESC";
                         }
                     } else {
-                        echo '<script> 
-                            window.location= "' . $path . $urlParams[0] . '";
-                        </script>';
+                        $orderBy = "id_product";
+                        $orderMode = "DESC";
                     }
                 } else {
                     $orderBy = "id_product";
@@ -255,6 +253,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
     <!-- Preloader placeholder loader -->
     <script src="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css"></script>
+
+    <!-- Funciones2-->
+    <script src="js/funciones2.js"></script>
 
 
 </head>

@@ -97,7 +97,7 @@ function validatejs(e, tipo){
         $(e.target).parent().children(".invalid-feedback").html("No uses numeros ni caracteres especiales");
         return;
     }} else if(tipo=="email"){
-        let pattern = /^[^0-9][.a-zA-Z0-9_]+([.][.a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/;
+        let pattern = /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/;
         if(!pattern.test(e.target.value)){
             $(e.target).parent().addClass("was-validated");
             $(e.target).parent().children(".invalid-feedback").html("Solo se acepta un formato email");

@@ -52,7 +52,7 @@
 
                         <div class="form-group">
 
-                            <input class="form-control" type="email" name="createEmail" placeholder="Email..." required pattern="[^0-9][.a-zA-Z0-9_]+([.][.a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}" onchange="emailRepeat(event)">
+                            <input class="form-control" type="email" name="createEmail" placeholder="Email..." required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}" onchange="emailRepeat(event)">
                             <div class="valid-feedback"></div>
                             <div class="invalid-feedback">El email es requerido</div>
 

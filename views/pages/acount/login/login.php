@@ -6,6 +6,52 @@ Login - Register Content
 
     <div class="container">
 
+        <?php
+        /* Verificacion del correo electronico */
+
+        if (isset( $urlParams[2])) {
+            $verify = base64_decode($urlParams[2]);
+
+            $url = CurlController::api() . "users?linkTo=email_user&equalTo=" . $verify . "&select=id_user";
+            $metod = "GET";
+            $header = array();
+            $fields = array();
+
+            $resultVerify = CurlController::request($url, $metod, $header, $fields);
+            //echo '<pre>'; print_r($resultVerify->status); echo '</pre>';
+            if (isset($resultVerify)) {
+                if ($resultVerify->status == 200) {
+                    $url = CurlController::api() . "users?id=" . $resultVerify->result[0]->id_user . "&nameId=id_user&token=no&except=verificated_user";
+                    $metod = "PUT";
+                    $header = "verificated_user=1";
+                    $fields = array();
+
+                    $veryf = CurlController::request($url, $metod, $header, $fields);
+
+                    if (isset($veryf)) {
+                        if ($veryf->status == 200) {
+
+                            echo '<div class="alert alert-success alert-dismissible">Tu Cuenta se VERIFICO CORRECTAMENTE, inicia sesion en tu nueva cuenta <i class="fas fa-laugh-wink"></i></div>
+                            <script>
+                            formatearAlertas()
+                        </script>';
+                        }
+                    } else {
+                        echo '<div class="alert alert-danger alert-dismissible">UPSSS!! hay un error al confirmar tu email, vuelve a intentaro. Si el error persiste vuelve a registrarte!!</div>
+                        <script>
+                        formatearAlertas()
+                    </script>';
+                    }
+                }
+            } else {
+                echo '<div class="alert alert-danger alert-dismissible">UPSSS!! hay un error al confirmar tu email, vuelve a intentaro. Si el error persiste vuelve a registrarte!!</div>
+                <script>
+                formatearAlertas()
+            </script>';
+            }
+        }
+        ?>
+
         <form class="ps-form--account ps-tab-root needs-validation" novalidate method="post">
 
             <ul class="ps-tab-list">
@@ -34,7 +80,7 @@ Login - Register Content
 
                         <div class="form-group">
 
-                            <input class="form-control" type="email" name="logEmail" placeholder="Email..." required pattern="[^0-9][.a-zA-Z0-9_]+([.][.a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}" onchange="validatejs(event, 'email')">
+                            <input class="form-control" type="email" name="logEmail" placeholder="Email..." required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}" onchange="validatejs(event, 'email')">
                             <div class="valid-feedback"></div>
                             <div class="invalid-feedback">El email es requerido</div>
                         </div>
@@ -67,8 +113,8 @@ Login - Register Content
                         </div>
 
                         <?php
-                            $login= new ControllerUser();
-                            $login->login();
+                        $login = new ControllerUser();
+                        $login->login();
                         ?>
 
                     </div>
