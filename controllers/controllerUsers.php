@@ -88,6 +88,14 @@ class ControllerUser
                 if ($response->status == 200) {
                     //echo '<pre>'; print_r($response->result[0]->verificated_user); echo '</pre>';
                     if ($response->result[0]->verificated_user > 0) {
+
+                        $_SESSION['user'] = $response->result[0];
+                        echo '
+                        <script>
+                        formatearAlertas()
+                        window.location="' . TemplateController::path() . 'acount&wishAcount";
+                        </script>
+                        ';
                     } else {
                         echo '<div class="alert alert-danger alert-dismissible">El email no esta confirmado, por favor confirmalo</div>
                         <script>
@@ -109,4 +117,29 @@ class ControllerUser
             }
         }
     }
+
+    /* login con facebook */
+    // static public function loginFacebook($url){
+    //     $fb = new \Facebook\Facebook([
+    //         'app_id' => '1279275769213584',
+    //         'app_secret' => 'fdf5eb9f167c65de79c3b6293216e999',
+    //         'default_graph_version' => 'v2.10',
+    //         //'default_access_token' => '{access-token}', // optional
+    //       ]);
+
+    //       /* creamos la redireccion hacia la API de facebook */
+    //       $handler=$fb->getRedirectLoginHelper();
+
+    //       /* solcitar datos relacionados al email */
+    //       $data=["email"];
+
+    //       /* activamos la url de facebook con los parametro: url de regreso y parametros que pedimos */
+    //       $fullUrl= $handler->getLoginUrl($url, $data);
+
+    //       /* redireccionamos la pagina de facebook  */
+    //       echo '<script>
+    //             window.location="'.$fullUrl.'";
+    //       </script>';
+    //               //  echo '<pre>'; print_r($fb); echo '</pre>';
+    // }
 }

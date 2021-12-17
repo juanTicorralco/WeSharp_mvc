@@ -80,12 +80,13 @@
 
                     <div class="ps-form__footer">
 
-                        <p>Registrarme con:</p>
+                        <!-- <p>Registrarme con:</p> -->
 
                         <ul class="ps-list--social">
 
-                            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a class="google" href="#"><i class="fab fa-google"></i></a></li>
+                      
+                            <!-- <li><a class="facebook" href="<?php //echo $path; ?>acount&enrollment&facebook"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a class="google" href="#"><i class="fab fa-google"></i></a></li> -->
 
                         </ul>
 
@@ -96,7 +97,7 @@
             </div>
 
         </form>
-
+  
     </div>
 
 </div>

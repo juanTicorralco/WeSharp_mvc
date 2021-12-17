@@ -121,12 +121,12 @@ Login - Register Content
 
                     <div class="ps-form__footer">
 
-                        <p>Entrar a mi cuenta con:</p>
+                        <!-- <p>Entrar a mi cuenta con:</p> -->
 
                         <ul class="ps-list--social">
 
-                            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a class="google" href="#"><i class="fab fa-google"></i></a></li>
+                            <!-- <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a class="google" href="#"><i class="fab fa-google"></i></a></li> -->
 
                         </ul>
 

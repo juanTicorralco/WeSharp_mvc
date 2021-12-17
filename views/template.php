@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 /* Direction Route  */
 $routesArray = explode("/", $_SERVER['REQUEST_URI']);
 
