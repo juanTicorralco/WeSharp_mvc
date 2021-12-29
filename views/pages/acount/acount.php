@@ -20,7 +20,7 @@ Breadcrumb
 
 <?php
 if (isset($urlParams[1])) {
-    if ($urlParams[1] == "enrollment" || $urlParams[1] == "login" || $urlParams[1]=="wishAcount") {
+    if ($urlParams[1] == "enrollment" || $urlParams[1] == "login" || $urlParams[1]=="wishAcount" || $urlParams[1]=="logout") {
         include $urlParams[1] . "/" . $urlParams[1] . ".php";
         // if (isset($urlParams[2])) {
         //     if ($urlParams[2] == "facebook") {

@@ -88,14 +88,12 @@ class ControllerUser
                 if ($response->status == 200) {
                     //echo '<pre>'; print_r($response->result[0]->verificated_user); echo '</pre>';
                     if ($response->result[0]->verificated_user > 0) {
-
-                        $_SESSION['user'] = $response->result[0];
                         echo '
                         <script>
-                        formatearAlertas()
                         window.location="' . TemplateController::path() . 'acount&wishAcount";
                         </script>
                         ';
+                        $_SESSION['user'] = $response->result[0];
                     } else {
                         echo '<div class="alert alert-danger alert-dismissible">El email no esta confirmado, por favor confirmalo</div>
                         <script>

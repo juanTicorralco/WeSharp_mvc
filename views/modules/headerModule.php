@@ -88,7 +88,7 @@ Header Content
 
                             <?php foreach ($menuCategories as $key => $value) : ?>
                                 <li class="menu-item-has-children has-mega-menu">
-                                    <a href="<?php echo $path.$value->url_category; ?> "><i class="<?php echo $value->icon_category; ?> "></i>
+                                    <a href="<?php echo $path . $value->url_category; ?> "><i class="<?php echo $value->icon_category; ?> "></i>
                                         <?php echo $value->name_category; ?> </a>
                                     <div class="mega-menu">
 
@@ -99,7 +99,7 @@ Header Content
                                                 <ul class="mega-menu__list">
 
                                                     <?php
-                                                    $url = CurlController::api() . "subcategories?linkTo=title_list_subcategory&equalTo=" . rawurlencode($value)."&select=url_subcategory,name_subcategory";
+                                                    $url = CurlController::api() . "subcategories?linkTo=title_list_subcategory&equalTo=" . rawurlencode($value) . "&select=url_subcategory,name_subcategory";
                                                     $method = "GET";
                                                     $field = array();
                                                     $header = array();
@@ -109,7 +109,7 @@ Header Content
                                                     ?>
 
                                                     <?php foreach ($menuSubcategories as $key => $value) : ?>
-                                                        <li><a href="<?php echo $path.$value->url_subcategory; ?>">
+                                                        <li><a href="<?php echo $path . $value->url_subcategory; ?>">
                                                                 <?php echo $value->name_subcategory; ?> </a>
                                                         </li>
                                                     <?php endforeach; ?>
@@ -134,7 +134,7 @@ Header Content
 
             <div class="header__content-center">
                 <form class="ps-form--quick-search">
-                   <!--  <div class="form-group--icon">
+                    <!--  <div class="form-group--icon">
                         <i class="icon-chevron-down"></i>
                         <select class="form-control">
                             <option value="1">All</option>
@@ -228,19 +228,41 @@ Header Content
 
                     </div>
 
-                    <!--=====================================
-                Login and Register
+                    <?php if (isset($_SESSION["user"])) : ?>
+                        <!--=====================================
+                Login and Register dentro
                 ======================================-->
 
-                    <div class="ps-block--user-header">
-                        <div class="ps-block__left">
-                            <i class="icon-user"></i>
+                        <div class="ps-block--user-header">
+                            <div class="ps-block__left">
+                                <?php if ($_SESSION["user"]->method_user == "direct") : ?>
+                                    <?php if ($_SESSION["user"]->picture_user == "" || $_SESSION["user"]->picture_user == "NULL") : ?>
+                                        <img class="rounded-circle" style="width: 50px;" src="img/users/default/default.png" alt="<?php echo $_SESSION["user"]->name_user; ?>">
+                                    <?php else : ?>
+                                        <img class="rounded-circle" style="width: 50px;" src="img/users/<?php echo $_SESSION["user"]->id_user; ?>/<?php echo $_SESSION["user"]->picture_user; ?>" alt="<?php echo $_SESSION["user"]->name_user; ?>">
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+                            <div class="ps-block__right">
+                                <a href="<?php echo $path ?>acount&wishAcount"><?php echo $_SESSION["user"]->displayname_user; ?></a>
+                                <a href="<?php echo $path ?>acount&logout">Salir</a>
+                            </div>
                         </div>
-                        <div class="ps-block__right">
-                            <a href="<?php echo $path ?>acount&login">Mi cuenta</a>
-                            <a href="<?php echo $path ?>acount&enrollment">Registrarse</a>
+                    <?php else : ?>
+                        <!--=====================================
+                Login and Register fuera
+                ======================================-->
+
+                        <div class="ps-block--user-header">
+                            <div class="ps-block__left">
+                            <a href="<?php echo $path ?>acount&login"><i class="icon-user"></i></a>
+                            </div>
+                            <div class="ps-block__right">
+                                <a href="<?php echo $path ?>acount&login">Mi cuenta</a>
+                                <a href="<?php echo $path ?>acount&enrollment">Registrarse</a>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
                 </div><!-- End Header Actions-->
 
