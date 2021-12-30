@@ -185,6 +185,8 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- Preloader placeholder loading  -->
     <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
 
+    <!-- notie Alert -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
     <!--=====================================
 	PLUGINS JS
 	======================================-->
@@ -260,6 +262,11 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- Funciones2-->
     <script src="js/funciones2.js"></script>
 
+    <!-- notie alert -->
+    <script src="https://unpkg.com/notie"></script>
+
+    <!-- swit alert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 

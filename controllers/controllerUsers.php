@@ -36,6 +36,8 @@ class ControllerUser
                 $response = CurlController::request($url, $method, $fields, $header);
 
                 if ($response->status == 200) {
+
+                    // registrar email
                     $name = $displayName;
                     $subject = "Registro WeSharp";
                     $message = "Confirma tu email para crear una cuenta en WeSharp";
@@ -73,6 +75,11 @@ class ControllerUser
                 preg_match('/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/', $_POST["logEmail"]) &&
                 preg_match('/^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/', $_POST["logPassword"])
             ) {
+                echo'
+                <script>
+                switAlert("loading", "Accesando a WeSharp", "","");
+                </script>
+                ';
                 $url = CurlController::api() . "users?login=true";
                 $method = "POST";
                 $fields = array(
@@ -98,6 +105,7 @@ class ControllerUser
                         echo '<div class="alert alert-danger alert-dismissible">El email no esta confirmado, por favor confirmalo</div>
                         <script>
                         formatearAlertas()
+                        switAlert("close", "", "","");
                         </script>
                         ';
                     }
@@ -105,12 +113,14 @@ class ControllerUser
                     echo '<div class="alert alert-danger alert-dismissible">El email o la contraseña no son correctas</div>
                     <script>
                     formatearAlertas()
+                    switAlert("close", "", "","");
                 </script>';
                 }
             } else {
                 echo '<div class="alert alert-danger alert-dismissible">Error en la sintaxis de los campos</div>
                 <script>
                 formatearAlertas()
+                switAlert("close", "", "","");
             </script>';
             }
         }
@@ -140,4 +150,87 @@ class ControllerUser
     //       </script>';
     //               //  echo '<pre>'; print_r($fb); echo '</pre>';
     // }
+
+    public function resetPassword()
+    {
+        if (isset($_POST["resetPassword"])) {
+            /* validar los campos */
+            if (
+                preg_match('/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/', $_POST["resetPassword"])
+            ) {
+                $url = CurlController::api() . "users?linkTo=email_user&equalTo=" . $_POST["resetPassword"] . "&select=email_user,id_user,displayname_user";
+                $method = "GET";
+                $fields = array();
+                $header = array();
+
+                $user = CurlController::request($url, $method, $fields, $header);
+                if ($user->status == 200) {
+                    function genPassword($Length)
+                    {
+                        $password = "";
+                        $chain = "123456789abcdefghijklmnopqrstuvwxyz";
+                        $max = strlen($chain) - 1;
+
+                        for ($i = 0; $i < $Length; $i++) {
+                            $password .= substr($chain, mt_rand(0, $max), 1);
+                        }
+                        return $password;
+                    }
+
+                    $newPassword = genPassword(11);
+                    $crypt = crypt($newPassword, '$2a$07$pdgtwzaldisoqrtrswqpxzasdte$');
+
+                    $url = CurlController::api() . "users?id=" . $user->result[0]->id_user . "&nameId=id_user&token=no&except=password_user";
+                    $method = "PUT";
+                    $fields = "password_user=" . $crypt;
+                    $header = array();
+
+                    $respuesta = CurlController::request($url, $method, $fields, $header);
+                    if ($respuesta->status == 200) {
+                        
+                    // registrar email
+                    $email= $_POST["resetPassword"];
+                    $name = $user->result[0]->displayname_user;
+                    $subject = "Nueva contraseña WeSharp";
+                    $message = "Confirma tu nueva contraseña para ingresar a WeSharp... Tu nueva contraseña es: " . $newPassword; 
+                    $url = TemplateController::path() . "acount&login";
+                    $post = "Confirmar Nueva Contraseña";
+                    $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
+
+                    if ($sendEmail == "ok") {
+                        echo '
+                        <script>
+                        formatearAlertas();
+                        notiAlert(1, "Tu nueva contraseña se envio correctamente, confirma en tu cuenta email (aveces esta en spam)");
+                    </script>';
+                    } else {
+                        echo '
+                        <script>
+                        formatearAlertas();
+                        notiAlert(3, "'.$sendEmail.'");
+                    </script>';
+                    }
+                    } else {
+                        echo '
+                            <script>
+                            formatearAlertas();
+                            notiAlert(3, "no se pudo resetear la contraseña");
+                        </script>';
+                    }
+                } else {
+                    echo '
+                <script>
+                formatearAlertas();
+                notiAlert(3, "El email no esta registrado");
+            </script>';
+                }
+            } else {
+                echo '
+                <script>
+                formatearAlertas();
+                notiAlert(3, "Error en la sintaxis de los campos");
+            </script>';
+            }
+        }
+    }
 }

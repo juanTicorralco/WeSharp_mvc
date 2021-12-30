@@ -9,7 +9,7 @@ Login - Register Content
         <?php
         /* Verificacion del correo electronico */
 
-        if (isset( $urlParams[2])) {
+        if (isset($urlParams[2])) {
             $verify = base64_decode($urlParams[2]);
 
             $url = CurlController::api() . "users?linkTo=email_user&equalTo=" . $verify . "&select=id_user";
@@ -88,7 +88,7 @@ Login - Register Content
                         <div class="form-group form-forgot">
 
                             <input class="form-control" type="password" name="logPassword" placeholder="Password..." required pattern="[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}" onchange="validatejs(event, 'pass')">
-                            <a href="">Forgot?</a>
+                            <a href="#resetUserPassword" data-toggle="modal">Recuperar</a>
                             <div class="valid-feedback"></div>
                             <div class="invalid-feedback">El password es requerido</div>
 
@@ -140,4 +140,41 @@ Login - Register Content
 
     </div>
 
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="resetUserPassword">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Resetear Password</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form method="POST" class="ps-form--account ps-tab-root needs-validation" novalidate>
+                    <div class="form-group">
+
+                        <input class="form-control" type="email" name="resetPassword" placeholder="Email..." required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}" onchange="validatejs(event, 'email')">
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">El email es requerido</div>
+                    </div>
+
+                    <div class="form-group submtit">
+
+                        <button type="submit" class="ps-btn ps-btn--fullwidth">Enviar</button>
+
+                        <?php
+                            $reset= new ControllerUser();
+                            $reset->resetPassword();
+                        ?>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
