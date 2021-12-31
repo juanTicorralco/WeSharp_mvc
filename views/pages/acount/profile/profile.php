@@ -39,7 +39,9 @@
 
             <p><i class="fas fa-envelope"></i> <?php echo $_SESSION["user"]->email_user; ?></p>
 
-            <button class="btn btn-warning btn-lg">Cambiar Password</button>
+            <?php if ($_SESSION["user"]->method_user == "direct") : ?>
+                <button class="btn btn-warning btn-lg" data-toggle="modal" data-target="#changePassword">Cambiar Password</button>
+            <?php endif; ?>
 
         </div>
 
@@ -85,3 +87,41 @@
     </div>
 
 </aside><!-- s -->
+
+<!-- ventana modal -->
+<!-- The Modal -->
+<div class="modal" id="changePassword">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Nueva Contraseña</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form class="ps-form--account ps-tab-root needs-validation" novalidate method="post">
+                    <div class="form-group form-forgot">
+
+                        <input class="form-control" type="password" name="newPassword" placeholder="Nuevo Password..." required pattern="[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}" onchange="validatejs(event, 'pass')">
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">El nuevo password es requerido</div>
+                    </div>
+
+                    <div class="form-group submtit">
+
+                    <?php  
+                        $newPass= new ControllerUser();
+                        $newPass->actualiarContraseña();
+                    ?>
+
+                        <button type="submit" class="ps-btn ps-btn--fullwidth">Actualizar</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

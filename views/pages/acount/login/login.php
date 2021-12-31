@@ -98,8 +98,7 @@ Login - Register Content
 
                             <div class="ps-checkbox">
 
-                                <input class="form-control" type="checkbox" id="remember-me" name="remember-me">
-
+                                <input class="form-control" type="checkbox" id="remember-me" name="remember-me" onchange="rememberme(event)">
                                 <label for="remember-me">Reconrdar</label>
 
                             </div>

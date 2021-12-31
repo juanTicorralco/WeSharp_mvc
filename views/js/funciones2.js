@@ -80,3 +80,15 @@ function switAlert(type, text, url, icon) {
     break;
   }
 }
+
+//funcion para recordar el email
+function rememberme(e){
+  
+  if(e.target.checked){
+    localStorage.setItem("emailRem", $('[name="logEmail"]').val());
+    localStorage.setItem("checkRem", true);
+  }else{
+    localStorage.removeItem("emailRem");
+    localStorage.removeItem("checkRem");
+  }
+}

@@ -786,6 +786,17 @@
           })();
     }
 
+    //validar funcion login
+    function validarLogin(){
+        if(localStorage.getItem("emailRem") != null){
+            $('[name="logEmail"]').val(localStorage.getItem("emailRem"));
+        }
+        if(localStorage.getItem("checkRem") != null && localStorage.getItem("checkRem")){
+            $('#remember-me').attr("checked", true);
+        }
+    }
+
+    // funciones globales
     $(function() {
         backgroundImage();
         owlCarouselConfig();
@@ -817,6 +828,7 @@
         pagination();
         preload();
         validacionBS();
+        validarLogin();
     });
 
     $(window).on('load', function() {

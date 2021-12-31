@@ -107,7 +107,7 @@ function validatejs(e, tipo){
         let pattern = /^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/;
         if(!pattern.test(e.target.value)){
             $(e.target).parent().addClass("was-validated");
-            $(e.target).parent().children(".invalid-feedback").html("No se admiten espacios");
+            $(e.target).parent().children(".invalid-feedback").html("No se admiten espacios ni tampoco algunos caracteres especiales");
             e.target.value="";
             return;
         }

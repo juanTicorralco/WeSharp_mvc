@@ -75,7 +75,7 @@ class ControllerUser
                 preg_match('/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/', $_POST["logEmail"]) &&
                 preg_match('/^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/', $_POST["logPassword"])
             ) {
-                echo'
+                echo '
                 <script>
                 switAlert("loading", "Accesando a WeSharp", "","");
                 </script>
@@ -158,77 +158,149 @@ class ControllerUser
             if (
                 preg_match('/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/', $_POST["resetPassword"])
             ) {
-                $url = CurlController::api() . "users?linkTo=email_user&equalTo=" . $_POST["resetPassword"] . "&select=email_user,id_user,displayname_user";
+                $url = CurlController::api() . "users?linkTo=email_user&equalTo=" . $_POST["resetPassword"] . "&select=email_user,id_user,displayname_user,method_user";
                 $method = "GET";
                 $fields = array();
                 $header = array();
 
                 $user = CurlController::request($url, $method, $fields, $header);
                 if ($user->status == 200) {
-                    function genPassword($Length)
-                    {
-                        $password = "";
-                        $chain = "123456789abcdefghijklmnopqrstuvwxyz";
-                        $max = strlen($chain) - 1;
+                    if ($user->result[0]->method_user == "direct") {
+                        function genPassword($Length)
+                        {
+                            $password = "";
+                            $chain = "123456789abcdefghijklmnopqrstuvwxyz";
+                            $max = strlen($chain) - 1;
 
-                        for ($i = 0; $i < $Length; $i++) {
-                            $password .= substr($chain, mt_rand(0, $max), 1);
+                            for ($i = 0; $i < $Length; $i++) {
+                                $password .= substr($chain, mt_rand(0, $max), 1);
+                            }
+                            return $password;
                         }
-                        return $password;
+
+                        $newPassword = genPassword(11);
+                        $crypt = crypt($newPassword, '$2a$07$pdgtwzaldisoqrtrswqpxzasdte$');
+
+                        $url = CurlController::api() . "users?id=" . $user->result[0]->id_user . "&nameId=id_user&token=no&except=password_user";
+                        $method = "PUT";
+                        $fields = "password_user=" . $crypt;
+                        $header = array();
+
+                        $respuesta = CurlController::request($url, $method, $fields, $header);
+                        if ($respuesta->status == 200) {
+
+                            // Email donde esta la nueva contraseña
+                            $email = $_POST["resetPassword"];
+                            $name = $user->result[0]->displayname_user;
+                            $subject = "Nueva contraseña WeSharp";
+                            $message = "Confirma tu nueva contraseña para ingresar a WeSharp... Tu nueva contraseña es: " . $newPassword;
+                            $url = TemplateController::path() . "acount&login";
+                            $post = "Confirmar Nueva Contraseña";
+                            $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
+
+                            if ($sendEmail == "ok") {
+                                echo '
+                                    <script>
+                                    formatearAlertas();
+                                    notiAlert(1, "Tu nueva contraseña se envio correctamente, confirma en tu cuenta email (aveces esta en spam)");
+                                </script>';
+                            } else {
+                                echo '
+                                    <script>
+                                    formatearAlertas();
+                                    notiAlert(3, "' . $sendEmail . '");
+                                </script>';
+                            }
+                        } else {
+                            echo '
+                            <script>
+                            formatearAlertas();
+                            notiAlert(3, "no se pudo resetear la contraseña");
+                        </script>';
+                        }
+                    } else {
+                        echo '
+                            <script>
+                            formatearAlertas();
+                            notiAlert(3, "Te registraste por face o por gmail");
+                        </script>';
                     }
+                } else {
+                    echo '
+                        <script>
+                        formatearAlertas();
+                        notiAlert(3, "El email no esta registrado");
+                    </script>';
+                }
+            } else {
+                echo '
+                        <script>
+                        formatearAlertas();
+                        notiAlert(3, "Error en la sintaxis de los campos");
+                    </script>';
+            }
+        }
+    }
 
-                    $newPassword = genPassword(11);
-                    $crypt = crypt($newPassword, '$2a$07$pdgtwzaldisoqrtrswqpxzasdte$');
+    public function actualiarContraseña(){
+        if (isset($_POST["newPassword"])) {
+            /* validar los campos */
+            if (
+                preg_match('/^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/', $_POST["newPassword"])
+            ) {
+                if ( $_SESSION["user"]->method_user == "direct") {
 
-                    $url = CurlController::api() . "users?id=" . $user->result[0]->id_user . "&nameId=id_user&token=no&except=password_user";
+                    $crypt = crypt($_POST["newPassword"], '$2a$07$pdgtwzaldisoqrtrswqpxzasdte$');
+
+                    $url = CurlController::api() . "users?id=" . $_SESSION["user"]->id_user . "&nameId=id_user&token=". $_SESSION["user"]->token_user;
                     $method = "PUT";
                     $fields = "password_user=" . $crypt;
                     $header = array();
 
                     $respuesta = CurlController::request($url, $method, $fields, $header);
-                    if ($respuesta->status == 200) {
-                        
-                    // registrar email
-                    $email= $_POST["resetPassword"];
-                    $name = $user->result[0]->displayname_user;
-                    $subject = "Nueva contraseña WeSharp";
-                    $message = "Confirma tu nueva contraseña para ingresar a WeSharp... Tu nueva contraseña es: " . $newPassword; 
-                    $url = TemplateController::path() . "acount&login";
-                    $post = "Confirmar Nueva Contraseña";
-                    $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
 
-                    if ($sendEmail == "ok") {
+                    if ($respuesta->status == 200) {
+                         // Email donde esta la nueva contraseña
+                         $email = $_SESSION["user"]->email_user;
+                         $name = $_SESSION["user"]->displayname_user;
+                         $subject = "Nueva contraseña WeSharp";
+                         $message = "Acabas de cambiar tu contraseña... si es un error Por favor de notificar a WeSharp... ";
+                         $url = TemplateController::path() . "acount&login";
+                         $post = "Confirmar Nueva Contraseña";
+                         $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
+
+                         if ($sendEmail == "ok") {
+                             echo '
+                                 <script>
+                                 formatearAlertas();
+                                 notiAlert(1, "Tu nueva contraseña se envio correctamente, confirma en tu cuenta email (aveces esta en spam)");
+                             </script>';
+                         } else {
+                             echo '
+                                 <script>
+                                 formatearAlertas();
+                                 notiAlert(3, "' . $sendEmail . '");
+                             </script>';
+                         }
+                    }else{
                         echo '
-                        <script>
-                        formatearAlertas();
-                        notiAlert(1, "Tu nueva contraseña se envio correctamente, confirma en tu cuenta email (aveces esta en spam)");
-                    </script>';
-                    } else {
-                        echo '
-                        <script>
-                        formatearAlertas();
-                        notiAlert(3, "'.$sendEmail.'");
-                    </script>';
+                                 <script>
+                                 formatearAlertas();
+                                 notiAlert(3, "no se pudo cambiar tu contraseña");
+                             </script>';
                     }
-                    } else {
-                        echo '
-                            <script>
-                            formatearAlertas();
-                            notiAlert(3, "no se pudo resetear la contraseña");
-                        </script>';
-                    }
-                } else {
+                }else{
                     echo '
-                <script>
-                formatearAlertas();
-                notiAlert(3, "El email no esta registrado");
-            </script>';
+                                 <script>
+                                 formatearAlertas();
+                                 notiAlert(3, "Te logeaste con metodo Facebook o google");
+                             </script>';
                 }
-            } else {
+            }else{
                 echo '
                 <script>
                 formatearAlertas();
-                notiAlert(3, "Error en la sintaxis de los campos");
+                notiAlert(3, "El formato de la contraseña es incorrecto");
             </script>';
             }
         }
