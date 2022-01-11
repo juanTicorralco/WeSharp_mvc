@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -81,14 +82,14 @@ class TemplateController
         $mail = new PHPMailer;
         $mail->Charset = "UTF-8";
         $mail->isMail();
-        $mail->setFrom("roster_rtr@hotmail.com", "WeSharp Support");//esto se debe cambiar en produccion
-        $mail->Subyect= "Hola ".$name." - ".$subject;
+        $mail->setFrom("roster_rtr@hotmail.com", "WeSharp Support"); //esto se debe cambiar en produccion
+        $mail->Subyect = "Hola " . $name . " - " . $subject;
         $mail->addAddress($email);
         $mail->msgHTML('
             <div>
-                Hola,' .$name. ':
-                <p>'. $message .'</p>
-                <a href="'.$url.'">Dale Click al link para: '.$post.'</a>
+                Hola,' . $name . ':
+                <p>' . $message . '</p>
+                <a href="' . $url . '">Dale Click al link para: ' . $post . '</a>
                 Si no deseas verificar tu email en WeSharp, favor de ignorar este mensaje.
 
                 Gracias
@@ -97,11 +98,60 @@ class TemplateController
 
             </div>
         ');
-        $send=$mail->Send();
-        if(!$send){
+        $send = $mail->Send();
+        if (!$send) {
             return $mail->ErrorInfo;
-        }else{
+        } else {
             return "ok";
+        }
+    }
+
+    // Funcion para almacear fotos
+    static public function AlmacenPhoto($image, $folder, $path, $width, $heigt, $name)
+    {
+        if (isset($image["tmp_name"]) && !empty($image["tmp_name"])) {
+            // configuramos la ruta de directorio donde se guarda la imagen 
+            $directory = strtolower("views/" . $folder . "/" . $path);
+            // preguntamos primero si existe el directorio, si no lo creamos
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755);
+            }
+            // eliminar todos los archivos que existan en ese directorio
+            $files = glob($directory . "/*");
+            foreach ($files as $file) {
+                unlink($file);
+            }
+            // captur ancho y alto original de la foto
+            list($lastWidth, $lastHeight) = getimagesize($image["tmp_name"]);
+            // de acuerdo l tipo de la imagen aplicams las funciones or defecto
+            if ($image["type"] == "image/jpeg") {
+                // nombre del archivo
+                $newName = $name . '.jpg';
+                // definimos el directorio a guardar el archivo
+                $folderPath = $directory . "/" . $newName;
+                // crear una copia de la imagen 
+                $start = imagecreatefromjpeg($image["tmp_name"]);
+                // intrucciones para aplicar a la imagen definitiva
+                $end = imagecreatetruecolor($width, $heigt);
+                imagecopyresized($end, $start, 0, 0, 0, 0, $width, $heigt, $lastWidth, $lastHeight);
+                imagejpeg($end, $folderPath);
+            } else if ($image["type"] == "image/png") {
+                // nombre del archivo
+                $newName = $name . '.png';
+                // definimos el directorio a guardar el archivo
+                $folderPath = $directory . "/" . $newName;
+                // crear una copia de la imagen 
+                $start = imagecreatefrompng($image["tmp_name"]);
+                // intrucciones para aplicar a la imagen definitiva
+                $end = imagecreatetruecolor($width, $heigt);
+                imagealphablending($end, false);
+                imagesavealpha($end, true);
+                imagecopyresampled($end, $start, 0, 0, 0, 0, $width, $heigt, $lastWidth, $lastHeight);
+                imagepng($end, $folderPath);
+            }
+            return $newName;
+        } else {
+            return "error";
         }
     }
 }

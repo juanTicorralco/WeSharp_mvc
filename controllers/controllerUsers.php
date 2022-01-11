@@ -242,17 +242,18 @@ class ControllerUser
         }
     }
 
-    public function actualiarContraseña(){
+    public function actualiarContraseña()
+    {
         if (isset($_POST["newPassword"])) {
             /* validar los campos */
             if (
                 preg_match('/^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/', $_POST["newPassword"])
             ) {
-                if ( $_SESSION["user"]->method_user == "direct") {
+                if ($_SESSION["user"]->method_user == "direct") {
 
                     $crypt = crypt($_POST["newPassword"], '$2a$07$pdgtwzaldisoqrtrswqpxzasdte$');
 
-                    $url = CurlController::api() . "users?id=" . $_SESSION["user"]->id_user . "&nameId=id_user&token=". $_SESSION["user"]->token_user;
+                    $url = CurlController::api() . "users?id=" . $_SESSION["user"]->id_user . "&nameId=id_user&token=" . $_SESSION["user"]->token_user;
                     $method = "PUT";
                     $fields = "password_user=" . $crypt;
                     $header = array();
@@ -260,48 +261,92 @@ class ControllerUser
                     $respuesta = CurlController::request($url, $method, $fields, $header);
 
                     if ($respuesta->status == 200) {
-                         // Email donde esta la nueva contraseña
-                         $email = $_SESSION["user"]->email_user;
-                         $name = $_SESSION["user"]->displayname_user;
-                         $subject = "Nueva contraseña WeSharp";
-                         $message = "Acabas de cambiar tu contraseña... si es un error Por favor de notificar a WeSharp... ";
-                         $url = TemplateController::path() . "acount&login";
-                         $post = "Confirmar Nueva Contraseña";
-                         $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
+                        // Email donde esta la nueva contraseña
+                        $email = $_SESSION["user"]->email_user;
+                        $name = $_SESSION["user"]->displayname_user;
+                        $subject = "Nueva contraseña WeSharp";
+                        $message = "Acabas de cambiar tu contraseña... si es un error Por favor de notificar a WeSharp... ";
+                        $url = TemplateController::path() . "acount&login";
+                        $post = "Confirmar Nueva Contraseña";
+                        $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
 
-                         if ($sendEmail == "ok") {
-                             echo '
+                        if ($sendEmail == "ok") {
+                            echo '
                                  <script>
                                  formatearAlertas();
                                  notiAlert(1, "Tu nueva contraseña se envio correctamente, confirma en tu cuenta email (aveces esta en spam)");
                              </script>';
-                         } else {
-                             echo '
+                        } else {
+                            echo '
                                  <script>
                                  formatearAlertas();
                                  notiAlert(3, "' . $sendEmail . '");
                              </script>';
-                         }
-                    }else{
+                        }
+                    } else {
                         echo '
                                  <script>
                                  formatearAlertas();
                                  notiAlert(3, "no se pudo cambiar tu contraseña");
                              </script>';
                     }
-                }else{
+                } else {
                     echo '
                                  <script>
                                  formatearAlertas();
                                  notiAlert(3, "Te logeaste con metodo Facebook o google");
                              </script>';
                 }
-            }else{
+            } else {
                 echo '
                 <script>
                 formatearAlertas();
                 notiAlert(3, "El formato de la contraseña es incorrecto");
             </script>';
+            }
+        }
+    }
+
+    public function CambiarPhoto()
+    {
+        // validar la sintaxis de los campos 
+        if (isset($_FILES['changePhoto']["tmp_name"]) && !empty($_FILES["changePhoto"]["tmp_name"])) {
+            $image = $_FILES["changePhoto"];
+            $folder = "img/users";
+            $path = $_SESSION["user"]->id_user;
+            $width = 200;
+            $heigt = 200;
+            $name = $_SESSION["user"]->username_user;
+
+            $photo = TemplateController::AlmacenPhoto($image, $folder, $path, $width, $heigt, $name);
+
+            if ($photo != "error") {
+                // actualizar la foto
+                $url = CurlController::api() . "users?id=" . $_SESSION["user"]->id_user . "&nameId=id_user&token=" . $_SESSION["user"]->token_user;
+                $method = "PUT";
+                $fields = "picture_user=" . $photo;
+                $header = array();
+
+                $respuesta = CurlController::request($url, $method, $fields, $header);
+                if ($respuesta->status == 200) {
+                    $_SESSION["user"]->picture_user = $photo;
+                    echo '<script>
+                    formatearAlertas();
+                    switAlert("success", "Tu foto a sido modificada correctamente", "' . $_SERVER["REQUEST_URI"] . '","");
+                    </script>';
+                } else {
+                    echo '
+                        <script>
+                        formatearAlertas();
+                        notiAlert(3, "Ocurrio un error al guardar la imagen");
+                    </script>';
+                }
+            } else {
+                echo '
+                        <script>
+                        formatearAlertas();
+                        notiAlert(3, "Ocurrio un error al crear la imagen. Vuelve a intentarlo");
+                    </script>';
             }
         }
     }

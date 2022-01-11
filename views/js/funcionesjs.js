@@ -111,6 +111,23 @@ function validatejs(e, tipo){
             e.target.value="";
             return;
         }
+    }else if(tipo=="image"){
+        let image= e.target.files[0];
+        if(image["type"] !== "image/jpeg" && image["type"] !== "image/png"){
+            switAlert("error","La imagen tiene que ser PNG  JPEG", null, null);
+            return;
+        }else if(image["size"] > 2000000){
+            switAlert("error","La imagen tiene que ser menor a 2MB", null, null);
+            return;
+        }else{
+            var data= new FileReader();
+            data.readAsDataURL(image);
+
+            $(data).on("load", function(event){
+                let path= event.target.result;
+                $(".changePhoto").attr("src", path);
+            });
+        }
     }
 }
 
