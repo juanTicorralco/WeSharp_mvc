@@ -1,152 +1,216 @@
 /* funcion para resetear url de los filtros */
-function sortProduct(event){
-    let url= event.target.value.split("+")[0];
-    let sort= event.target.value.split("+")[1];
-    let endUrl= url.split("&")[0];
-    window.location= endUrl+"&1&"+sort+"#showCase";
+function sortProduct(event) {
+  let url = event.target.value.split("+")[0];
+  let sort = event.target.value.split("+")[1];
+  let endUrl = url.split("&")[0];
+  window.location = endUrl + "&1&" + sort + "#showCase";
 }
 /* funcion para cear una cooky para la vitrina */
-function setCookie(name, value, exp){
-    let now = new Date();
-    now.setTime(now.getTime() + (exp*24*60*60*1000));
+function setCookie(name, value, exp) {
+  let now = new Date();
+  now.setTime(now.getTime() + exp * 24 * 60 * 60 * 1000);
 
-    let expDate= "expires="+now.toUTCString();
-    document.cookie= name + "=" + value + "; " + expDate;
-    
+  let expDate = "expires=" + now.toUTCString();
+  document.cookie = name + "=" + value + "; " + expDate;
 }
 
 /* fucion para almacenar en cookies la vitrina */
-$(document).on("click",".ps-tab-list li", function(){
-    setCookie("tab", $(this).attr("type"), 1);
-})
+$(document).on("click", ".ps-tab-list li", function () {
+  setCookie("tab", $(this).attr("type"), 1);
+});
 
 /* funcion para el buscador */
-$(document).on("click", ".btnSearch", function(e){
-    e.preventDefault();
-    let path= $(this).attr("path");
-    let search= $(this).parent().children(".inputSearch").val().toLowerCase();
-    let match= /^[a-z0-9ñÑáéíóú ]*$/;
+$(document).on("click", ".btnSearch", function (e) {
+  e.preventDefault();
+  let path = $(this).attr("path");
+  let search = $(this).parent().children(".inputSearch").val().toLowerCase();
+  let match = /^[a-z0-9ñÑáéíóú ]*$/;
 
-    if(match.test(search)){
-        let searchTest=search.replace(/[ ]/g, "_");
-        searchTest=searchTest.replace(/[ñ]/g, "n");
-        searchTest=searchTest.replace(/[á]/g, "a");
-        searchTest=searchTest.replace(/[é]/g, "e");
-        searchTest=searchTest.replace(/[í]/g, "i");
-        searchTest=searchTest.replace(/[ó]/g, "o");
-        searchTest=searchTest.replace(/[ú]/g, "u");
+  if (match.test(search)) {
+    let searchTest = search.replace(/[ ]/g, "_");
+    searchTest = searchTest.replace(/[ñ]/g, "n");
+    searchTest = searchTest.replace(/[á]/g, "a");
+    searchTest = searchTest.replace(/[é]/g, "e");
+    searchTest = searchTest.replace(/[í]/g, "i");
+    searchTest = searchTest.replace(/[ó]/g, "o");
+    searchTest = searchTest.replace(/[ú]/g, "u");
 
-        window.location= path+searchTest;
-    }else{
-        $(this).parent().children(".inputSearch").val("");
-    }
-})
+    window.location = path + searchTest;
+  } else {
+    $(this).parent().children(".inputSearch").val("");
+  }
+});
 
 /* funcion para buscador con enter */
 let inputSearch = $(".inputSearch");
 let btnSearch = $(".btnSearch");
 
-for(let i=0;i<inputSearch.length;i++){
-    $(inputSearch[i]).keyup(function(e){
-        e.preventDefault();
-        if(e.keyCode==13 && $(inputSearch[i]).val() != ""){
-            let path= $(btnSearch[i]).attr("path");
-            let search= $(this).val().toLowerCase();
-            let match= /^[a-z0-9ñÑáéíóú ]*$/;
+for (let i = 0; i < inputSearch.length; i++) {
+  $(inputSearch[i]).keyup(function (e) {
+    e.preventDefault();
+    if (e.keyCode == 13 && $(inputSearch[i]).val() != "") {
+      let path = $(btnSearch[i]).attr("path");
+      let search = $(this).val().toLowerCase();
+      let match = /^[a-z0-9ñÑáéíóú ]*$/;
 
-            if(match.test(search)){
-                let searchTest=search.replace(/[ ]/g, "_");
-                searchTest=searchTest.replace(/[ñ]/g, "n");
-                searchTest=searchTest.replace(/[á]/g, "a");
-                searchTest=searchTest.replace(/[é]/g, "e");
-                searchTest=searchTest.replace(/[í]/g, "i");
-                searchTest=searchTest.replace(/[ó]/g, "o");
-                searchTest=searchTest.replace(/[ú]/g, "u");
+      if (match.test(search)) {
+        let searchTest = search.replace(/[ ]/g, "_");
+        searchTest = searchTest.replace(/[ñ]/g, "n");
+        searchTest = searchTest.replace(/[á]/g, "a");
+        searchTest = searchTest.replace(/[é]/g, "e");
+        searchTest = searchTest.replace(/[í]/g, "i");
+        searchTest = searchTest.replace(/[ó]/g, "o");
+        searchTest = searchTest.replace(/[ú]/g, "u");
 
-                window.location= path+searchTest;
-            }else{
-                $(this).val("");
-            }
-        }
-    })
+        window.location = path + searchTest;
+      } else {
+        $(this).val("");
+      }
+    }
+  });
 }
 
 /* funcion para cambiar la cantidad del carrito */
-function  changeQualyty(quantity, move, stock){
-    let number=1;
-    if(Number(quantity) > stock-1){
-        quantity= stock -1;
-    }
-    if(move=="up" ){
-            number = Number(quantity)+1;
-        
-    }
-    if(move == "down" && Number(quantity)>1){
-        number=Number(quantity)-1;
-    }
+function changeQualyty(quantity, move, stock) {
+  let number = 1;
+  if (Number(quantity) > stock - 1) {
+    quantity = stock - 1;
+  }
+  if (move == "up") {
+    number = Number(quantity) + 1;
+  }
+  if (move == "down" && Number(quantity) > 1) {
+    number = Number(quantity) - 1;
+  }
 
-    $(".quantity input").val(number);
+  $(".quantity input").val(number);
 }
 
 /* funcion para validar un formiulario */
-function validatejs(e, tipo){
-    if(tipo=="text"){
-        let pattern = /^[A-Za-zñÑáéíóúÁÉÍÓÚ ]{1,}$/;
-    if(!pattern.test(e.target.value)){
-        $(e.target).parent().addClass("was-validated");
-        $(e.target).parent().children(".invalid-feedback").html("No uses numeros ni caracteres especiales");
-        return;
-    }} else if(tipo=="email"){
-        let pattern = /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/;
-        if(!pattern.test(e.target.value)){
-            $(e.target).parent().addClass("was-validated");
-            $(e.target).parent().children(".invalid-feedback").html("Solo se acepta un formato email");
-            return;
-        }
-    }else if(tipo=="pass"){
-        let pattern = /^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/;
-        if(!pattern.test(e.target.value)){
-            $(e.target).parent().addClass("was-validated");
-            $(e.target).parent().children(".invalid-feedback").html("No se admiten espacios ni tampoco algunos caracteres especiales");
-            e.target.value="";
-            return;
-        }
-    }else if(tipo=="image"){
-        let image= e.target.files[0];
-        if(image["type"] !== "image/jpeg" && image["type"] !== "image/png"){
-            switAlert("error","La imagen tiene que ser PNG  JPEG", null, null);
-            return;
-        }else if(image["size"] > 2000000){
-            switAlert("error","La imagen tiene que ser menor a 2MB", null, null);
-            return;
-        }else{
-            var data= new FileReader();
-            data.readAsDataURL(image);
-
-            $(data).on("load", function(event){
-                let path= event.target.result;
-                $(".changePhoto").attr("src", path);
-            });
-        }
+function validatejs(e, tipo) {
+  if (tipo == "text") {
+    let pattern = /^[A-Za-zñÑáéíóúÁÉÍÓÚ ]{1,}$/;
+    if (!pattern.test(e.target.value)) {
+      $(e.target).parent().addClass("was-validated");
+      $(e.target)
+        .parent()
+        .children(".invalid-feedback")
+        .html("No uses numeros ni caracteres especiales");
+      return;
     }
+  } else if (tipo == "email") {
+    let pattern = /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/;
+    if (!pattern.test(e.target.value)) {
+      $(e.target).parent().addClass("was-validated");
+      $(e.target)
+        .parent()
+        .children(".invalid-feedback")
+        .html("Solo se acepta un formato email");
+      return;
+    }
+  } else if (tipo == "pass") {
+    let pattern = /^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/;
+    if (!pattern.test(e.target.value)) {
+      $(e.target).parent().addClass("was-validated");
+      $(e.target)
+        .parent()
+        .children(".invalid-feedback")
+        .html(
+          "No se admiten espacios ni tampoco algunos caracteres especiales"
+        );
+      e.target.value = "";
+      return;
+    }
+  } else if (tipo == "image") {
+    let image = e.target.files[0];
+    if (image["type"] !== "image/jpeg" && image["type"] !== "image/png") {
+      switAlert("error", "La imagen tiene que ser PNG  JPEG", null, null);
+      return;
+    } else if (image["size"] > 2000000) {
+      switAlert("error", "La imagen tiene que ser menor a 2MB", null, null);
+      return;
+    } else {
+      var data = new FileReader();
+      data.readAsDataURL(image);
+
+      $(data).on("load", function (event) {
+        let path = event.target.result;
+        $(".changePhoto").attr("src", path);
+      });
+    }
+  }
 }
 
 /* funcion para validar un formiulario */
-function emailRepeat(e){
-    let settings={
-        "url": $("#urlApi").val()+"users?equalTo="+e.target.value+"&linkTo=email_user&select=email_user",
-        "metod": "GET",
-        "timeaot": 0,
-    };
+function emailRepeat(e) {
+  let settings = {
+    url:
+      $("#urlApi").val() +
+      "users?equalTo=" +
+      e.target.value +
+      "&linkTo=email_user&select=email_user",
+    metod: "GET",
+    timeaot: 0,
+  };
 
-    $.ajax(settings).done(function(response){
-        if(response.status==200){    
-        $(e.target).parent().addClass("was-validated");
-        $(e.target).parent().children(".invalid-feedback").html("Este email ya esta registrado");
-        e.target.value="";
-        return;
+  $.ajax(settings).done(function (response) {
+    if (response.status == 200) {
+      $(e.target).parent().addClass("was-validated");
+      $(e.target)
+        .parent()
+        .children(".invalid-feedback")
+        .html("Este email ya esta registrado");
+      e.target.value = "";
+      return;
+    }
+  });
+
+  validatejs(e, "email");
+}
+
+// funcion para agregar producto a la list de deseos
+function addWishList(urlProducto, urlApi) {
+  // valdar que es token exista
+  
+    if (localStorage.getItem("token_user") != null) {
+      // validar que el token sea el mismo que en la bd
+      let settings = {
+        url:
+          urlApi +
+          "users?equalTo=" +
+          localStorage.getItem("token_user") +
+          "&linkTo=token_user&select=id_user",
+        metod: "GET",
+        timeaot: 0,
+      };
+
+    //   respuesta incorrecta
+    $.ajax(settings).error(function (response) {
+        if(response.responseJSON.status==404){
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Ocurrio un error... por favor vuelve a logearte',
+                showConfirmButton: false,
+                timer: 3000
+              });
+              return;
         }
-    }); 
-
-    validatejs(e, "email");
+    });
+    
+    // respuesta correcta
+      $.ajax(settings).done(function (response) {
+        if (response.status == 200) {
+          console.log("respuesta: ", response);
+        }
+      });
+    }else {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: 'Para agregar a la lista de deseos debes estar logeado',
+            showConfirmButton: false,
+            timer: 3000
+          })
+      }
 }

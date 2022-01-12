@@ -195,7 +195,7 @@
                                 <?php if ($_SESSION["user"]->picture_user == "" || $_SESSION["user"]->picture_user == "NULL") : ?>
                                     <img class="rounded-circle" style="width: 40px;" src="img/users/default/default.png" alt="<?php echo $_SESSION["user"]->name_user; ?>">
                                 <?php else : ?>
-                                    <img class="rounded-circle" style="width: 40px;" src="img/users/<?php echo $_SESSION["user"]->id_user; ?>/<?php echo $_SESSION["user"]->picture_user; ?>" alt="<?php echo $_SESSION["user"]->name_user; ?>">
+                                    <img class="rounded-circle" style="width: 40px;" src="img/users/<?php echo $_SESSION["user"]->id_user; ?>/<?php echo $_SESSION["user"]->picture_user; ?>" alt="<?php echo $_SESSION["user"]->username_user; ?>">
                                 <?php endif; ?>
                             <?php endif; ?>
                         </div>

@@ -132,7 +132,7 @@
                             </li>
 
                             <li>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist">
+                                <a class="button" onclick="addWishList('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>')" data-toggle="tooltip" data-placement="top" title="Lo deseo">
                                     <i class="icon-heart"></i>
                                 </a>
                             </li>

@@ -4,6 +4,15 @@ if (!isset($_SESSION['user'])) {
             window.location="' . $path . '";
     </script>';
     return;
+}else{
+    $time= time();
+    if($_SESSION["user"]->token_exp_user < $time){
+        echo '<script>
+        switAlert("error", "Para proteger tus datos, si no hay actividad en tu cuenta, se cierra automaticamente. Vuelve a logearte!", "' . $path . 'acount&logout","");
+            
+    </script>';
+    return;
+    }
 }
 ?>
 <!--=====================================

@@ -95,12 +95,15 @@ class ControllerUser
                 if ($response->status == 200) {
                     //echo '<pre>'; print_r($response->result[0]->verificated_user); echo '</pre>';
                     if ($response->result[0]->verificated_user > 0) {
+                        $_SESSION['user'] = $response->result[0];
                         echo '
-                        <script>
+                        <script> 
+                        formatearAlertas();
+                        localStorage.setItem("token_user", "' . $_SESSION["user"]->token_user . '");
                         window.location="' . TemplateController::path() . 'acount&wishAcount";
                         </script>
                         ';
-                        $_SESSION['user'] = $response->result[0];
+                        
                     } else {
                         echo '<div class="alert alert-danger alert-dismissible">El email no esta confirmado, por favor confirmalo</div>
                         <script>
@@ -284,11 +287,18 @@ class ControllerUser
                              </script>';
                         }
                     } else {
-                        echo '
+                        if ($respuesta->status == 303) {
+                            echo '<script>
+                            formatearAlertas();
+                            switAlert("error", "' . $respuesta->result . '", "' . TemplateController::path() . 'acount&logout","");
+                            </script>';
+                        } else {
+                            echo '
                                  <script>
                                  formatearAlertas();
                                  notiAlert(3, "no se pudo cambiar tu contraseña");
                              </script>';
+                        }
                     }
                 } else {
                     echo '
@@ -328,7 +338,12 @@ class ControllerUser
                 $header = array();
 
                 $respuesta = CurlController::request($url, $method, $fields, $header);
-                if ($respuesta->status == 200) {
+                if ($respuesta->status == 303) {
+                    echo '<script>
+                    formatearAlertas();
+                    switAlert("error", "' . $respuesta->result . '", "' . TemplateController::path() . 'acount&logout","");
+                    </script>';
+                } else if ($respuesta->status == 200) {
                     $_SESSION["user"]->picture_user = $photo;
                     echo '<script>
                     formatearAlertas();
