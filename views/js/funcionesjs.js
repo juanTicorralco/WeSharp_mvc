@@ -171,46 +171,98 @@ function emailRepeat(e) {
 // funcion para agregar producto a la list de deseos
 function addWishList(urlProducto, urlApi) {
   // valdar que es token exista
-  
-    if (localStorage.getItem("token_user") != null) {
-      // validar que el token sea el mismo que en la bd
-      let settings = {
-        url:
-          urlApi +
-          "users?equalTo=" +
-          localStorage.getItem("token_user") +
-          "&linkTo=token_user&select=id_user",
-        metod: "GET",
-        timeaot: 0,
-      };
+
+  if (localStorage.getItem("token_user") != null) {
+    // validar que el token sea el mismo que en la bd
+    let token = localStorage.getItem("token_user");
+    let settings = {
+      url:
+        urlApi + "users?equalTo=" + token + "&linkTo=token_user&select=id_user,wishlist_user",
+      method: "GET",
+      timeaot: 0,
+    };
 
     //   respuesta incorrecta
     $.ajax(settings).error(function (response) {
-        if(response.responseJSON.status==404){
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: 'Ocurrio un error... por favor vuelve a logearte',
-                showConfirmButton: false,
-                timer: 3000
-              });
-              return;
-        }
-    });
-    
-    // respuesta correcta
-      $.ajax(settings).done(function (response) {
-        if (response.status == 200) {
-          console.log("respuesta: ", response);
-        }
-      });
-    }else {
-        Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: 'Para agregar a la lista de deseos debes estar logeado',
-            showConfirmButton: false,
-            timer: 3000
-          })
+      if (response.responseJSON.status == 404) {
+        switAlert("error", "Ocurrio un error... por favor vuelve a logearte", null, null, 3000);
+        return;
       }
+    });
+
+    // respuesta correcta
+    $.ajax(settings).done(function (response) {
+      if (response.status == 200) {
+        let id = response.result[0].id_user;
+        let wishlist = JSON.parse(response.result[0].wishlist_user);
+        let noRepeat = 0;
+        // preguntar si hay articulos en la lista de deseos 
+        if (wishlist != null && wishlist.length > 0) {
+          wishlist.forEach(list => {
+            if (list == urlProducto) {
+              noRepeat--;
+            } else {
+              noRepeat++;
+            }
+          });
+
+
+          // preguntamos si ya esta en la lista de deseos
+          if (wishlist.length != noRepeat) {
+            switAlert("error", "El producto ya se agrego a tu lista de deseos", null, null, 2000);
+          } else {
+
+            wishlist.push(urlProducto);
+            // Cuando no exista la lista de deseos inicialmente
+            let settings = {
+              "url": urlApi + "users?id=" + id + "&nameId=id_user&token=" + token + "&select=id_user",
+              "method": "PUT",
+              "timeaot": 0,
+              "headers": {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              "data": {
+                "wishlist_user": JSON.stringify(wishlist),
+              },
+            };
+
+            $.ajax(settings).done(function (response) {
+              if (response.status == 200) {
+
+                let totalWishlist = Number($(".totalWishList").html());
+                $(".totalWishList").html(totalWishlist + 1);
+                switAlert("success", "El producto se añadio a la lista de deseos", null, null, 1500);
+              }
+            });
+          }
+        } else {
+
+          // Cuando no exista la lista de deseos inicialmente
+          let settings = {
+            "url": urlApi + "users?id=" + id + "&nameId=id_user&token=" + token + "&select=id_user",
+            "method": "PUT",
+            "timeaot": 0,
+            "headers": {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            "data": {
+              "wishlist_user": '["' + urlProducto + '"]',
+            },
+          };
+
+          $.ajax(settings).done(function (response) {
+            if (response.status == 200) {
+
+              let totalWishlist = Number($(".totalWishList").html());
+              $(".totalWishList").html(totalWishlist + 1);
+
+              switAlert("success", "El producto se añadio a la lista de deseos", null, null, 1500);
+            }
+          });
+        }
+      }
+    });
+  } else {
+    switAlert("error", "Para agregar a la lista de deseos debes estar logeado", null, null, 3000);
+  }
 }

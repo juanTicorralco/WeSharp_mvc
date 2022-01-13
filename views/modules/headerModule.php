@@ -6,6 +6,16 @@ $header = array();
 
 $menuCategories = CurlController::request($url, $method, $field, $header)->result;
 /* echo '<pre>'; print_r($menuCategories); echo '</pre>'; */
+$wishlist=array();
+if( isset($_SESSION["user"])){
+    $url= CurlController::api()."users?linkTo=id_user&equalTo=".$_SESSION["user"]->id_user."&select=wishlist_user";
+    $WisUser = CurlController::request($url, $method, $field, $header)->result[0];
+    if(!empty($WisUser->wishlist_user)){
+        $wishlist= json_decode($WisUser->wishlist_user, true);
+    }else{
+        $wishlist=0;
+    }
+}
 ?>
 
 <header class="header header--standard header--market-place-4" data-sticky="true">
@@ -156,8 +166,8 @@ Header Content
                 Wishlist
                 ======================================-->
 
-                    <a class="header__extra" href="#">
-                        <i class="icon-heart"></i><span><i>0</i></span>
+                    <a class="header__extra" href="<?php echo $path ?>acount&wishAcount">
+                        <i class="icon-heart"></i><span><i class="totalWishList"><?php echo count($wishlist) ?></i></span>
                     </a>
 
                     <!--=====================================

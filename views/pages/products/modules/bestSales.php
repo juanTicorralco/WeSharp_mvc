@@ -100,7 +100,11 @@
                             Product
                             ======================================-->
             <?php foreach ($bestSalesItem as $key => $value) :  ?>
-                <div class="ps-product">
+                <div class="ps-product  <?php 
+                        if(in_array($value->url_product, $wishlist)){
+                            echo " border-success";
+                        }
+                    ?>">
 
                     <div class="ps-product__thumbnail">
 
@@ -117,7 +121,7 @@
                             <div class="ps-product__badge out-stock">Out Of Stock</div>
                         <?php endif; ?>
 
-                        <ul class="ps-product__actions">
+                        <ul class="ps-product__actions ">
 
                             <li>
                                 <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Cart">

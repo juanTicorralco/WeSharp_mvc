@@ -13,15 +13,17 @@ function notiAlert(type, text) {
   });
 }
 
-function switAlert(type, text, url, icon) {
+function switAlert(type, text, url, icon, time) {
   switch (type) {
     // cuando ocurre un error
     case "error":
       if (url == null && icon == null) {
         Swal.fire({
+          position: "top-end",
           icon: "error",
-          title: "Error",
-          text: text,
+          title: text,
+          showConfirmButton: false,
+          timer: time,
         });
       } else {
         Swal.fire({
@@ -40,9 +42,11 @@ function switAlert(type, text, url, icon) {
     case "success":
       if (url == null && icon == null) {
         Swal.fire({
+          position: "top-end",
           icon: "success",
-          title: "Success",
-          text: text,
+          title: text,
+          showConfirmButton: false,
+          timer: time,
         });
       } else {
         Swal.fire({

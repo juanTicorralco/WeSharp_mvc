@@ -796,6 +796,14 @@
         }
     }
 
+    // datatable start
+    function dataTable(){
+        var target= $('.dt-responsive');
+        if(target.length>0){
+            $(target).DataTable();
+        }
+    }
+
     // funciones globales
     $(function() {
         backgroundImage();
@@ -829,6 +837,7 @@
         preload();
         validacionBS();
         validarLogin();
+        dataTable();
     });
 
     $(window).on('load', function() {
