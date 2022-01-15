@@ -2,7 +2,7 @@
 
     <div class="ps-block__header">
 
-        <h3>Best Sale Items</h3>
+        <h3>Mas vendidos</h3>
 
         <div class="ps-block__navigation">
 
@@ -100,16 +100,13 @@
                             Product
                             ======================================-->
             <?php foreach ($bestSalesItem as $key => $value) :  ?>
-                <div class="ps-product  <?php 
-                        if(in_array($value->url_product, $wishlist)){
-                            echo " border-success";
-                        }
-                    ?>">
+                <div class="ps-product">
 
                     <div class="ps-product__thumbnail">
 
                         <a href="<?php echo $path . $value->url_product; ?>">
                             <img src="img/products/<?php echo $value->url_category; ?>/<?php echo $value->image_product; ?>" alt="<?php echo $value->name_product; ?>">
+
                         </a>
 
                         <?php if ($value->stock_product != 0) : ?>
@@ -120,6 +117,17 @@
                         <?php else : ?>
                             <div class="ps-product__badge out-stock">Out Of Stock</div>
                         <?php endif; ?>
+
+                        <?php
+                        if (in_array($value->url_product, $wishlist)) {
+                            echo '  <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>';
+                        }
+                        ?>
+
+                        <div class="invisibleCorazon <?php echo $value->url_product; ?>">
+                        <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>
+                        </div>
+
 
                         <ul class="ps-product__actions ">
 
@@ -136,7 +144,7 @@
                             </li>
 
                             <li>
-                                <a class="button" onclick="addWishList('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>')" data-toggle="tooltip" data-placement="top" title="Lo deseo">
+                                <a class="btn" onclick="addWishList('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>')" data-toggle="tooltip" data-placement="top" title="Lo deseo">
                                     <i class="icon-heart"></i>
                                 </a>
                             </li>
@@ -144,6 +152,8 @@
                         </ul>
 
                     </div>
+
+
 
                     <div class="ps-product__container">
 

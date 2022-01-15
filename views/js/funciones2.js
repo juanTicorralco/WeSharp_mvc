@@ -82,6 +82,25 @@ function switAlert(type, text, url, icon, time) {
     case "close":
         Swal.close();
     break;
+
+    // cnfiracion de eliminar
+    case "confirm":
+      
+      return new Promise(resolve=>{
+        Swal.fire({
+          title: 'Estas seguro?',
+          text: text,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then(function(result){
+          resolve(result.value);
+        });
+      });
+
+    break;
   }
 }
 

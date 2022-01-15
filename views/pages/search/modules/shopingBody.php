@@ -130,6 +130,17 @@ if ($totalResultProducts == "no found") {
                                             <div class="ps-product__badge out-stock">Out Of Stock</div>
                                         <?php endif; ?>
 
+
+                                        <?php
+                                        if (in_array($value->url_product, $wishlist)) {
+                                            echo '  <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>';
+                                        }
+                                        ?>
+
+                                        <div class="invisibleCorazon <?php echo $value->url_product; ?>">
+                                        <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>
+                                        </div>
+
                                         <ul class="ps-product__actions">
 
                                             <li>
@@ -145,7 +156,7 @@ if ($totalResultProducts == "no found") {
                                             </li>
 
                                             <li>
-                                                <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist">
+                                                <a class="btn" onclick="addWishList('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>')" data-toggle="tooltip" data-placement="top" title="Lo deseo">
                                                     <i class="icon-heart"></i>
                                                 </a>
                                             </li>
@@ -284,6 +295,16 @@ if ($totalResultProducts == "no found") {
                                                 <div class="ps-product__badge out-stock">Out Of Stock</div>
                                             <?php endif; ?>
 
+                                            <?php
+                                            if (in_array($value->url_product, $wishlist)) {
+                                                echo '  <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>';
+                                            }
+                                            ?>
+
+                                                <div class="invisibleCorazon <?php echo $value->url_product; ?>">
+                                                <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>
+                                                </div>
+
                                         </div>
 
                                         <div class="ps-product__container">
@@ -355,7 +376,11 @@ if ($totalResultProducts == "no found") {
 
                                                 <ul class="ps-product__actions">
                                                     <li><a href="<?php echo $path . $value->url_product; ?>"><i class="icon-eye"></i>View</a></li>
-                                                    <li><a href="#"><i class="icon-heart"></i> Wishlist</a></li>
+                                                    
+                                                    <li>
+                                                    <a class="btn" onclick="addWishList('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>')" >
+                                                    <strong> <i class="icon-heart"></i> Wishlist</a> </strong>
+                                                    </li>
                                                 </ul>
 
                                             </div>

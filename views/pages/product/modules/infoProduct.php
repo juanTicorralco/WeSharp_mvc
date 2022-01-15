@@ -206,9 +206,24 @@
 
         <div class="ps-product__actions">
 
-            <a href="#">
-                <i class="icon-heart"></i>
+            <?php
+                if (in_array($producter->url_product, $wishlist)): ?>
+            <a href="<?php echo $path ?>acount&wishAcount"  class="text-danger">
+            <i class="fas fa-heart"></i>
             </a>
+
+               <?php else: ?>
+                <a   class="btn text-danger" id="visibl-cor" onclick="addWishList('<?php echo $producter->url_product; ?>', '<?php echo CurlController::api(); ?>')">
+                    <i class="icon-heart txt"></i>
+                    </a>
+               <?php endif; ?>
+
+               <div class="invisibleCorazon <?php echo $producter->url_product; ?>">
+               <a href="<?php echo $path ?>acount&wishAcount"  class="text-danger">
+            <i class="fas fa-heart"></i>
+            </a>
+            </div>
+            
 
         </div>
 

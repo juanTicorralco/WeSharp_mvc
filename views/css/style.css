@@ -15974,7 +15974,7 @@ textarea.form-control {
     z-index: 1000;
     border-bottom: 1px solid #ccc;
     padding: 10px 0;
-    background-color: #ffffff;
+    background-color: #999;
 }
 
 .header--standard.header--sticky .header__content .menu--product-categories {
@@ -17666,4 +17666,11 @@ ul.timeline>li.process:before {
 
 .magin-tope {
     margin-top: 50px;
+}
+
+.basura-wislist{ 
+    font-size: 25px;
+}
+.invisibleCorazon{
+    display: none;
 }

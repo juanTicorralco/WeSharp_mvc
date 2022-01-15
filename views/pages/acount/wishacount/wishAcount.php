@@ -60,19 +60,19 @@ My Account Content
                     Wishlist
                     ======================================-->
 
-                <div class="table-responsive">
+                <div class="table-responsive ">
 
-                    <table class="table ps-table--whishlist dt-responsive">
+                    <table class="table ps-table--whishlist dt-responsive pr-5">
 
                         <thead>
 
                             <tr>
 
-                                <th>Product name</th>
+                                <th>Nombre Producto</th>
 
-                                <th>Unit Price</th>
+                                <th>Precio</th>
 
-                                <th>Stock Status</th>
+                                <th>Stock</th>
 
                                 <th></th>
 
@@ -90,23 +90,41 @@ My Account Content
                            foreach ($products as $key => $value):
                             ?>
 
-                            <tr>
+                            <tr class="<?php echo $value->url_product; ?>">
 
                                 <td>
                                     <div class="ps-product--cart">
-                                        <div class="ps-product__thumbnail"><a href="product-default.html"><img src="img/products/electronic/1.jpg" alt=""></a></div>
-                                        <div class="ps-product__content"><a href="product-default.html"><?php echo $value->name_product; ?></a></div>
+                                        <div class="ps-product__thumbnail">
+                                        <a href="<?php echo $path . $value->url_product; ?>">
+                            <img src="img/products/<?php echo $value->url_category; ?>/<?php echo $value->image_product; ?>" alt="<?php echo $value->name_product; ?>">
+
+                        </a>
+                                        </div>
+                                        <div class="ps-product__content"><a href="<?php echo $path . $value->url_product; ?>"><?php echo $value->name_product; ?></a></div>
                                     </div>
                                 </td>
 
-                                <td class="price">$205.00</td>
+                                <td>  <?php if ($value->offer_product != null) : ?>
+                                <p class="ps-product__price sale text-success">$<?php echo TemplateController::offerPrice($value->price_product, json_decode($value->offer_product, true)[1], json_decode($value->offer_product, true)[0]); ?> <del class="text-danger">$<?php echo $value->price_product; ?></del></p>
+                            <?php else : ?>
+                                <p class="ps-product__price text-dark">$<?php echo $value->price_product; ?></p>
+                            <?php endif; ?> </td>
 
-                                <td><span class="ps-tag ps-tag--in-stock">In-stock</span></td>
+                                <td><span class="ps-tag ps-tag--in-stock">
+                                    <?php                                     
+                                    if (intval($value->stock_product) != 0) : ?>
+                                    <?php if ($value->offer_product != null) : ?>
+
+                                    <div class="ps-product__badge out-stock text-success">Hay en bodega</div>
+                                    <?php else : ?>
+                                        <div class="ps-product__badge out-stock text-success">Hay en bodega</div>
+                                        <?php endif; ?>
+                                    <?php else : ?>
+                                        <div class="ps-product__badge out-stock text-danger">Agotado</div>
+                                    <?php endif; ?></span></td>
 
                                 <td><a class="ps-btn" href="#">Add to cart</a></td>
-
-                                <td><a href="#"><i class="icon-cross"></i></a></td>
-
+                                <td><a  class="text-danger btn basura-wislist" onclick="removeWishlist('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>', '<?php echo $path; ?>' )"><i class="fas fa-trash-alt"></i></a></td>
                             </tr>
 
                             <?php endforeach; ?>

@@ -2,7 +2,7 @@
 
     <div class="ps-block__header">
 
-        <h3>Recommended Items</h3>
+        <h3>Recomendados</h3>
 
         <div class="ps-block__navigation">
 
@@ -117,6 +117,16 @@
                             <div class="ps-product__badge out-stock">Out Of Stock</div>
                         <?php endif; ?>
 
+                        <?php
+                        if (in_array($value->url_product, $wishlist)) {
+                            echo '  <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>';
+                        }
+                        ?>
+
+                        <div class="invisibleCorazon <?php echo $value->url_product; ?>">
+                        <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>
+                        </div>
+
                         <ul class="ps-product__actions">
 
                             <li>
@@ -132,7 +142,7 @@
                             </li>
 
                             <li>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist">
+                            <a class="btn" onclick="addWishList('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>')" data-toggle="tooltip" data-placement="top" title="Lo deseo">
                                     <i class="icon-heart"></i>
                                 </a>
                             </li>

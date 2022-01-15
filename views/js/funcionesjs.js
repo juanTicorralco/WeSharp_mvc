@@ -231,6 +231,8 @@ function addWishList(urlProducto, urlApi) {
 
                 let totalWishlist = Number($(".totalWishList").html());
                 $(".totalWishList").html(totalWishlist + 1);
+                $(`.${urlProducto}`).removeClass("invisibleCorazon");
+                $(`#visibl-cor`).remove();
                 switAlert("success", "El producto se añadio a la lista de deseos", null, null, 1500);
               }
             });
@@ -255,7 +257,7 @@ function addWishList(urlProducto, urlApi) {
 
               let totalWishlist = Number($(".totalWishList").html());
               $(".totalWishList").html(totalWishlist + 1);
-
+              $(`.${urlProducto}`).removeClass("invisibleCorazon");
               switAlert("success", "El producto se añadio a la lista de deseos", null, null, 1500);
             }
           });
@@ -265,4 +267,59 @@ function addWishList(urlProducto, urlApi) {
   } else {
     switAlert("error", "Para agregar a la lista de deseos debes estar logeado", null, null, 3000);
   }
+}
+
+// funcion para eliminar elementos a la lista de deseos
+function removeWishlist(urlProduct, urlApi){
+  switAlert("confirm", "Esta seguro de eliminar de la lista de deseos?", null, null, null).then(resp=>{
+    
+    if(resp==true){
+      // revisar que el token coincida con la bd
+      let token = localStorage.getItem("token_user");
+    let settings = {
+      url:
+        urlApi + "users?equalTo=" + token + "&linkTo=token_user&select=id_user,wishlist_user",
+      method: "GET",
+      timeaot: 0,
+    };
+    $.ajax(settings).done(function (response) {
+      if (response.status == 200) {
+        let id = response.result[0].id_user;
+        let wishlist = JSON.parse(response.result[0].wishlist_user);
+        wishlist.forEach((list, index) => {
+          if(list== urlProduct){
+            wishlist.splice(index,1);
+            $(`.${urlProduct}`).remove();
+          }
+        });
+        
+         // Cuando no se quite de la lista 
+         let settings = {
+          "url": urlApi + "users?id=" + id + "&nameId=id_user&token=" + token,
+          "method": "PUT",
+          "timeaot": 0,
+          "headers": {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          "data": {
+            "wishlist_user": JSON.stringify(wishlist),
+          },
+        };
+
+        $.ajax(settings).done(function (response) {
+          if (response.status == 200) {
+
+            let totalWishlist = Number($(".totalWishList").html());
+            $(".totalWishList").html(totalWishlist - 1);
+
+            switAlert("success", "El producto se elimino de la lista de deseos", null, null, 1500);
+            
+          }
+        });
+
+      }
+    })
+    }
+  });
+
 }
