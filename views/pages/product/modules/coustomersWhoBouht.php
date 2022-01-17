@@ -2,7 +2,7 @@
 
     <div class="ps-section__header">
 
-        <h3>Customers who bought this item also bought</h3>
+        <h3>Personas que compraron este producto tambien compraron</h3>
 
     </div>
 

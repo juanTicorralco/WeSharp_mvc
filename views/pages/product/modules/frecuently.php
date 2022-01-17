@@ -46,6 +46,16 @@ $newProduct = CurlController::request($url10, $method10, $field10, $header10)->r
                             <!-- imagen del producto -->
                             <img src="img/products/<?php echo $producter->url_category; ?>/<?php echo $producter->image_product; ?>" alt="<?php echo $producter->name_product ?>">
 
+                            <?php
+                                if (in_array($producter->url_product, $wishlist)) {
+                                    echo '  <p mb-5></p>  <div class="ps-product__badge bg-danger "><i class="fas fa-heart"></i></div>';
+                                }
+                                ?>
+
+                                    <div class="invisibleCorazon <?php echo $producter->url_product; ?>">
+                                    <p mb-5></p>  <div class="ps-product__badge bg-danger "><i class="fas fa-heart"></i></div>
+                                    </div>
+
                         </div>
 
                         <div class="ps-product__container">
@@ -86,7 +96,15 @@ $newProduct = CurlController::request($url10, $method10, $field10, $header10)->r
 
                                     <!-- imagen del producto -->
                                     <img src="img/products/<?php echo $value->url_category; ?>/<?php echo $value->image_product; ?>" alt="<?php echo $value->name_product ?>">
+                                    <?php
+                                        if (in_array($value->url_product, $wishlist)) {
+                                            echo '  <p mb-5></p>  <div class="ps-product__badge bg-danger "><i class="fas fa-heart"></i></div>';
+                                        }
+                                        ?>
 
+                                            <div class="invisibleCorazon <?php echo $value->url_product; ?>">
+                                            <p mb-5></p>  <div class="ps-product__badge bg-danger "><i class="fas fa-heart"></i></div>
+                                            </div>
                                 </div>
 
                                 <div class="ps-product__container">
@@ -120,10 +138,10 @@ $newProduct = CurlController::request($url10, $method10, $field10, $header10)->r
                             <p>Total Precio:<strong class="text-success"> $<?php echo $price1 + $price2 ?></strong></p>
 
                             <a class="ps-btn" href="#">Add All to cart</a>
-                            <a class="ps-btn ps-btn--gray ps-btn--outline" href="#">Add All to whishlist</a>
+                            <a class="ps-btn ps-btn--gray ps-btn--outline btn" onclick="addWishListDos('<?php echo $producter->url_product; ?>', '<?php echo CurlController::api(); ?>', '<?php echo $value->url_product; ?>')" >Add All to whishlist</a>
 
                         </div>
-
+                
             </div>
 
         </div>

@@ -121,6 +121,17 @@ $storeProduct = CurlController::request($url11, $method11, $field11, $header11)-
                         <div class="ps-product__badge out-stock">Out Of Stock</div>
                     <?php endif; ?>
 
+                    
+                    <?php
+                                            if (in_array($value->url_product, $wishlist)) {
+                                                echo '  <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>';
+                                            }
+                                         ?>
+
+                                        <div class="invisibleCorazon <?php echo $value->url_product; ?>">
+                                        <p mb-5></p>  <div class="ps-product__badge bg-danger mt-5 "><i class="fas fa-heart"></i></div>
+                                        </div>
+
                     <ul class="ps-product__actions">
 
                         <li>
@@ -136,9 +147,9 @@ $storeProduct = CurlController::request($url11, $method11, $field11, $header11)-
                         </li>
 
                         <li>
-                            <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist">
-                                <i class="icon-heart"></i>
-                            </a>
+                        <a class="btn" onclick="addWishList('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>')" data-toggle="tooltip" data-placement="top" title="Lo deseo">
+                                                <i class="icon-heart"></i>
+                                            </a>
                         </li>
 
                     </ul>

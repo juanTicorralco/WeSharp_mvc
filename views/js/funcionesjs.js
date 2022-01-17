@@ -269,57 +269,277 @@ function addWishList(urlProducto, urlApi) {
   }
 }
 
+// AGREGAR DOS PROductos a la lista de deseos 
+
+function addWishListDos(urlProducto, urlApi, urlProductoDos) {
+  addWishList(urlProducto, urlApi);
+  setTimeout(() => {
+    addWishList(urlProductoDos, urlApi);
+  }, 1000);
+}
+
 // funcion para eliminar elementos a la lista de deseos
-function removeWishlist(urlProduct, urlApi){
-  switAlert("confirm", "Esta seguro de eliminar de la lista de deseos?", null, null, null).then(resp=>{
-    
-    if(resp==true){
+function removeWishlist(urlProduct, urlApi) {
+  switAlert("confirm", "Esta seguro de eliminar de la lista de deseos?", null, null, null).then(resp => {
+
+    if (resp == true) {
       // revisar que el token coincida con la bd
       let token = localStorage.getItem("token_user");
-    let settings = {
-      url:
-        urlApi + "users?equalTo=" + token + "&linkTo=token_user&select=id_user,wishlist_user",
-      method: "GET",
-      timeaot: 0,
-    };
-    $.ajax(settings).done(function (response) {
-      if (response.status == 200) {
-        let id = response.result[0].id_user;
-        let wishlist = JSON.parse(response.result[0].wishlist_user);
-        wishlist.forEach((list, index) => {
-          if(list== urlProduct){
-            wishlist.splice(index,1);
-            $(`.${urlProduct}`).remove();
-          }
-        });
-        
-         // Cuando no se quite de la lista 
-         let settings = {
-          "url": urlApi + "users?id=" + id + "&nameId=id_user&token=" + token,
-          "method": "PUT",
-          "timeaot": 0,
-          "headers": {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          "data": {
-            "wishlist_user": JSON.stringify(wishlist),
-          },
-        };
+      let settings = {
+        url:
+          urlApi + "users?equalTo=" + token + "&linkTo=token_user&select=id_user,wishlist_user",
+        method: "GET",
+        timeaot: 0,
+      };
+      $.ajax(settings).done(function (response) {
+        if (response.status == 200) {
+          let id = response.result[0].id_user;
+          let wishlist = JSON.parse(response.result[0].wishlist_user);
+          wishlist.forEach((list, index) => {
+            if (list == urlProduct) {
+              wishlist.splice(index, 1);
+              $(`.${urlProduct}`).remove();
+            }
+          });
 
-        $.ajax(settings).done(function (response) {
-          if (response.status == 200) {
+          // Cuando no se quite de la lista 
+          let settings = {
+            "url": urlApi + "users?id=" + id + "&nameId=id_user&token=" + token,
+            "method": "PUT",
+            "timeaot": 0,
+            "headers": {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            "data": {
+              "wishlist_user": JSON.stringify(wishlist),
+            },
+          };
 
-            let totalWishlist = Number($(".totalWishList").html());
-            $(".totalWishList").html(totalWishlist - 1);
+          $.ajax(settings).done(function (response) {
+            if (response.status == 200) {
 
-            switAlert("success", "El producto se elimino de la lista de deseos", null, null, 1500);
-            
-          }
-        });
+              let totalWishlist = Number($(".totalWishList").html());
+              $(".totalWishList").html(totalWishlist - 1);
 
-      }
-    })
+              switAlert("success", "El producto se elimino de la lista de deseos", null, null, 1500);
+
+            }
+          });
+
+        }
+      })
     }
   });
+}
 
+//Agredamos articulos al carrito de compras
+function addBagCard(urlProduct, category, image, name, price, path, urlApi) {
+  // Traer informacion del producto 
+  let select = "stock_product,specifications_product,shipping_product,offer_product";
+
+  let settings = {
+    url:
+      urlApi + "products?linkTo=url_product&equalTo=" + urlProduct + "&select=" + select,
+    method: "GET",
+    timeaot: 0,
+  };
+
+  $.ajax(settings).done(function (response) {
+    if (response.status == 200) {
+
+      if (response.result[0].stock_product == 0) {
+        switAlert("error", "Por el momento no tenemos en stock este producto", null, null, 3000);
+        return;
+      }
+
+      // Creamos la estructura detalles
+      let detalleProduct = '';
+      var quantity = 1;
+      if (response.result[0].specifications_product != null) {
+        let DetProd = JSON.parse(response.result[0].specifications_product);
+        detalleProduct = '[{';
+        for (const i in DetProd) {
+          let propiety = Object.keys(DetProd[i]).toString();
+          detalleProduct += '"' + propiety + '":"' + DetProd[i][propiety][0] + '",';
+        }
+        detalleProduct = detalleProduct.slice(0, -1);
+        detalleProduct += '}]';
+      }
+
+      // preguntamos is la cookie ya existe
+      let myCookie = document.cookie;
+      let listCookie = myCookie.split(";");
+      let count = 0;
+
+      for (let i in listCookie) {
+        var list = listCookie[i].search("listSC");
+        // si list es mayor a -1 es por qu se ncontro la cooki
+        if (list > -1) {
+          count--;
+          var arrayList = JSON.parse(listCookie[i].split("=")[1]);
+        } else {
+          count++;
+        }
+      }
+
+      // trabajamos sobre la cookie que ya existe
+      if (count != listCookie.length) {
+        if (arrayList != undefined) {
+          // Preguntar si el producto existe
+          var count2 = 0;
+          var index = null;
+          for (let i in arrayList) {
+            if (arrayList[i].product == urlProduct) {
+              count2--;
+              index = i;
+            } else {
+              count2++;
+            }
+          }
+          if (count2 == arrayList.length) {
+            arrayList.push({
+              "product": urlProduct,
+              "details": detalleProduct,
+              "quantity": quantity
+            });
+          } else {
+            arrayList[index].quantity += quantity;
+          }
+
+          // creamos una cookie
+          setCookie("listSC", JSON.stringify(arrayList), 1);
+          switAlert("success", "El producto se agrego a la lista de deseos", null, null, 1500);
+
+          // precio
+          function priceFun(offer, price) {
+            if (offer != null) {
+              if (offer[0] == "Discount") {
+                let offerPrice = price - (price * offer[1]) / 100;
+                offerPrice = offerPrice.toFixed(2)
+                return offerPrice;
+              } else if (offer[0] == "Fixed") {
+                let offerPrice = offer[1];
+                return offerPrice;
+              }
+            } else {
+              return price;
+            }
+          }
+
+          // lista
+          function listFun(lisArray) {
+            let lista2 = JSON.parse(lisArray[0]["details"]);
+            // html`<p class='mb-0'> <strong> Detalles por defecto:</strong></p>`;
+            let newlist = [];
+            for (let prop in lista2[0]) {
+              newlist += prop + " : " + lista2[0][prop] + `<br>`;
+            }
+
+            return newlist;
+          }
+
+          if (arrayList[index] == undefined) {
+            $("#bagTok").after(`
+              <div class="ps-product--cart-mobile bg-white p-3">
+                <div class="ps-product__thumbnail">
+                    <a class="m-0" href="${path + urlProduct}">
+                    <img src="img/products/${category}/${image}" alt="${name}">
+                    </a>
+                </div>
+  
+                <div class="ps-product__content">
+                    <a class="ps-product__remove" href="#">
+                        <i class="icon-cross"></i>
+                    </a>
+                    <a class="m-0" href="${path + urlProduct}">${name}</a>
+                    <p class="m-0"><strong></strong> WeSharp</p>
+                    <div class="small text-secondary">
+                    <p class='mb-0'> <strong> Detalles por defecto:</strong></p>
+                    <div class="mb-0">${listFun(arrayList)}</div>                         
+                    </div>
+                    <p class="m-0"><strong>Envio: </strong> $${JSON.parse(response.result[0].shipping_product)}</p>
+                    <small> <spam class="${urlProduct}">1</spam> x $
+                    ${priceFun(JSON.parse(response.result[0].offer_product), price)}
+                    </small>
+                </div>
+              </div>`
+            );
+            let totalbager = Number($('.totalWishBag').html());
+            $('.totalWishBag').html(totalbager + 1);
+          } else {
+            let totalbag = Number($(`.${urlProduct}`).html());
+            $(`.${urlProduct}`).html(totalbag + 1);
+          }
+        }
+      } else {
+        // creamos una cookie
+        var arrayList = [];
+        arrayList.push({
+          "product": urlProduct,
+          "details": detalleProduct,
+          "quantity": 1
+        });
+
+        setCookie("listSC", JSON.stringify(arrayList), 1);
+        switAlert("success", "El producto se agrego a la lista de deseos", null, null, 1500);
+
+        // precio
+        function priceFun(offer, price) {
+          if (offer != null) {
+            if (offer[0] == "Discount") {
+              let offerPrice = price - (price * offer[1]) / 100;
+              offerPrice = offerPrice.toFixed(2)
+              return offerPrice;
+            } else if (offer[0] == "Fixed") {
+              let offerPrice = offer[1];
+              return offerPrice;
+            }
+          } else {
+            return price;
+          }
+        }
+
+        // lista
+        function listFun(lisArray) {
+          let lista2 = JSON.parse(lisArray[0]["details"]);
+          // html`<p class='mb-0'> <strong> Detalles por defecto:</strong></p>`;
+          let newlist = [];
+          for (let prop in lista2[0]) {
+            newlist += prop + " : " + lista2[0][prop] + `<br>`;
+          }
+
+          return newlist;
+        }
+
+        $("#bagTok").after(`
+        <div class="ps-product--cart-mobile bg-white p-3">
+          <div class="ps-product__thumbnail">
+              <a class="m-0" href="${path + urlProduct}">
+              <img src="img/products/${category}/${image}" alt="${name}">
+              </a>
+          </div>
+
+          <div class="ps-product__content">
+              <a class="ps-product__remove" href="#">
+                  <i class="icon-cross"></i>
+              </a>
+              <a class="m-0" href="${path + urlProduct}">${name}</a>
+              <p class="m-0"><strong></strong> WeSharp</p>
+              <div class="small text-secondary">
+              <p class='mb-0'> <strong> Detalles por defecto:</strong></p>
+              <div class="mb-0">${listFun(arrayList)}</div>                         
+              </div>
+              <p class="m-0"><strong>Envio: </strong> $${JSON.parse(response.result[0].shipping_product)}</p>
+              <small> <spam class="${urlProduct}">${1}</spam> x $
+               ${priceFun(JSON.parse(response.result[0].offer_product), price)}
+              </small>
+          </div>
+        </div>`
+        );
+
+        let totalbager = Number($('.totalWishBag').html());
+        $('.totalWishBag').html(totalbager + 1);
+      }
+    }
+  });
 }

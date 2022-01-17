@@ -1,7 +1,7 @@
 <?php
 if (!isset($_SESSION['user'])) {
     echo '<script>
-            window.location="' . $path . '";
+            window.location="' . $path . 'acount&login";
     </script>';
     return;
 }else{
