@@ -332,8 +332,42 @@ function removeWishlist(urlProduct, urlApi) {
   });
 }
 
+// funcion que remueve de bag
+function removeBagSC(urlProduct, urlPagina){
+  switAlert("confirm", "Esta seguro de eliminar del carrito de compras?", urlPagina, null, null).then(resp => {
+     // preguntamos is la cookie ya existe
+     let myCookie = document.cookie;
+     let listCookie = myCookie.split(";");
+     let count = 0;
+
+     for (let i in listCookie) {
+       var list = listCookie[i].search("listSC");
+       // si list es mayor a -1 es por qu se ncontro la cooki
+       if (list > -1) {
+         count--;
+         var arrayList = JSON.parse(listCookie[i].split("=")[1]);
+       } else {
+         count++;
+       }
+     }
+
+     // trabajamos sobre la cookie que ya existe
+     if (count != listCookie.length) {
+       if (arrayList != undefined) {
+          arrayList.forEach((list, index)=>{
+            if(list.product == urlProduct){
+              arrayList.splice(index,1);
+            }
+          });
+          setCookie("listSC", JSON.stringify(arrayList), 1);
+          switAlert("success", "El producto se elimino de el carrito", urlPagina, null, 1500);
+        }
+      }
+  });
+}
+
 //Agredamos articulos al carrito de compras
-function addBagCard(urlProduct, category, image, name, price, path, urlApi) {
+function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag) {
   // Traer informacion del producto 
   let select = "stock_product,specifications_product,shipping_product,offer_product";
 
@@ -353,17 +387,25 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi) {
       }
 
       // Creamos la estructura detalles
-      let detalleProduct = '';
+      if(tag.getAttribute("detailSC") != ""){
+        var detalleProduct = tag.getAttribute("detailSC");  
+      }else{
+        var detalleProduct = "";
+      }
       var quantity = 1;
-      if (response.result[0].specifications_product != null) {
-        let DetProd = JSON.parse(response.result[0].specifications_product);
-        detalleProduct = '[{';
-        for (const i in DetProd) {
-          let propiety = Object.keys(DetProd[i]).toString();
-          detalleProduct += '"' + propiety + '":"' + DetProd[i][propiety][0] + '",';
+
+      //preguntamos si detalles viene bacio
+      if(detalleProduct === ""){
+        if (response.result[0].specifications_product != null) {
+          let DetProd = JSON.parse(response.result[0].specifications_product);
+          detalleProduct = '[{';
+          for (const i in DetProd) {
+            let propiety = Object.keys(DetProd[i]).toString();
+            detalleProduct += '"' + propiety + '":"' + DetProd[i][propiety][0] + '",';
+          }
+          detalleProduct = detalleProduct.slice(0, -1);
+          detalleProduct += '}]';
         }
-        detalleProduct = detalleProduct.slice(0, -1);
-        detalleProduct += '}]';
       }
 
       // preguntamos is la cookie ya existe
@@ -438,7 +480,53 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi) {
             return newlist;
           }
 
+          function priceTotalFun(varer, varer2, varer3) {
+
+            
+            if (varer3 == null) {
+              let priceSum;
+
+              priceSum = varer + (varer2);
+              priceSum = priceSum.toFixed(2)
+              return priceSum;
+            }else {
+              let priceSum;
+
+              priceSum = (varer * varer3);
+              priceSum = priceSum.toFixed(2)
+              return priceSum;
+            }
+
+          }
+
+          function resetFinishEnv(varer, varer2, varer3, varer4){
+           if(varer==0){
+            let priceSum;
+
+            priceSum = (varer3 * varer4);
+            priceSum = priceSum.toFixed(2)
+            return priceSum;
+          }else{
+            let priceSum;
+
+            priceSum = varer2 + (varer4);
+            priceSum = priceSum.toFixed(2)
+            return priceSum;
+          }
+
+          }
+
+          function resetenvio(var1, var2) {
+            if (var1 > 2) {
+              return 0;
+            } else {
+
+              return var2* 1.5;
+            }
+          }
+
           if (arrayList[index] == undefined) {
+    
             $("#bagTok").after(`
               <div class="ps-product--cart-mobile bg-white p-3">
                 <div class="ps-product__thumbnail">
@@ -448,27 +536,55 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi) {
                 </div>
   
                 <div class="ps-product__content">
-                    <a class="ps-product__remove" href="#">
-                        <i class="icon-cross"></i>
-                    </a>
+                <a class="ps-product__remove text-danger btn" onclick="removeBagSC('${urlProduct}', '${location.reload()}')">
+                <i class="fas fa-trash-alt"></i>
+                </a>
                     <a class="m-0" href="${path + urlProduct}">${name}</a>
                     <p class="m-0"><strong></strong> WeSharp</p>
                     <div class="small text-secondary">
                     <p class='mb-0'> <strong> Detalles por defecto:</strong></p>
                     <div class="mb-0">${listFun(arrayList)}</div>                         
                     </div>
-                    <p class="m-0"><strong>Envio: </strong> $${JSON.parse(response.result[0].shipping_product)}</p>
+                    <p class="m-0"><strong>Envio: </strong> $<span class="envibagcl">${JSON.parse(response.result[0].shipping_product) * 1.5}</span></p>
                     <small> <spam class="${urlProduct}">1</spam> x $
                     ${priceFun(JSON.parse(response.result[0].offer_product), price)}
                     </small>
                 </div>
               </div>`
             );
+
+            let var1 = parseFloat(priceFun(JSON.parse(response.result[0].offer_product), price));
+            let var2 = parseInt(JSON.parse(response.result[0].shipping_product));
+            let var3 = Number($(`.${urlProduct}`).html());
+            let var5= arrayList.length - 1 ;
+
+            let envios = JSON.parse(response.result[0].shipping_product);
+            let var4 = resetenvio(var5, envios);
+
+            $(".envibagcl").html(var4);
+
+            let tobagtal = Number($('.tobagtal').html());
+            $(".tobagtal").html(tobagtal + parseFloat(priceTotalFun(var1, var2, null)));
+            
+            console.log(parseFloat(priceTotalFun(var1, tobagtal, null)));
+
             let totalbager = Number($('.totalWishBag').html());
             $('.totalWishBag').html(totalbager + 1);
           } else {
-            let totalbag = Number($(`.${urlProduct}`).html());
-            $(`.${urlProduct}`).html(totalbag + 1);
+           
+            let var1 = parseFloat(priceFun(JSON.parse(response.result[0].offer_product), price));
+            let var3 = Number($(`.${urlProduct}`).html());
+            $(`.${urlProduct}`).html(var3 + 1);
+            let envios = JSON.parse(response.result[0].shipping_product);
+            let var4 = resetenvio(var3, envios);
+            let tobagtal = Number($('.tobagtal').html());
+    
+            var3 = Number($(`.${urlProduct}`).html());
+            $(".envibagcl").html(var4);
+            var4 = Number($(".envibagcl").html());
+
+            // parseFloat(priceTotalFun(resetenvio(var3, envios), var2, var3))
+            $(".tobagtal").html(resetFinishEnv(var4, tobagtal, var3, var1));           
           }
         }
       } else {
@@ -511,6 +627,14 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi) {
           return newlist;
         }
 
+        function priceTotalFun(varer, varer2) {
+
+          let priceSum;
+
+          return priceSum = varer + (varer2 * 1.5);
+
+        }
+
         $("#bagTok").after(`
         <div class="ps-product--cart-mobile bg-white p-3">
           <div class="ps-product__thumbnail">
@@ -520,16 +644,16 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi) {
           </div>
 
           <div class="ps-product__content">
-              <a class="ps-product__remove" href="#">
-                  <i class="icon-cross"></i>
-              </a>
+          <a class="ps-product__remove text-danger btn" onclick="removeBagSC('${urlProduct}', '${location.reload()}')">
+          <i class="fas fa-trash-alt"></i>
+          </a>
               <a class="m-0" href="${path + urlProduct}">${name}</a>
               <p class="m-0"><strong></strong> WeSharp</p>
               <div class="small text-secondary">
               <p class='mb-0'> <strong> Detalles por defecto:</strong></p>
               <div class="mb-0">${listFun(arrayList)}</div>                         
               </div>
-              <p class="m-0"><strong>Envio: </strong> $${JSON.parse(response.result[0].shipping_product)}</p>
+              <p class="m-0"><strong>Envio: </strong> $ <span class="envibagcl">${JSON.parse(response.result[0].shipping_product) * 1.5}</span></p>
               <small> <spam class="${urlProduct}">${1}</spam> x $
                ${priceFun(JSON.parse(response.result[0].offer_product), price)}
               </small>
@@ -537,9 +661,44 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi) {
         </div>`
         );
 
+        let var1 = parseFloat(priceFun(JSON.parse(response.result[0].offer_product), price));
+        let var2 = parseInt(JSON.parse(response.result[0].shipping_product));
+
+        $("#viewCardBag").html(` 
+        <h3>Total: <strong>$ <span class="tobagtal">${priceTotalFun(var1, var2)}</span </strong></h3>
+        <figure>
+            <a class="ps-btn" href="shopping-cart.html">View Cart</a>
+            <a class="ps-btn" href="checkout.html">Checkout</a>
+        </figure>`);
+        
         let totalbager = Number($('.totalWishBag').html());
         $('.totalWishBag').html(totalbager + 1);
       }
     }
   });
 }
+
+// seleccionar detalles al producto
+$(document).on("click", ".details", function(){
+  let details = $(this).attr("datailType");
+  let value = $(this).attr("detailValue");
+  let detailsLenth= $(".details."+ details);
+
+  for(let i=0; i<detailsLenth.length; i++){
+    $(detailsLenth[i]).css({"border":"1px solid #bbb"});
+  }
+  $(this).css({"border":"5px solid #80F"});
+
+  // preguntar si se agregaron detalles
+  if($("[detailSC]").attr("detailSC") != ""){
+    
+    let detailsSC = JSON.parse($("[detailSC]").attr("detailSC"));
+    for(const i in detailsSC){
+      detailsSC[i][details]= value;
+      $("[detailSC]").attr("detailSC", JSON.stringify(detailsSC));
+    }
+
+  }else{
+    $("[detailSC]").attr("detailSC", '[{\"'+details+'\":\"'+value+'\"}]')
+  }
+})

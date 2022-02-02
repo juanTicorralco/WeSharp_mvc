@@ -132,7 +132,8 @@
 
                             <li>
                                 <a class="btn" 
-                                onclick="addBagCard('<?php echo $value->url_product; ?>', '<?php echo $value->url_category; ?>', '<?php echo $value->image_product; ?>', '<?php echo $value->name_product; ?>', '<?php echo $value->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>')" 
+                                onclick="addBagCard('<?php echo $value->url_product; ?>', '<?php echo $value->url_category; ?>', '<?php echo $value->image_product; ?>', '<?php echo $value->name_product; ?>', '<?php echo $value->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
+                                detailSC 
                                 data-toggle="tooltip" data-placement="top" title="Add to Cart">
                                     <i class="icon-bag2"></i>
                                 </a>

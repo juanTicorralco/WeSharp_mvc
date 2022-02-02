@@ -105,15 +105,20 @@
                     <?php foreach ($value as $key3 => $value3) : ?>
                         <?php foreach ($value3 as $key4 => $value4) : ?>
                             <?php if (array_keys($value)[0] == "Color") : ?>
-                                <div class="ps-variant round-circle mr-3" style="background-color:<?php echo $value4; ?>;
-                        width:30px;
-                        height:30px;
-                        cursor:pointer;
-                        border:1px solid #bbb;">
+                                <div class="ps-variant round-circle mr-3 details <?php echo array_keys($value)[0]; ?>" 
+                                datailType= "<?php echo array_keys($value)[0]; ?>"
+                                detailValue= "<?php echo $value4; ?>"
+                                style="background-color:<?php echo $value4; ?>;
+                                    width:30px;
+                                    height:30px;
+                                    cursor:pointer;
+                                    border:1px solid #bbb;">
                                     <span class="ps-variant__tooltip"><?php echo $value4; ?></span>
                                 </div>
                             <?php else : ?>
-                                <div class="ps-variant ps-variant--size">
+                                <div class="ps-variant ps-variant--size details <?php echo array_keys($value)[0]; ?>"
+                                datailType= "<?php echo array_keys($value)[0]; ?>"
+                                detailValue= "<?php echo $value4; ?>">
                                     <span class="ps-variant__tooltip"><?php echo $value4; ?></span>
                                     <span class="ps-variant__size"><?php echo substr($value4, 0, 3); ?></span>
                                 </div>
@@ -200,7 +205,9 @@
 
         </figure>
 
-        <a class="ps-btn ps-btn--black" href="#">Add to cart</a>
+        <a class="ps-btn ps-btn--black" onclick="addBagCard('<?php echo $producter->url_product; ?>', '<?php echo $producter->url_category; ?>', '<?php echo $producter->image_product; ?>', '<?php echo $producter->name_product; ?>', '<?php echo $producter->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
+        detailSC
+        >Add to cart</a>
 
         <a class="ps-btn" href="#">Buy Now</a>
 

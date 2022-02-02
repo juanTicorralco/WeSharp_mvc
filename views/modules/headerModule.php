@@ -175,6 +175,9 @@ Header Content
                 ======================================-->
 
                     <?php
+                    $totalPriceSC= 0;
+                    $ValorPrecioEnvio=0;
+                    $preceProduct=0;
                     if (isset($_COOKIE["listSC"])) {
                         $shopinCard = json_decode($_COOKIE["listSC"], true);
                         $totalSC = count($shopinCard);
@@ -191,77 +194,92 @@ Header Content
 
                         <div class="ps-cart__content">
 
-                            <div class="ps-cart__items" id="bagTok">
+                                <div class="ps-cart__items" id="bagTok">
+                                    <?php if ($totalSC > 0) : ?>
 
-                                <?php if ($totalSC > 0) : ?>
+                                    <?php foreach ($shopinCard as $key => $value) :
 
-                                    <?php foreach ($shopinCard as $key => $value):
-                                    
-                                    // traer productos al carrito
-                                    $select= "url_product,url_category,name_product,image_product,price_product,offer_product,shipping_product";
-                                    $url= CurlController::api()."relations?rel=products,categories&type=product,category&linkTo=url_product&equalTo=". $value["product"]."&select=". $select;
-                                    $method= "GET";
-                                    $fields= array();
-                                    $header= array();
+                                        // traer productos al carrito
+                                        $select = "url_product,url_category,name_product,image_product,price_product,offer_product,shipping_product";
+                                        $url = CurlController::api() . "relations?rel=products,categories&type=product,category&linkTo=url_product&equalTo=" . $value["product"] . "&select=" . $select;
+                                        $method = "GET";
+                                        $fields = array();
+                                        $header = array();
 
-                                    $result= CurlController::request($url, $method, $fields, $header)->result[0];
+                                        $result = CurlController::request($url, $method, $fields, $header)->result[0];
 
-                                  //  echo '<pre>'; print_r($result); echo '</pre>';
+                                        //  echo '<pre>'; print_r($result); echo '</pre>';
 
                                     ?>
 
-                                    <div class="ps-product--cart-mobile">
+                                        <div class="ps-product--cart-mobile">
 
-                                        <div class="ps-product__thumbnail mb-0">
-                                        <a class="m-0" href="<?php echo $path . $result->url_product; ?>">
-                                            <img src="img/products/<?php echo $result->url_category; ?>/<?php echo $result->image_product; ?>" alt="<?php echo $result->name_product; ?>">
-                                        </a>
-                                        </div>
+                                            <div class="ps-product__thumbnail mb-0">
+                                                <a class="m-0" href="<?php echo $path . $result->url_product; ?>">
+                                                    <img src="img/products/<?php echo $result->url_category; ?>/<?php echo $result->image_product; ?>" alt="<?php echo $result->name_product; ?>">
+                                                </a>
+                                            </div>
 
-                                        <div class="ps-product__content m-0">
-                                            <a class="ps-product__remove" href="#">
-                                                <i class="icon-cross"></i>
-                                            </a>
-                                            <a class="m-0" href="<?php echo $path . $result->url_product; ?>"><?php echo $result->name_product; ?></a>
-                                            <p class="m-0"><strong></strong> WeSharp</p>
-                                            <div class="small text-secondary">
-                                            
-                                                <?php
-                                                    if($value["details"] != ""){
+                                            <div class="ps-product__content m-0">
+                                                <a class="ps-product__remove text-danger btn" onclick="removeBagSC('<?php echo $result->url_product; ?>','<?php echo $_SERVER['REQUEST_URI']; ?>')">
+                                                <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                                <a class="m-0" href="<?php echo $path . $result->url_product; ?>"><?php echo $result->name_product; ?></a>
+                                                <p class="m-0"><strong></strong> WeSharp</p>
+                                                <div class="small text-secondary">
+
+                                                    <?php
+                                                    if ($value["details"] != "") {
                                                         echo  "<p class='mb-0'> <strong> Detalles por defecto:</strong></p>";
-                                                        foreach (json_decode($value["details"],true) as $key => $detalle) {
-                                                            foreach ( array_keys($detalle) as $key => $list) {
-                                                                echo '<div class="mb-0">'. $list .': '. array_values($detalle)[$key] . '</div>';
+                                                        foreach (json_decode($value["details"], true) as $key => $detalle) {
+                                                            foreach (array_keys($detalle) as $key => $list) {
+                                                                echo '<div class="mb-0">' . $list . ': ' . array_values($detalle)[$key] . '</div>';
                                                             }
                                                         }
                                                     }
-                                                ?>
+                                                    ?>
+                                                </div>
+                                                <p class="m-0"><strong>Envio:</strong> $ <span class="envibagcl"><?php 
+                                                if($value["quantity"] > 3 || $totalSC >3 || ($value["quantity"] >= 2 && $totalSC >= 2)){
+                                                    $ValorPrecioEnvio=0;
+                                                    echo $ValorPrecioEnvio;
+                                                }else{
+                                                    $ValorPrecioEnvio= ($result->shipping_product * 1.5 )/ $value["quantity"];
+                                                    echo $ValorPrecioEnvio;
+                                                }
+                                                
+                                                ?></span></p>
+                                                <small> <strong>Cantidad: </strong> <span class="<?php echo $value["product"]; ?>"><?php echo $value["quantity"]; ?></span> <strong>Precio:</strong> $
+                                                    <?php if ($result->offer_product != null) : ?>
+                                                        <?php
+                                                            $preceProduct= TemplateController::offerPrice($result->price_product, json_decode($result->offer_product, true)[1], json_decode($result->offer_product, true)[0]); 
+                                                            echo $preceProduct; ?>
+                                                    <?php else : ?>
+                                                        <?php 
+                                                            $preceProduct= $result->price_product;
+                                                            echo $preceProduct; ?>
+                                                    <?php endif; ?>
+                                                    
+                                                    <?php $totalPriceSC += $ValorPrecioEnvio + ($preceProduct * $value["quantity"]); ?>
+                                                </small>
                                             </div>
-                                            <p class="m-0"><strong>Envio:</strong> $<?php echo $result->shipping_product; ?></p>
-                                            <small> <strong>Cantidad: </strong> <span class="<?php echo $value["product"]; ?>"><?php echo $value["quantity"]; ?></span> <strong>Precio:</strong> $
-                                            <?php if ($result->offer_product != null) : ?>
-                                                <?php echo TemplateController::offerPrice($result->price_product, json_decode($result->offer_product, true)[1], json_decode($result->offer_product, true)[0]); ?>
-                                            <?php else : ?>
-                                                <?php echo $result->price_product; ?>
-                                            <?php endif; ?>
-                                            </small>
+
                                         </div>
-
-                                    </div>
                                     <?php endforeach; ?>
-                                <?php endif; ?>
+                                    
+                                    <?php endif; ?>
+                                </div>
+                            
+                                <div class="ps-cart__footer" id="viewCardBag">
 
-                            </div>
+                                    <h3>Total:<strong>$<span class="tobagtal"> <?php echo $totalPriceSC; ?></span> </strong></h3>
+                                    <figure>
+                                        <a class="ps-btn" href="shopping-cart.html">View Cart</a>
+                                        <a class="ps-btn" href="checkout.html">Checkout</a>
+                                    </figure>
 
-                            <div class="ps-cart__footer">
-
-                                <h3>Sub Total:<strong>$59.99</strong></h3>
-                                <figure>
-                                    <a class="ps-btn" href="shopping-cart.html">View Cart</a>
-                                    <a class="ps-btn" href="checkout.html">Checkout</a>
-                                </figure>
-
-                            </div>
+                                </div>
+                           
 
                         </div>
 
