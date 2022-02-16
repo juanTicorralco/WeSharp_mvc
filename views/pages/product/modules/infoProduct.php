@@ -207,6 +207,7 @@
 
         <a class="ps-btn ps-btn--black" onclick="addBagCard('<?php echo $producter->url_product; ?>', '<?php echo $producter->url_category; ?>', '<?php echo $producter->image_product; ?>', '<?php echo $producter->name_product; ?>', '<?php echo $producter->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
         detailSC
+        quantitySC
         >Add to cart</a>
 
         <a class="ps-btn" href="#">Buy Now</a>

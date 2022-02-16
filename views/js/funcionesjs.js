@@ -84,6 +84,8 @@ function changeQualyty(quantity, move, stock) {
   }
 
   $(".quantity input").val(number);
+  
+  $("[quantitySC]").attr("quantitySC", number);
 }
 
 /* funcion para validar un formiulario */
@@ -386,13 +388,19 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
         return;
       }
 
-      // Creamos la estructura detalles
+      // Creamos la estructura detalles, vaidamos existencia de detalles
       if(tag.getAttribute("detailSC") != ""){
         var detalleProduct = tag.getAttribute("detailSC");  
       }else{
         var detalleProduct = "";
       }
-      var quantity = 1;
+
+      // validamos la existecia de cantidad 
+      if(tag.getAttribute("quantitySC") != ""){
+        var quantity = tag.getAttribute("quantitySC");  
+      }else{
+        var quantity = 1;
+      }
 
       //preguntamos si detalles viene bacio
       if(detalleProduct === ""){
@@ -702,3 +710,12 @@ $(document).on("click", ".details", function(){
     $("[detailSC]").attr("detailSC", '[{\"'+details+'\":\"'+value+'\"}]')
   }
 })
+
+// AGREGAR DOS PROductos al carrito
+
+function addBagCardDos(urlProduct, category, image, name, price, path, urlApi, tag, urlProductoDos) {
+  addBagCard(urlProduct, category, image, name, price, path, urlApi, tag);
+  setTimeout(() => {
+    addBagCard(urlProductoDos, category, image, name, price, path, urlApi, tag);
+  }, 1000);
+}

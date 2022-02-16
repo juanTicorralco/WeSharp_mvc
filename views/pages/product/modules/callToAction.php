@@ -29,7 +29,11 @@
                             <p class="ps-product__price">$<?php echo $producter->price_product; ?></p>
                         <?php endif; ?>
 
-                        <a class="ps-btn" href="#"> Add to Cart</a>
+                        <a class="ps-btn btn" 
+                            onclick="addBagCard('<?php echo $producter->url_product; ?>', '<?php echo $producter->url_category; ?>', '<?php echo $producter->image_product; ?>', '<?php echo $producter->name_product; ?>', '<?php echo $producter->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
+                            detailSC 
+                            quantitySC
+                        > Add to Cart</a>
                     </div>
 
                 </div>

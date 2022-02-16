@@ -170,25 +170,25 @@ Header Content
                         <i class="icon-heart"></i><span><i class="totalWishList"><?php echo count($wishlist) ?></i></span>
                     </a>
 
-                    <!--=====================================
+                <!--=====================================
                 Cart
                 ======================================-->
 
                     <?php
-                    $totalPriceSC= 0;
-                    $ValorPrecioEnvio=0;
-                    $preceProduct=0;
-                    if (isset($_COOKIE["listSC"])) {
-                        $shopinCard = json_decode($_COOKIE["listSC"], true);
-                        $totalSC = count($shopinCard);
-                    } else {
-                        $totalSC = 0;
-                    }
+                        $totalPriceSC= 0;
+                        $ValorPrecioEnvio=0;
+                        $preceProduct=0;
+                        if (isset($_COOKIE["listSC"])) {
+                            $shopinCard = json_decode($_COOKIE["listSC"], true);
+                            $totalSC = count($shopinCard);
+                        } else {
+                            $totalSC = 0;
+                        }
                     ?>
 
                     <div class="ps-cart--mini">
 
-                        <a class="header__extra" href="#">
+                        <a class="header__extra" class="btn">
                             <i class="icon-bag2"></i><span><i class="totalWishBag"><?php echo $totalSC; ?></i></span>
                         </a>
 
@@ -239,15 +239,15 @@ Header Content
                                                     }
                                                     ?>
                                                 </div>
-                                                <p class="m-0"><strong>Envio:</strong> $ <span class="envibagcl"><?php 
-                                                if($value["quantity"] > 3 || $totalSC >3 || ($value["quantity"] >= 2 && $totalSC >= 2)){
-                                                    $ValorPrecioEnvio=0;
-                                                    echo $ValorPrecioEnvio;
-                                                }else{
-                                                    $ValorPrecioEnvio= ($result->shipping_product * 1.5 )/ $value["quantity"];
-                                                    echo $ValorPrecioEnvio;
-                                                }
-                                                
+                                                <p class="m-0"><strong>Envio:</strong> $ <span class="envibagcl">
+                                                <?php 
+                                                    if($value["quantity"] >= 3 || $totalSC >=3 || ($value["quantity"] >= 3 && $totalSC >= 3)){
+                                                        $ValorPrecioEnvio=0;
+                                                        echo $ValorPrecioEnvio;
+                                                    }else{
+                                                        $ValorPrecioEnvio= ($result->shipping_product * 1.5 )/ $value["quantity"];
+                                                        echo $ValorPrecioEnvio;
+                                                    }
                                                 ?></span></p>
                                                 <small> <strong>Cantidad: </strong> <span class="<?php echo $value["product"]; ?>"><?php echo $value["quantity"]; ?></span> <strong>Precio:</strong> $
                                                     <?php if ($result->offer_product != null) : ?>
@@ -274,7 +274,7 @@ Header Content
 
                                     <h3>Total:<strong>$<span class="tobagtal"> <?php echo $totalPriceSC; ?></span> </strong></h3>
                                     <figure>
-                                        <a class="ps-btn" href="shopping-cart.html">View Cart</a>
+                                        <a class="ps-btn" href="<?php echo $path; ?>shopingBag">Ver carrito</a>
                                         <a class="ps-btn" href="checkout.html">Checkout</a>
                                     </figure>
 
@@ -285,10 +285,10 @@ Header Content
 
                     </div>
 
+                    <!--=====================================
+                    Login and Register dentro
+                    ======================================-->
                     <?php if (isset($_SESSION["user"])) : ?>
-                        <!--=====================================
-                Login and Register dentro
-                ======================================-->
 
                         <div class="ps-block--user-header">
                             <div class="ps-block__left">

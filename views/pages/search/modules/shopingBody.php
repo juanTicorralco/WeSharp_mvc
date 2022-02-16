@@ -144,7 +144,12 @@ if ($totalResultProducts == "no found") {
                                         <ul class="ps-product__actions">
 
                                             <li>
-                                                <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Cart">
+                                                <a 
+                                                class="btn" 
+                                                onclick="addBagCard('<?php echo $value->url_product; ?>', '<?php echo $value->url_category; ?>', '<?php echo $value->image_product; ?>', '<?php echo $value->name_product; ?>', '<?php echo $value->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
+                                                detailSC 
+                                                quantitySC
+                                                data-toggle="tooltip" data-placement="top" title="Agregar al carrito">
                                                     <i class="icon-bag2"></i>
                                                 </a>
                                             </li>
@@ -372,7 +377,11 @@ if ($totalResultProducts == "no found") {
                                                     <p class="ps-product__price">$<?php echo $value->price_product; ?></p>
                                                 <?php endif; ?>
 
-                                                <a class="ps-btn" href="#">Add to cart</a>
+                                                <a class="ps-btn" 
+                                                onclick="addBagCard('<?php echo $value->url_product; ?>', '<?php echo $value->url_category; ?>', '<?php echo $value->image_product; ?>', '<?php echo $value->name_product; ?>', '<?php echo $value->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
+                                                detailSC 
+                                                quantitySC
+                                                >Add to cart</a>
 
                                                 <ul class="ps-product__actions">
                                                     <li><a href="<?php echo $path . $value->url_product; ?>"><i class="icon-eye"></i>View</a></li>

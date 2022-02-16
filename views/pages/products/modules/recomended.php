@@ -130,7 +130,12 @@
                         <ul class="ps-product__actions">
 
                             <li>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Cart">
+                                <a
+                                class="btn" 
+                                onclick="addBagCard('<?php echo $value->url_product; ?>', '<?php echo $value->url_category; ?>', '<?php echo $value->image_product; ?>', '<?php echo $value->name_product; ?>', '<?php echo $value->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
+                                detailSC 
+                                quantitySC
+                                data-toggle="tooltip" data-placement="top" title="Agregar al carrito">
                                     <i class="icon-bag2"></i>
                                 </a>
                             </li>

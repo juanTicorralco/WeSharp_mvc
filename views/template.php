@@ -296,7 +296,7 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <?php
     /* choose which page to enter */
     if (!empty($urlParams[0])) {
-        if ($urlParams[0] == "acount") {
+        if ($urlParams[0] == "acount" || $urlParams[0] =="shopingBag"){
             include "pages/" . $urlParams[0] . "/" . $urlParams[0] . ".php";
         } else if ($urlCategories->status == 200 || $urlSubcategories->status == 200) {
             include "pages/products/products.php";

@@ -137,7 +137,11 @@ $newProduct = CurlController::request($url10, $method10, $field10, $header10)->r
 
                             <p>Total Precio:<strong class="text-success"> $<?php echo $price1 + $price2 ?></strong></p>
 
-                            <a class="ps-btn" href="#">Add All to cart</a>
+                            <a class="ps-btn"
+                            onclick="addBagCardDos('<?php echo $producter->url_product; ?>', '<?php echo $producter->url_category; ?>', '<?php echo $producter->image_product; ?>', '<?php echo $producter->name_product; ?>', '<?php echo $producter->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this, '<?php echo $value->url_product; ?>')"
+                            detailSC 
+                            quantitySC
+                            >Add All to cart</a>
                             <a class="ps-btn ps-btn--gray ps-btn--outline btn" onclick="addWishListDos('<?php echo $producter->url_product; ?>', '<?php echo CurlController::api(); ?>', '<?php echo $value->url_product; ?>')" >Add All to whishlist</a>
 
                         </div>
