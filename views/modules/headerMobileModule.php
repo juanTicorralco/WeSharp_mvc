@@ -181,7 +181,7 @@
                                                     ?>
                                                 </div>
                                                 <p class="m-0"><strong>Envio:</strong> $ <span class="envibagcl"><?php 
-                                                if($value["quantity"] > 3 || $totalSC >3 || ($value["quantity"] >= 2 && $totalSC >= 2)){
+                                                if($value["quantity"] >= 3 || $totalSC >= 3 || ($value["quantity"] >= 3 && $totalSC >= 3)){
                                                     $ValorPrecioEnvio=0;
                                                     echo $ValorPrecioEnvio;
                                                 }else{
@@ -216,7 +216,9 @@
                                     <h3>Total:<strong>$<span class="tobagtal"> <?php echo $totalPriceSC; ?></span> </strong></h3>
                                     <figure>
                                         <a class="ps-btn" href="<?php echo $path; ?>shopingBag">Ver carrito</a>
-                                        <a class="ps-btn" href="checkout.html">Checkout</a>
+                                        <?php if(isset($_COOKIE["listSC"]) && $_COOKIE["listSC"] != []): ?>
+                                        <a class="ps-btn" href="<?php echo $path; ?>checkout">Pagar</a>
+                                        <?php endif; ?>
                                     </figure>
 
                                 </div>

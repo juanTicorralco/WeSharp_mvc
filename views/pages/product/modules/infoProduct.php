@@ -191,15 +191,19 @@
 
             <div class="form-group--number quantity">
 
-                <button class="up" onclick="changeQualyty($('.quantity input').val(), 'up', <?php echo $producter->stock_product ?> )">
+                <button class="up" 
+                onclick="changeQualyty($('#quant0').val(), 'up', <?php echo $producter->stock_product ?>, 0)">
                     <i class="fa fa-plus"></i>
                 </button>
 
-                <button class="down" onclick="changeQualyty($('.quantity input').val(), 'down')">
+                <button class="down" 
+                onclick="changeQualyty($('#quant0').val(), 'down', <?php echo $producter->stock_product ?>, 0)">
                     <i class="fa fa-minus"></i>
                 </button>
 
-                <input class="form-control" type="text" value="1" readonly>
+                <input 
+                id="quant0"
+                class="form-control" type="text" value="1" readonly>
 
             </div>
 

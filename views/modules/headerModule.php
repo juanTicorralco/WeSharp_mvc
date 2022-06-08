@@ -275,7 +275,9 @@ Header Content
                                     <h3>Total:<strong>$<span class="tobagtal"> <?php echo $totalPriceSC; ?></span> </strong></h3>
                                     <figure>
                                         <a class="ps-btn" href="<?php echo $path; ?>shopingBag">Ver carrito</a>
-                                        <a class="ps-btn" href="checkout.html">Checkout</a>
+                                        <?php if(isset($_COOKIE["listSC"]) && $_COOKIE["listSC"] != []): ?>
+                                        <a class="ps-btn" href="<?php echo $path; ?>checkout">Pagar</a>
+                                        <?php endif; ?>
                                     </figure>
 
                                 </div>

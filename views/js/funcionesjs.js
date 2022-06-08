@@ -71,7 +71,7 @@ for (let i = 0; i < inputSearch.length; i++) {
 }
 
 /* funcion para cambiar la cantidad del carrito */
-function changeQualyty(quantity, move, stock) {
+function changeQualyty(quantity, move, stock, index) {
   let number = 1;
   if (Number(quantity) > stock - 1) {
     quantity = stock - 1;
@@ -83,9 +83,13 @@ function changeQualyty(quantity, move, stock) {
     number = Number(quantity) - 1;
   }
 
-  $(".quantity input").val(number);
-  
+  $("#quant"+index).val(number);
+  // console.log(number);
   $("[quantitySC]").attr("quantitySC", number);
+
+  // console.log(index);
+
+  totalp(index);
 }
 
 /* funcion para validar un formiulario */
@@ -450,10 +454,10 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
             arrayList.push({
               "product": urlProduct,
               "details": detalleProduct,
-              "quantity": quantity
+              "quantity": parseInt(quantity)
             });
           } else {
-            arrayList[index].quantity += quantity;
+            arrayList[index].quantity += parseInt( quantity);
           }
 
           // creamos una cookie
@@ -574,7 +578,7 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
             let tobagtal = Number($('.tobagtal').html());
             $(".tobagtal").html(tobagtal + parseFloat(priceTotalFun(var1, var2, null)));
             
-            console.log(parseFloat(priceTotalFun(var1, tobagtal, null)));
+            // console.log(parseFloat(priceTotalFun(var1, tobagtal, null)));
 
             let totalbager = Number($('.totalWishBag').html());
             $('.totalWishBag').html(totalbager + 1);
@@ -712,10 +716,59 @@ $(document).on("click", ".details", function(){
 })
 
 // AGREGAR DOS PROductos al carrito
-
 function addBagCardDos(urlProduct, category, image, name, price, path, urlApi, tag, urlProductoDos) {
   addBagCard(urlProduct, category, image, name, price, path, urlApi, tag);
   setTimeout(() => {
     addBagCard(urlProductoDos, category, image, name, price, path, urlApi, tag);
   }, 1000);
 }
+
+// definir el subtotal y total del carrito de compras
+let price = $(".price span");
+let quantity= $(".quantity input");
+let envio= $(".shopingcantidad span");
+let subtotal= $(".subtotal");
+let totalPrice= $(".totalPrice span");
+let listtSC= $(".listtSC");
+
+function totalp(index){
+  let totalPri= 0;
+  let arrayListSC= [];
+
+  if(price.length>0){
+    price.each(function(i){
+
+    
+      if(index != null){
+
+        // console.log($(quantity[index]).val());
+
+        if($(quantity[index]).val() >= 3 || i >= 3 || index >= 3 || ($(quantity[index]).val() >= 3 && index >3) ){
+        $(envio[index]).html(0);
+        }else{
+          $(envio[index]).html((5 * 1.5 )/ $(quantity[index]).val());
+        }
+          
+      }
+      // console.log(($(price[i]).html()*$(quantity[i]).val()) + $(envio[i]).html());
+
+      let subt= parseFloat(($(price[i]).html()*$(quantity[i]).val()) + parseFloat( $(envio[i]).html()));
+    
+      totalPri += subt;
+      $(subtotal[i]).html(`$${subt.toFixed(2)}`);
+
+      // coocar la cookie 
+      arrayListSC.push({
+        "product": $(listtSC[i]).attr("url"),
+        "details": $(listtSC[i]).attr("details"),
+        "quantity": parseInt($(quantity[i]).val()) 
+      });
+    });
+    $(totalPrice).html(totalPri.toFixed(2));
+
+    // actualizar cookie
+    setCookie("listSC", JSON.stringify(arrayListSC), 1);
+  }
+}
+
+totalp(null);

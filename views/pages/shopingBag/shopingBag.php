@@ -95,7 +95,7 @@ Shopping Car
 
                                                 <a href="<?php echo $path . $value->url_product; ?>"><?php echo $value->name_product ?></a>
 
-                                                <div class="small text-secondary">
+                                                <div class="small text-secondary listtSC" url="<?php echo $value->url_product; ?>" details='<?php echo $shoppingBag[$key]["details"]; ?>'>
 
                                                     <?php
                                                     if ($shoppingBag[$key]["details"] != "") {
@@ -117,7 +117,7 @@ Shopping Car
 
                                     </td>
 
-                                    <td class="price">$
+                                    <td class="price">$<span>
                                     <?php if ($value->offer_product != null) : ?>
                                         <?php
                                             $preceProduct= TemplateController::offerPrice($value->price_product, json_decode($value->offer_product, true)[1], json_decode($value->offer_product, true)[0]); 
@@ -128,9 +128,10 @@ Shopping Car
                                             echo $preceProduct;
                                         ?>
                                     <?php endif; ?>
+                                    </span>
                                     </td>
 
-                                    <td class="text-center">$
+                                    <td class="text-center shopingcantidad">$<span>
                                     <?php 
                                         if($shoppingBag[$key]["quantity"] >= 3 || $totalSC >= 3 || ($shoppingBag[$key]["quantity"] >= 3 && $totalSC >= 3)){
                                             $ValorPrecioEnvio=0;
@@ -140,24 +141,31 @@ Shopping Car
                                             echo $ValorPrecioEnvio;
                                         }
                                     ?>
+                                    </span>
                                     </td>
 
 
                                     <td>
 
-                                        <div class="form-group--number">
+                                        <div class="form-group--number quantity">
 
-                                            <button class="up">+</button>
+                                            <button class="up"
+                                            onclick="changeQualyty($('#quant<?php echo $key; ?>').val(), 'up', <?php echo $value->stock_product ?>, <?php echo $key; ?> )"
+                                            >+</button>
 
-                                            <button class="down">-</button>
+                                            <button class="down"
+                                            onclick="changeQualyty($('#quant<?php echo $key; ?>').val(), 'down', <?php echo $value->stock_product ?>, <?php echo $key; ?>)"
+                                            >-</button>
 
-                                            <input class="form-control" type="text" placeholder="1" value="<?php echo $shoppingBag[$key]["quantity"]?>">
+                                            <input 
+                                            id="quant<?php echo $key; ?>"
+                                            class="form-control" type="text" placeholder="1" value="<?php echo $shoppingBag[$key]["quantity"]?>">
 
                                         </div>
 
                                     </td>
 
-                                    <td>$207.00</td>                             
+                                    <td><span class="subtotal">$0.00</span></td>                             
 
                                     <td>
                                         <a class="ps-product__remove text-danger btn" onclick="removeBagSC('<?php echo $value->url_product; ?>','<?php echo $_SERVER['REQUEST_URI']; ?>')">
@@ -178,7 +186,7 @@ Shopping Car
             <hr>
 
             <div class="d-flex flex-row-reverse">
-                <div class="p-2"><h3>Total <span>$414.00</span></h3></div>             
+                <div class="p-2 totalPrice"><h3>Total $<span>0.00</span></h3></div>             
             </div>
 
             <div class="ps-section__cart-actions">
@@ -187,9 +195,13 @@ Shopping Car
                     <i class="icon-arrow-left"></i> Back to Shop
                 </a>
 
-                <a class="ps-btn" href="checkout.html">
-                    Proceed to checkout <i class="icon-arrow-right"></i> 
+                <?php if(isset($_COOKIE["listSC"]) && $_COOKIE["listSC"] != []): ?>
+
+                <a class="ps-btn" href="<?php echo $path; ?>checkout">
+                    Pagar <i class="icon-arrow-right"></i> 
                 </a>
+
+                <?php endif; ?>
 
             </div>
 

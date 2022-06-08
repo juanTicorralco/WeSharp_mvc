@@ -800,7 +800,9 @@
     function dataTable(){
         var target= $('.dt-responsive');
         if(target.length>0){
-            $(target).DataTable();
+            $(target).DataTable({
+                "order": []
+            });
         }
     }
 
