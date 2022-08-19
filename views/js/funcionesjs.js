@@ -104,7 +104,8 @@ function validatejs(e, tipo) {
         .html("No uses numeros ni caracteres especiales");
       return;
     }
-  } else if (tipo == "email") {
+  } 
+  if (tipo == "email") {
     let pattern = /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/;
     if (!pattern.test(e.target.value)) {
       $(e.target).parent().addClass("was-validated");
@@ -114,7 +115,8 @@ function validatejs(e, tipo) {
         .html("Solo se acepta un formato email");
       return;
     }
-  } else if (tipo == "pass") {
+  } 
+  if (tipo == "pass") {
     let pattern = /^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/;
     if (!pattern.test(e.target.value)) {
       $(e.target).parent().addClass("was-validated");
@@ -127,7 +129,8 @@ function validatejs(e, tipo) {
       e.target.value = "";
       return;
     }
-  } else if (tipo == "image") {
+  } 
+  if (tipo == "image") {
     let image = e.target.files[0];
     if (image["type"] !== "image/jpeg" && image["type"] !== "image/png") {
       switAlert("error", "La imagen tiene que ser PNG  JPEG", null, null);
@@ -143,6 +146,28 @@ function validatejs(e, tipo) {
         let path = event.target.result;
         $(".changePhoto").attr("src", path);
       });
+    }
+  } 
+  if(tipo=="phone"){
+    let  pattern = /^[-\\(\\)\\0-9 ]{1,}$/; 
+    if (!pattern.test(e.target.value)) {
+      $(e.target).parent().addClass("was-validated");
+        $(e.target)
+          .parent()
+          .children(".invalid-feedback")
+          .html("Solo se aceptan numeros");
+      return;
+    }
+  }
+  if(tipo=="parrafo"){
+    let  pattern = /^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}$/; 
+    if (!pattern.test(e.target.value)) {
+      $(e.target).parent().addClass("was-validated");
+        $(e.target)
+          .parent()
+          .children(".invalid-feedback")
+          .html("Algun caracter que estas usando no es valido");
+      return;
     }
   }
 }
@@ -772,3 +797,7 @@ function totalp(index){
 }
 
 totalp(null);
+
+function changeContry(event){
+  $(".dialCode").html(event.target.value.split("_")[1]);
+}

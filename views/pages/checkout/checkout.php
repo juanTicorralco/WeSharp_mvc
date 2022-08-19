@@ -93,9 +93,26 @@ Checkout
 
                                     <label>Country<sup>*</sup></label>
 
+                                    <?php
+                                        $data = file_get_contents("views/json/ciudades.json");
+                                        $ciudades= json_decode($data, true);
+                                    ?>
+
                                     <div class="form-group__content">
 
-                                        <input class="form-control" type="text" value="<?php echo $_SESSION["user"]->country_user; ?>" required>
+                                        <select 
+                                            class="form-control select2" 
+                                            onchange="changeContry(event)"
+                                            required>
+                                            <?php if($_SESSION["user"]->country_user != null): ?>
+                                                <option value="<?php echo $_SESSION["user"]->country_user ?>_<?php echo explode("_",$_SESSION["user"]->phone_user)[0]?>"><?php echo $_SESSION["user"]->country_user ?></option>
+                                            <?php else: ?>
+                                                <option value>Select country</option>
+                                            <?php endif; ?>
+                                            <?php foreach($ciudades as $key => $value):?>
+                                                <option value="<?php echo $value["name"] ?>_<?php echo $value["dial_code"] ?>"><?php echo $value["name"] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                         <div class="valid-feedback"></div>
                                          <div class="invalid-feedback">El pais es requerido</div>
 
@@ -109,7 +126,13 @@ Checkout
 
                                     <div class="form-group__content">
 
-                                        <input class="form-control" type="text" value="<?php echo $_SESSION["user"]->city_user; ?>" required>
+                                        <input 
+                                        class="form-control" 
+                                        type="text"
+                                        pattern = "[A-Za-zñÑáéíóúÁÉÍÓÚ ]{1,}"
+                                        onchange="validatejs(event, 'text')" 
+                                        value="<?php echo $_SESSION["user"]->city_user; ?>" 
+                                        required>
                                         <div class="valid-feedback"></div>
                                          <div class="invalid-feedback">La ciudad es requerida</div>
 
@@ -122,12 +145,30 @@ Checkout
                                     <label>Phone<sup>*</sup></label>
 
                                     <div class="form-group__content input-group">
+                                        <?php if($_SESSION["user"]->phone_user != null): ?>
 
                                         <div class="input-group-append">
-                                            <span class="input-group-text">+57</span>
+                                            <span class="input-group-text dialCode"><?php echo explode("_",$_SESSION["user"]->phone_user)[0]?></span>
                                         </div>
 
-                                        <input class="form-control" type="text" value="<?php echo $_SESSION["user"]->phone_user; ?>" required>
+                                        <?php 
+                                            $phone= explode("_", $_SESSION["user"]->phone_user)[1]; 
+                                        ?>
+                                        <?php else: ?>
+                                            <div class="input-group-append">
+                                            <span class="input-group-text dialCode">+--</span>
+                                        </div>
+
+                                        <?php $phone="" ?>
+                                        <?php endif; ?>
+
+                                        <input 
+                                        class="form-control" 
+                                        type="text" 
+                                        pattern = "[-\\(\\)\\0-9 ]{1,}"
+                                        onchange="validatejs(event, 'phone')"
+                                        value="<?php echo $phone; ?>" 
+                                        required>
                                         <div class="valid-feedback"></div>
                                         <div class="invalid-feedback">El telefono es requerido</div>
 
@@ -141,7 +182,13 @@ Checkout
 
                                     <div class="form-group__content">
 
-                                        <input class="form-control" type="text" value="<?php echo $_SESSION["user"]->address_user; ?>" required>
+                                        <input 
+                                        class="form-control" 
+                                        type="text" 
+                                        pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
+                                        onchange="validatejs(event, 'parrafo')"
+                                        value="<?php echo $_SESSION["user"]->address_user; ?>" 
+                                        required>
                                         <div class="valid-feedback"></div>
                                          <div class="invalid-feedback">La direccion es requerida</div>
 
@@ -169,7 +216,13 @@ Checkout
 
                                     <div class="form-group__content">
 
-                                        <textarea class="form-control" rows="7" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                                        <textarea 
+                                         class="form-control" 
+                                         pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
+                                        onchange="validatejs(event, 'parrafo')"
+                                         rows="7" 
+                                         placeholder="Notes about your order, e.g. special notes for delivery.">
+                                        </textarea>
 
                                         <div class="valid-feedback"></div>
                                         <div class="invalid-feedback">Algunos caracteres no son validos</div>
@@ -181,6 +234,8 @@ Checkout
                             </div>
 
                         </div>
+
+                        <!-- Notes order -->
 
                         <div class="col-xl-5 col-lg-4 col-sm-12">
 
