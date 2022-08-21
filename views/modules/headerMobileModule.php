@@ -181,14 +181,13 @@
                                                     ?>
                                                 </div>
                                                 <p class="m-0"><strong>Envio:</strong> $ <span class="envibagcl"><?php 
-                                                if($value["quantity"] >= 3 || $totalSC >= 3 || ($value["quantity"] >= 3 && $totalSC >= 3)){
-                                                    $ValorPrecioEnvio=0;
-                                                    echo $ValorPrecioEnvio;
-                                                }else{
-                                                    $ValorPrecioEnvio= ($result->shipping_product * 1.5 )/ $value["quantity"];
-                                                    echo $ValorPrecioEnvio;
-                                                }
-                                                
+                                                    if($value["quantity"] >= 3 || $totalSC >= 3 || ($value["quantity"] >= 3 && $totalSC >= 3)){
+                                                        $ValorPrecioEnvio=0;
+                                                        echo $ValorPrecioEnvio;
+                                                    }else{
+                                                        $ValorPrecioEnvio= ($result->shipping_product * 1.5 )/ $value["quantity"];
+                                                        echo $ValorPrecioEnvio;
+                                                    }
                                                 ?></span></p>
                                                 <small> <strong>Cantidad: </strong> <span class="<?php echo $value["product"]; ?>"><?php echo $value["quantity"]; ?></span> <strong>Precio:</strong> $
                                                     <?php if ($result->offer_product != null) : ?>

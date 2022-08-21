@@ -13,6 +13,8 @@ if (!isset($_SESSION['user'])) {
     return;
     }
 }
+
+$totalPriceSC2= 0;
 ?>
 
 <!--=====================================
@@ -255,39 +257,84 @@ Checkout
 
                                         </div>
 
+                                        <?php 
+                                            if(isset($_COOKIE["listSC"])){
+                                                
+                                                $order=json_decode($_COOKIE["listSC"], true);
+                                            }else{
+                                                echo '<script>
+                                                        window.location="' . $path .'";
+                                                </script>';
+                                                return;
+                                            }
+                                        ?>
+
                                         <div class="ps-block__content">
 
                                             <table class="table ps-block__products">
 
                                                 <tbody>
 
+                                                <?php foreach($order as $key => $value):?>
+                                                    <?php
+                                                        $select="name_product,url_product,name_store,url_store,price_product,offer_product";
+                                                        $url=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_product&equalTo=".$value["product"]."&select=".$select;
+                                                        $method="GET";
+                                                        $field=array();
+                                                        $header=array();
+                                                        $pOrder= CurlController::request($url,$method,$field,$header)->result[0];
+                                                    ?>
                                                     <tr>
 
                                                         <td>
-                                                            <a href="#"> MVMTH Classical Leather Watch In Black ×1</a>
-                                                            <p>Sold By:<strong>YOUNG SHOP</strong></p>
+                                                            <a href="<?php echo $path.$pOrder->url_product ?>"> <?php echo $pOrder->name_product; ?></a>
+                                                            <div class="small text_secondary">
+                                                                <div><a href="<?php echo $path.$pOrder->url_store ?>">Sold By:<strong> <?php echo $pOrder->name_store; ?></strong></a></div>
+                                                                <div class="detailsOrder">
+                                                                    <?php if($value["details"] != ""): ?>
+                                                                        <?php foreach(json_decode($value["details"],true) as $key => $item): ?>
+                                                                            <?php foreach(array_keys($item) as $key => $detail): ?>
+                                                                                <div><?php echo $detail.": ". array_values($item)[$key]?></div>
+                                                                            <?php endforeach; ?>
+                                                                            <?php endforeach; ?>
+                                                                    <?php endif; ?>
+                                                                </div>
+                                                                <div>Quantity:<strong> <?php echo $value["quantity"]; ?></strong></div>
+                                                                
+                                                                <p class="m-0"><strong>Envio:</strong> $ <span class="envibagcl"><?php 
+                                                                    if($value["quantity"] >= 3 || $totalSC >= 3 || ($value["quantity"] >= 3 && $totalSC >= 3)){
+                                                                        $ValorPrecioEnvio=0;
+                                                                        echo $ValorPrecioEnvio;
+                                                                    }else{
+                                                                        $ValorPrecioEnvio= ($result->shipping_product * 1.5 )/ $value["quantity"];
+                                                                        echo $ValorPrecioEnvio;
+                                                                    }
+                                                                ?></span></p>
+                                                            </div>
                                                         </td>
 
-                                                        <td class="text-right">$57.99</td>
-
-                                                    </tr>
-
-                                                    <tr>
-
-                                                        <td>
-                                                            <a href="#"> Apple Macbook Retina Display 12” × 1</a>
-                                                            <p>Sold By:<strong>ROBERT’S STORE</strong></p>
+                                                        <td class="text-right">
+                                                        <?php if ($pOrder->offer_product != null) : ?>
+                                                        <?php
+                                                            $preceProduct= TemplateController::offerPrice($pOrder->price_product, json_decode($pOrder->offer_product, true)[1], json_decode($pOrder->offer_product, true)[0]); 
+                                                                    echo $preceProduct; ?>
+                                                            <?php else : ?>
+                                                                <?php 
+                                                                    $preceProduct= $pOrder->price_product;
+                                                                    echo $preceProduct; ?>
+                                                            <?php endif; ?>
+                                                            
+                                                            <?php $totalPriceSC2 += $ValorPrecioEnvio + ($preceProduct * $value["quantity"]); ?>
                                                         </td>
 
-                                                        <td class="text-right">$625.50</td>
-
                                                     </tr>
+                                                <?php endforeach; ?>
 
                                                 </tbody>
 
                                             </table>
                                             
-                                            <h3 class="text-right">Total <span>$683.49</span></h3>
+                                            <h3 class="text-right">Total <span>$<?php echo $totalPriceSC2; ?></span></h3>
 
                                         </div>
 

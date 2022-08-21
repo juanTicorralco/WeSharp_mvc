@@ -443,6 +443,27 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
           detalleProduct = detalleProduct.slice(0, -1);
           detalleProduct += '}]';
         }
+      }else{
+        let newDetail= JSON.parse(detalleProduct);
+
+        if (response.result[0].specifications_product != null) {
+          let DetProd = JSON.parse(response.result[0].specifications_product);
+          detalleProduct = '[{';
+          for (const i in DetProd) {
+            let propiety = Object.keys(DetProd[i]).toString();
+            detalleProduct += '"' + propiety + '":"' + DetProd[i][propiety][0] + '",';
+          }
+          detalleProduct = detalleProduct.slice(0, -1);
+          detalleProduct += '}]';
+        }
+
+        for(const i in JSON.parse(detalleProduct)[0]){
+          if(newDetail[0][i] == undefined){
+            Object.assign(newDetail[0], {[i]: JSON.parse(detalleProduct)[0][i]})
+          }
+        }
+
+        detalleProduct= JSON.stringify(newDetail);
       }
 
       // preguntamos is la cookie ya existe
