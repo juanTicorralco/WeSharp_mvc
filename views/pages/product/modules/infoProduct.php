@@ -94,6 +94,7 @@
 
     <div class="ps-product__variations">
         <!-- especificaciones del producto -->
+        <?php if($producter->specifications_product != null): ?>
         <?php $spect = json_decode($producter->specifications_product, true); ?>
 
         <?php foreach ($spect as $key => $value) : ?>
@@ -101,7 +102,8 @@
                 <figure>
 
                     <figcaption>Elige: <strong><?php echo array_keys($value)[0]; ?></strong></figcaption>
-
+                </figure>
+                    <?php endif; ?>
                     <?php foreach ($value as $key3 => $value3) : ?>
                         <?php foreach ($value3 as $key4 => $value4) : ?>
                             <?php if (array_keys($value)[0] == "Color") : ?>
@@ -126,9 +128,10 @@
                             <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
-                </figure>
-            <?php endif; ?>
+                
+            
         <?php endforeach; ?>
+        <?php endif; ?>
 
     </div>
 

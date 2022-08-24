@@ -53,7 +53,9 @@ Checkout
 
             <div class="ps-section__content">
 
-                <form class="ps-form--checkout needs-validation" novalidate method="post">
+                <form class="ps-form--checkout needs-validation" novalidate method="post" onsubmit="return checkout()">
+
+                <input type="hidden" id="idUser" value="<?php echo $_SESSION["user"]->id_user; ?>" >
 
                     <div class="row">
 
@@ -277,7 +279,7 @@ Checkout
 
                                                 <?php foreach($order as $key => $value):?>
                                                     <?php
-                                                        $select="name_product,url_product,name_store,url_store,price_product,offer_product";
+                                                        $select="id_product,name_product,url_product,name_store,id_store,url_store,price_product,offer_product";
                                                         $url=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_product&equalTo=".$value["product"]."&select=".$select;
                                                         $method="GET";
                                                         $field=array();
@@ -287,6 +289,9 @@ Checkout
                                                     <tr>
 
                                                         <td>
+                                                            <input type="hidden" class="idStore" value="<?php echo $pOrder->id_store ?>">
+                                                            <input type="hidden" class="idProduct" value="<?php echo $pOrder->id_product ?>">
+
                                                             <a href="<?php echo $path.$pOrder->url_product ?>"> <?php echo $pOrder->name_product; ?></a>
                                                             <div class="small text_secondary">
                                                                 <div><a href="<?php echo $path.$pOrder->url_store ?>">Sold By:<strong> <?php echo $pOrder->name_store; ?></strong></a></div>
@@ -299,9 +304,9 @@ Checkout
                                                                             <?php endforeach; ?>
                                                                     <?php endif; ?>
                                                                 </div>
-                                                                <div>Quantity:<strong> <?php echo $value["quantity"]; ?></strong></div>
+                                                                <div>Quantity:<strong><span class="quantityOrder"> <?php echo $value["quantity"]; ?></span></strong></div>
                                                                 
-                                                                <p class="m-0"><strong>Envio:</strong> $ <span class="envibagcl"><?php 
+                                                                <p class="m-0"><strong>Envio:</strong> $ <span class="priceProd"><?php 
                                                                     if($value["quantity"] >= 3 || $totalSC >= 3 || ($value["quantity"] >= 3 && $totalSC >= 3)){
                                                                         $ValorPrecioEnvio=0;
                                                                         echo $ValorPrecioEnvio;
@@ -334,7 +339,7 @@ Checkout
 
                                             </table>
                                             
-                                            <h3 class="text-right">Total <span>$<?php echo $totalPriceSC2; ?></span></h3>
+                                            <h3 class="text-right totalOrder" total="<?php echo $totalPriceSC2; ?>">Total <span>$<?php echo $totalPriceSC2; ?></span></h3>
 
                                         </div>
 
@@ -346,7 +351,7 @@ Checkout
 
                                         <div class="ps-radio">
 
-                                            <input class="form-control" type="radio" id="pay-paypal" name="payment-method" value="paypal" checked>
+                                            <input class="form-control" type="radio" id="pay-paypal" name="payment-method" value="paypal" checked onchange="changemetodpay(event)">
 
                                             <label for="pay-paypal">Pay with paypal?  <span><img src="img/payment-method/paypal.jpg" class="w-50"></span></label>
 
@@ -358,7 +363,7 @@ Checkout
 
                                         <div class="ps-radio">
 
-                                            <input class="form-control" type="radio" id="pay-payu" name="payment-method" value="payu">
+                                            <input class="form-control" type="radio" id="pay-payu" name="payment-method" value="payu" onchange="changemetodpay(event)">
 
                                             <label for="pay-payu">Pay with payu? <span><img src="img/payment-method/payu.jpg" class="w-50"></span></label>
 
@@ -370,7 +375,7 @@ Checkout
 
                                         <div class="ps-radio">
 
-                                            <input class="form-control" type="radio" id="pay-mercadopago" name="payment-method" value="mercado-pago">
+                                            <input class="form-control" type="radio" id="pay-mercadopago" name="payment-method" value="mercado-pago" onchange="changemetodpay(event)">
 
                                             <label for="pay-mercadopago">Pay with Mercado Pago? <span><img src="img/payment-method/mercado_pago.jpg" class="w-50"></span></label>
 
@@ -378,7 +383,7 @@ Checkout
 
                                     </div>
 
-                                    <button type="submit" class="ps-btn ps-btn--fullwidth" href="checkout.html">Proceed to checkout</button>
+                                    <button type="submit" class="ps-btn ps-btn--fullwidth">Proceed to checkout</button>
 
                                 </div>
 

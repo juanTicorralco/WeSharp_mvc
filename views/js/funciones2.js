@@ -101,6 +101,22 @@ function switAlert(type, text, url, icon, time) {
       });
 
     break;
+
+    // cnfiracion de pago
+    case "html":
+
+        Swal.fire({
+          allowOutsideClick: false,
+          title: 'Click para seguir con el pago',
+          html: text,
+          icon: 'info',
+          showCancelButton: true,
+          showConfirmButton:false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, pagar!'
+        })
+    break;
   }
 }
 

@@ -268,6 +268,11 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- swit alert -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- paypal -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AYIGSP1y_NKdbIuVGCPHtlW-UBTTkKxWcQiHrauxCHt97CPZ2x7p_Fp_7e2QXuj5Bw-6-SiONTKeD1bo"></script>
+
+
+
 </head>
 
 <body>

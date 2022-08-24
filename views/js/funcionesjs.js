@@ -433,7 +433,10 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
 
       //preguntamos si detalles viene bacio
       if(detalleProduct === ""){
-        if (response.result[0].specifications_product != null) {
+        console.log(detalleProduct);
+        if (response.result[0].specifications_product != "" ) {
+          if(response.result[0].specifications_product != null){
+          console.log(response.result[0].specifications_product);
           let DetProd = JSON.parse(response.result[0].specifications_product);
           detalleProduct = '[{';
           for (const i in DetProd) {
@@ -443,6 +446,7 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
           detalleProduct = detalleProduct.slice(0, -1);
           detalleProduct += '}]';
         }
+      }
       }else{
         let newDetail= JSON.parse(detalleProduct);
 
@@ -821,4 +825,113 @@ totalp(null);
 
 function changeContry(event){
   $(".dialCode").html(event.target.value.split("_")[1]);
+}
+
+let metodpay= $('[name="payment-method"]').val()
+function changemetodpay(event){
+  metodpay = event.target.value;
+}
+// variable del total 
+let total = $(".totalOrder").attr("total");
+
+function checkout(){
+  let forms = document.getElementsByClassName('needs-validation');
+  var validation = Array.prototype.filter.call(forms, function(form) {
+    if(form.checkValidity()){
+      return [""];
+    }
+  })
+  if(validation.length > 0){
+    // pagar con paypal
+    if(metodpay == "paypal"){
+      switAlert("html", '<div id="paypal-button-container"></div>', null, null,null);
+      paypal.Buttons({
+         createOrder: function(data, actions){
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: total
+              }
+            }]
+          });
+        },
+
+        onApprove: function(data, actions){
+          return actions.order.capture().then(function(details){
+            if(details.status == 'COMPLETED'){
+              newOrden("paypal","pending", details.id,total);
+            }
+            return false;
+          })
+        },
+
+        onCancel: function(data){
+          switAlert("error", "La transaccion a sido cancelada", null,null,null );
+          return false;
+        },
+
+        onError: function(err){
+          switAlert("error", "Ocurrio un error al hacer la transaccion", null,null,null );
+          return false;
+        }
+    }).render('#paypal-button-container');
+
+    }
+    // pagar con payu
+    if(metodpay== "payu"){
+
+    }
+    // pagar con mercado pago
+    if(metodpay=="mercado-pago"){
+
+    }
+    return false;
+  }else{
+    return false;
+  }
+}
+// crear orden
+function newOrden(metodo,status,id,totals){
+  // id tienda
+  let idStoreClass= $(".idStore");
+  let idStore =[];
+
+  idStoreClass.each(i=>{
+    idStore.push($(idStoreClass[i]).val());
+  });
+
+  // id usuario
+  let idUser = $("#idUser").val();
+
+  // id producto
+  let idProductClass= $(".idProduct");
+  let idProduct =[];
+
+  idProductClass.each(i=>{
+    idProduct.push($(idProductClass[i]).val());
+  });
+
+  // detalles
+  let detailOrderClass= $(".detailsOrder");
+  let detailsOrder =[];
+
+  detailOrderClass.each(i=>{
+    detailsOrder.push($(detailOrderClass[i]).html().replace(/\s+/gi,''));
+  });
+
+  // cantidad de productos
+  let quantityOrderClass= $(".quantityOrder");
+  let quantityOrder =[];
+
+  quantityOrderClass.each(i=>{
+    quantityOrder.push($(quantityOrderClass[i]).html());
+  });
+
+  // precio de cada producto 
+  let priceProductClass= $(".priceProd");
+  let priceProduct =[];
+
+  priceProductClass.each(i=>{
+    priceProduct.push($(priceProductClass[i]).html());
+  });
 }
