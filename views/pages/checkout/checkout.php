@@ -56,6 +56,7 @@ Checkout
                 <form class="ps-form--checkout needs-validation" novalidate method="post" onsubmit="return checkout()">
 
                 <input type="hidden" id="idUser" value="<?php echo $_SESSION["user"]->id_user; ?>" >
+                <input type="hidden" id="urlApi" value="<?php echo CurlController::api() ?>" >
 
                     <div class="row">
 
@@ -85,7 +86,7 @@ Checkout
 
                                     <div class="form-group__content">
 
-                                        <input class="form-control" type="email" value="<?php echo $_SESSION["user"]->email_user; ?>" readonly required>
+                                        <input class="form-control" id="emailOrder" type="email" value="<?php echo $_SESSION["user"]->email_user; ?>" readonly required>
                                         <div class="valid-feedback"></div>
                                         <div class="invalid-feedback">El email es requerido</div>
 
@@ -106,6 +107,7 @@ Checkout
 
                                         <select 
                                             class="form-control select2" 
+                                            id="countryOrder"
                                             onchange="changeContry(event)"
                                             required>
                                             <?php if($_SESSION["user"]->country_user != null): ?>
@@ -132,6 +134,7 @@ Checkout
 
                                         <input 
                                         class="form-control" 
+                                        id="cityOrder"
                                         type="text"
                                         pattern = "[A-Za-zñÑáéíóúÁÉÍÓÚ ]{1,}"
                                         onchange="validatejs(event, 'text')" 
@@ -169,6 +172,7 @@ Checkout
                                         <input 
                                         class="form-control" 
                                         type="text" 
+                                        id="phoneOrder"
                                         pattern = "[-\\(\\)\\0-9 ]{1,}"
                                         onchange="validatejs(event, 'phone')"
                                         value="<?php echo $phone; ?>" 
@@ -189,6 +193,7 @@ Checkout
                                         <input 
                                         class="form-control" 
                                         type="text" 
+                                        id="addresOrder"
                                         pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
                                         onchange="validatejs(event, 'parrafo')"
                                         value="<?php echo $_SESSION["user"]->address_user; ?>" 
@@ -222,6 +227,7 @@ Checkout
 
                                         <textarea 
                                          class="form-control" 
+                                         id="infoOrder"
                                          pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
                                         onchange="validatejs(event, 'parrafo')"
                                          rows="7" 
@@ -279,7 +285,7 @@ Checkout
 
                                                 <?php foreach($order as $key => $value):?>
                                                     <?php
-                                                        $select="id_product,name_product,url_product,name_store,id_store,url_store,price_product,offer_product";
+                                                        $select="id_product,name_product,url_product,name_store,id_store,url_store,price_product,offer_product,delivery_time_product";
                                                         $url=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_product&equalTo=".$value["product"]."&select=".$select;
                                                         $method="GET";
                                                         $field=array();
@@ -290,7 +296,9 @@ Checkout
 
                                                         <td>
                                                             <input type="hidden" class="idStore" value="<?php echo $pOrder->id_store ?>">
+                                                            <input type="hidden" class="urlStore" value="<?php echo $pOrder->url_store ?>">
                                                             <input type="hidden" class="idProduct" value="<?php echo $pOrder->id_product ?>">
+                                                            <input type="hidden" class="deliverytime" value="<?php echo $pOrder->delivery_time_product ?>">
 
                                                             <a href="<?php echo $path.$pOrder->url_product ?>"> <?php echo $pOrder->name_product; ?></a>
                                                             <div class="small text_secondary">
@@ -306,19 +314,23 @@ Checkout
                                                                 </div>
                                                                 <div>Quantity:<strong><span class="quantityOrder"> <?php echo $value["quantity"]; ?></span></strong></div>
                                                                 
-                                                                <p class="m-0"><strong>Envio:</strong> $ <span class="priceProd"><?php 
-                                                                    if($value["quantity"] >= 3 || $totalSC >= 3 || ($value["quantity"] >= 3 && $totalSC >= 3)){
-                                                                        $ValorPrecioEnvio=0;
-                                                                        echo $ValorPrecioEnvio;
-                                                                    }else{
-                                                                        $ValorPrecioEnvio= ($result->shipping_product * 1.5 )/ $value["quantity"];
-                                                                        echo $ValorPrecioEnvio;
-                                                                    }
-                                                                ?></span></p>
+                                                                <p class="m-0"><strong>Envio:</strong> $ <span>
+                                                                    <?php 
+                                                                        if($value["quantity"] >= 3 || $totalSC >= 3 || ($value["quantity"] >= 3 && $totalSC >= 3)){
+                                                                            $ValorPrecioEnvio=0;
+                                                                            echo $ValorPrecioEnvio;
+                                                                        }else{
+                                                                            $ValorPrecioEnvio= ($result->shipping_product * 1.5 )/ $value["quantity"];
+                                                                            echo $ValorPrecioEnvio;
+                                                                        }
+                                                                    ?>
+                                                                </span></p>
+                                                               
                                                             </div>
                                                         </td>
 
-                                                        <td class="text-right">
+                                                        <td class="text-right"> <div><span class="priceProd">
+                                                            
                                                         <?php if ($pOrder->offer_product != null) : ?>
                                                         <?php
                                                             $preceProduct= TemplateController::offerPrice($pOrder->price_product, json_decode($pOrder->offer_product, true)[1], json_decode($pOrder->offer_product, true)[0]); 
@@ -330,7 +342,9 @@ Checkout
                                                             <?php endif; ?>
                                                             
                                                             <?php $totalPriceSC2 += $ValorPrecioEnvio + ($preceProduct * $value["quantity"]); ?>
+                                                           </span></div>
                                                         </td>
+                                                       
 
                                                     </tr>
                                                 <?php endforeach; ?>

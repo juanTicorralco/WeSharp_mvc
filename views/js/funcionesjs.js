@@ -84,11 +84,7 @@ function changeQualyty(quantity, move, stock, index) {
   }
 
   $("#quant"+index).val(number);
-  // console.log(number);
   $("[quantitySC]").attr("quantitySC", number);
-
-  // console.log(index);
-
   totalp(index);
 }
 
@@ -433,10 +429,8 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
 
       //preguntamos si detalles viene bacio
       if(detalleProduct === ""){
-        console.log(detalleProduct);
         if (response.result[0].specifications_product != "" ) {
           if(response.result[0].specifications_product != null){
-          console.log(response.result[0].specifications_product);
           let DetProd = JSON.parse(response.result[0].specifications_product);
           detalleProduct = '[{';
           for (const i in DetProd) {
@@ -627,8 +621,6 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
 
             let tobagtal = Number($('.tobagtal').html());
             $(".tobagtal").html(tobagtal + parseFloat(priceTotalFun(var1, var2, null)));
-            
-            // console.log(parseFloat(priceTotalFun(var1, tobagtal, null)));
 
             let totalbager = Number($('.totalWishBag').html());
             $('.totalWishBag').html(totalbager + 1);
@@ -791,8 +783,6 @@ function totalp(index){
     
       if(index != null){
 
-        // console.log($(quantity[index]).val());
-
         if($(quantity[index]).val() >= 3 || i >= 3 || index >= 3 || ($(quantity[index]).val() >= 3 && index >3) ){
         $(envio[index]).html(0);
         }else{
@@ -800,7 +790,6 @@ function totalp(index){
         }
           
       }
-      // console.log(($(price[i]).html()*$(quantity[i]).val()) + $(envio[i]).html());
 
       let subt= parseFloat(($(price[i]).html()*$(quantity[i]).val()) + parseFloat( $(envio[i]).html()));
     
@@ -859,7 +848,7 @@ function checkout(){
         onApprove: function(data, actions){
           return actions.order.capture().then(function(details){
             if(details.status == 'COMPLETED'){
-              newOrden("paypal","pending", details.id,total);
+               newOrden("paypal","pending", details.id,total);
             }
             return false;
           })
@@ -890,6 +879,15 @@ function checkout(){
     return false;
   }
 }
+
+function formatFecha(fecha){
+  let day = fecha.getDate();
+  let Mes=fecha.getMonth()+1;
+  let año=fecha.getFullYear();
+
+  return año + '-' + Mes + '-' + day;
+}
+
 // crear orden
 function newOrden(metodo,status,id,totals){
   // id tienda
@@ -898,6 +896,14 @@ function newOrden(metodo,status,id,totals){
 
   idStoreClass.each(i=>{
     idStore.push($(idStoreClass[i]).val());
+  });
+
+  // url store
+  let urlStoreClass= $(".urlStore");
+  let urlStore =[];
+
+  urlStoreClass.each(i=>{
+    urlStore.push($(urlStoreClass[i]).val());
   });
 
   // id usuario
@@ -932,6 +938,171 @@ function newOrden(metodo,status,id,totals){
   let priceProduct =[];
 
   priceProductClass.each(i=>{
-    priceProduct.push($(priceProductClass[i]).html());
+    priceProduct.push($(priceProductClass[i]).html().replace(/\s+/gi,''));
+  });
+
+  // Inforacion del usuario
+  let emailOrder = $("#emailOrder").val();
+  let countryOrder = $("#countryOrder").val().split("_")[0];
+  let cityOrder = $("#cityOrder").val();
+  let phoneOrder = $("#countryOrder").val().split("_")[1]+"_"+ $("#phoneOrder").val();
+  let addresOrder = $("#addresOrder").val();
+  let infoOrder = $("#infoOrder").val();
+
+  // tiempo de entrega
+  let delytimeClass= $(".deliverytime");
+  let deliveryTime =[];
+
+  delytimeClass.each(i=>{
+    deliveryTime.push($(delytimeClass[i]).val());
+  });
+
+  // preguntamos is la cookie ya existe
+  let myCookie = document.cookie;
+  let listCookie = myCookie.split(";");
+  var arrayCoupon = "";
+
+  for (const i in listCookie) {
+    let list = listCookie[i].search("cuponMP");
+    // si list es mayor a -1 es por qu se ncontro la cooki
+    if (list > -1) {
+      arrayCoupon = listCookie[i].split("=")[1]
+      arrayCoupon = JSON.parse(decodeURIComponent(arrayCoupon));
+    } 
+  }
+
+  // preguntar si el usuario quiere guardar su direccion
+  let saveAdres= $("#create-account")[0].checked;
+  if(saveAdres){
+    let settings = {
+      "url": $("#urlApi").val()+"users?id="+idUser+"&nameId=id_user&token=" + localStorage.getItem("token_user"),
+      "method": "PUT",
+      "timeaot": 0,
+      "headers": {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      "data": {
+        "country_user": countryOrder,
+        "city_user": cityOrder,
+        "phone_user": phoneOrder,
+        "address_user": addresOrder
+      },
+    };
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
+
+  }
+
+  idProduct.forEach((value,i) => {
+
+    let moment= Math.ceil(Number(deliveryTime[i]/2));
+    let sendDate = new Date();
+    sendDate.setDate(sendDate.getDate()+moment);
+
+    let delyvereDate= new Date();
+    delyvereDate.setDate(delyvereDate.getDate()+Number(deliveryTime[i]));
+
+    let procesOrder=[
+      {"stage":"reviewed",
+      "status":"ok",
+      "comment":"We have received your order, we start delivery process",
+      "date":formatFecha(new Date())},
+
+      {"stage":"sent",
+      "status":"pending",
+      "comment":"",
+      "date":formatFecha(sendDate)},
+      
+      {"stage":"delivered",
+      "status":"pending",
+      "comment":"",
+      "date":formatFecha(delyvereDate)}
+    ];
+
+    // guardar orden
+    let settings = {
+      "url": $("#urlApi").val() + "orders?token=" + localStorage.getItem("token_user"),
+      "method": "POST",
+      "timeaot": 0,
+      "headers": {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      "data": {
+        "id_store_order": idStore[i],
+        "id_user_order": idUser,
+        "id_product_order": value,
+        "details_order": JSON.stringify(detailsOrder),
+        "quantity_order": quantityOrder[i],
+        "price_order": priceProduct[i],
+        "email_order": emailOrder,
+        "country_order": countryOrder,
+        "city_order": cityOrder,
+        "phone_order": phoneOrder,
+        "address_order": addresOrder,
+        "notes_order": infoOrder,
+        "process_order": JSON.stringify(procesOrder),
+        "status_order": status,
+        "date_created_order": formatFecha(new Date())  
+      },
+    };
+
+
+
+    $.ajax(settings).done(function (response) {
+      if (response.status == 200) {
+        // Crear comision
+        let unitPrice = 0;
+        let commissionPrice = 0;
+        let count = 0;
+
+        if(arrayCoupon.length > 0){
+          arrayCoupon.forEach(value=> {
+            if(value == urlStore[i]){
+              count--;
+            }else{
+              count++;
+            }
+          });
+        }
+        if(arrayCoupon.length == count){
+          // comision organica
+          unitPrice= (Number(priceProduct[i])*0.75).toFixed(2);
+          commissionPrice=(Number(priceProduct[i])*0.25).toFixed(2);
+        }else{
+          // comision por cupon
+          unitPrice= (Number(priceProduct[i])*0.95).toFixed(2);
+          commissionPrice=(Number(priceProduct[i])*0.05).toFixed(2);
+        }
+        
+        // crear venta
+        let settings = {
+          "url": $("#urlApi").val() + "sales?token=" + localStorage.getItem("token_user"),
+          "method": "POST",
+          "timeaot": 0,
+          "headers": {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          "data": {
+            "id_order_sale": idStore[i],
+            "unit_price_sale": unitPrice,
+            "commission_sale": commissionPrice,
+            "payment_method_sale": metodo,
+            "id_payment_sale": id,
+            "status_sale": status,
+            "date_created_sale": formatFecha(new Date())  
+          },
+        };
+
+        $.ajax(settings).done(function (response) {
+          console.log(response);
+        })
+        // switAlert("success", "El producto se añadio a la lista de deseos", null, null, 1500);
+
+      }
+    });
   });
 }
+
+ 
