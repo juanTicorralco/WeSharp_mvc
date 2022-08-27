@@ -285,7 +285,7 @@ Checkout
 
                                                 <?php foreach($order as $key => $value):?>
                                                     <?php
-                                                        $select="id_product,name_product,url_product,name_store,id_store,url_store,price_product,offer_product,delivery_time_product";
+                                                        $select="id_product,name_product,url_product,name_store,id_store,url_store,price_product,offer_product,delivery_time_product,sales_product,stock_product";
                                                         $url=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_product&equalTo=".$value["product"]."&select=".$select;
                                                         $method="GET";
                                                         $field=array();
@@ -298,6 +298,8 @@ Checkout
                                                             <input type="hidden" class="idStore" value="<?php echo $pOrder->id_store ?>">
                                                             <input type="hidden" class="urlStore" value="<?php echo $pOrder->url_store ?>">
                                                             <input type="hidden" class="idProduct" value="<?php echo $pOrder->id_product ?>">
+                                                            <input type="hidden" class="salesProduct" value="<?php echo $pOrder->sales_product ?>">
+                                                            <input type="hidden" class="stockProduct" value="<?php echo $pOrder->stock_product ?>">
                                                             <input type="hidden" class="deliverytime" value="<?php echo $pOrder->delivery_time_product ?>">
 
                                                             <a href="<?php echo $path.$pOrder->url_product ?>"> <?php echo $pOrder->name_product; ?></a>

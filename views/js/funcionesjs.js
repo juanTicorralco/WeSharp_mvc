@@ -917,6 +917,20 @@ function newOrden(metodo,status,id,totals){
     idProduct.push($(idProductClass[i]).val());
   });
 
+  let stockProductClass= $(".stockProduct");
+  let stockProduct =[];
+
+  stockProductClass.each(i=>{
+    stockProduct.push($(stockProductClass[i]).val());
+  });
+
+  let salesProductClass= $(".salesProduct");
+  let salesProduct =[];
+
+  salesProductClass.each(i=>{
+    salesProduct.push($(salesProductClass[i]).val());
+  });
+
   // detalles
   let detailOrderClass= $(".detailsOrder");
   let detailsOrder =[];
@@ -975,7 +989,7 @@ function newOrden(metodo,status,id,totals){
   let saveAdres= $("#create-account")[0].checked;
   if(saveAdres){
     let settings = {
-      "url": $("#urlApi").val()+"users?id="+idUser+"&nameId=id_user&token=" + localStorage.getItem("token_user"),
+      "url": $("#urlApi").val()+"products?id="+idUser+"&nameId=id_user&token=" + localStorage.getItem("token_user"),
       "method": "PUT",
       "timeaot": 0,
       "headers": {
@@ -989,9 +1003,7 @@ function newOrden(metodo,status,id,totals){
       },
     };
 
-    $.ajax(settings).done(function (response) {
-      console.log(response);
-    });
+    $.ajax(settings).done(function (response) {});
 
   }
 
@@ -1096,7 +1108,23 @@ function newOrden(metodo,status,id,totals){
         };
 
         $.ajax(settings).done(function (response) {
-          console.log(response);
+          // contruir venta y stock
+          let settings2 = {
+            "url": $("#urlApi").val()+"products?id="+value+"&nameId=id_product&token=" + localStorage.getItem("token_user"),
+            "method": "PUT",
+            "timeaot": 0,
+            "headers": {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            "data": {
+              "stock_product": Number(stockProduct[i])-Number(quantityOrder[i]),
+              "sales_product": Number(salesProduct[i])+Number(quantityOrder[i])
+            },
+          };
+
+          $.ajax(settings2).done(function (response) {
+            console.log(response);
+          });
         })
         // switAlert("success", "El producto se añadio a la lista de deseos", null, null, 1500);
 
