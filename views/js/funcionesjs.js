@@ -988,8 +988,9 @@ function newOrden(metodo,status,id,totals){
   // preguntar si el usuario quiere guardar su direccion
   let saveAdres= $("#create-account")[0].checked;
   if(saveAdres){
+  
     let settings = {
-      "url": $("#urlApi").val()+"products?id="+idUser+"&nameId=id_user&token=" + localStorage.getItem("token_user"),
+      "url": $("#urlApi").val()+"users?id="+idUser+"&nameId=id_user&token=" + localStorage.getItem("token_user"),
       "method": "PUT",
       "timeaot": 0,
       "headers": {
@@ -1070,8 +1071,8 @@ function newOrden(metodo,status,id,totals){
         let count = 0;
 
         if(arrayCoupon.length > 0){
-          arrayCoupon.forEach(value=> {
-            if(value == urlStore[i]){
+          arrayCoupon.forEach(value2=> {
+            if(value2 == urlStore[i]){
               count--;
             }else{
               count++;
