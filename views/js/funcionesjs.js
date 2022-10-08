@@ -962,6 +962,7 @@ function newOrden(metodo,status,id,totals){
   let phoneOrder = $("#countryOrder").val().split("_")[1]+"_"+ $("#phoneOrder").val();
   let addresOrder = $("#addresOrder").val();
   let infoOrder = $("#infoOrder").val();
+  let mapOrder = [document.getElementById('mappp').dataset.value.split(",")[0], document.getElementById('mappp').dataset.value.split(",")[1]];
 
   // tiempo de entrega
   let delytimeClass= $(".deliverytime");
@@ -989,7 +990,7 @@ function newOrden(metodo,status,id,totals){
   let saveAdres= $("#create-account")[0].checked;
   if(saveAdres){
     let settings = {
-      "url": $("#urlApi").val()+"products?id="+idUser+"&nameId=id_user&token=" + localStorage.getItem("token_user"),
+      "url": $("#urlApi").val()+"users?id="+idUser+"&nameId=id_user&token=" + localStorage.getItem("token_user"),
       "method": "PUT",
       "timeaot": 0,
       "headers": {
@@ -999,7 +1000,8 @@ function newOrden(metodo,status,id,totals){
         "country_user": countryOrder,
         "city_user": cityOrder,
         "phone_user": phoneOrder,
-        "address_user": addresOrder
+        "address_user": addresOrder,
+        "map_user": JSON.stringify(mapOrder)
       },
     };
 

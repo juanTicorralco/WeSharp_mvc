@@ -187,6 +187,11 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
     <!-- notie Alert -->
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+
+     <!-- leaflet css  -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+   crossorigin=""/>
     <!--=====================================
 	PLUGINS JS
 	======================================-->
@@ -272,6 +277,11 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <script src="https://www.paypal.com/sdk/js?client-id=AYIGSP1y_NKdbIuVGCPHtlW-UBTTkKxWcQiHrauxCHt97CPZ2x7p_Fp_7e2QXuj5Bw-6-SiONTKeD1bo"></script>
 
 
+    <!-- leaflet js -->
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+   integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+   crossorigin=""></script>
 
 </head>
 
@@ -370,6 +380,7 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
     <script src="js/main.js"></script>
     <script src="js/funcionesjs.js"></script>
+    <script src="js/maps.js"></script>
 
 </body>
 

@@ -205,6 +205,18 @@ Checkout
 
                                 </div>
 
+                                 <!-- mandar el map -->
+                                <div class="form-group">
+                                <label>Map<sup>*</sup><small> (Puedes mover el marcador para una mejor localizacion)</small></label>
+
+                                <div id="myMap" style="height: 400px"></div>
+                                <div id="mappp" class="mappp" style="display: none" <?php 
+                                if(isset( $_SESSION["user"]->map_user)){
+                                    echo  'data-value =' . $_SESSION["user"]->map_user;
+                                }
+                                ?>></div>
+                                </div>
+
                                 <div class="form-group">
 
                                     <div class="ps-checkbox">
@@ -228,8 +240,9 @@ Checkout
                                         <textarea 
                                          class="form-control" 
                                          id="infoOrder"
+                                         required
                                          pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
-                                        onchange="validatejs(event, 'parrafo')"
+                                         onchange="validatejs(event, 'parrafo')"
                                          rows="7" 
                                          placeholder="Notes about your order, e.g. special notes for delivery.">
                                         </textarea>
