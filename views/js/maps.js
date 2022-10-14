@@ -1,4 +1,4 @@
-// let resultList = [19.42847,-99.12766];
+if(window.location == "http://wesharp.com/checkout"){
 let resultList = JSON.parse( document.getElementById('mappp').dataset.value);
 
 if(resultList == undefined){
@@ -56,3 +56,4 @@ document.getElementById('addresOrder').addEventListener('change', () => {
         }).catch(error => switAlert("error", "Algun campo esta mal, intenta corregirlo para colocar tu direccion en el mapa...", null,null,null )
         );
 });
+}

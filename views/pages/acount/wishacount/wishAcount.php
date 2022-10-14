@@ -50,8 +50,8 @@ My Account Content
             <div class="ps-section__content">
 
                 <ul class="ps-section__links">
-                    <li class="active"><a href=my-account_wishlist.html>My Wishlist</a></li>
-                    <li><a href="my-account_my-shopping.html">My Shopping</a></li>
+                    <li class="active"><a href="<?php echo $path; ?>acount&wishAcount">My Wishlist</a></li>
+                    <li ><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
                     <li><a href="my-account_new-store.html">My Store</a></li>
                     <li><a href="my-account_my-sales.html">My Sales</a></li>
                 </ul>

@@ -57,6 +57,7 @@ Checkout
 
                 <input type="hidden" id="idUser" value="<?php echo $_SESSION["user"]->id_user; ?>" >
                 <input type="hidden" id="urlApi" value="<?php echo CurlController::api() ?>" >
+                <input type="hidden" id="url" value="<?php echo $path ?>" >
 
                     <div class="row">
 
@@ -315,7 +316,7 @@ Checkout
                                                             <input type="hidden" class="stockProduct" value="<?php echo $pOrder->stock_product ?>">
                                                             <input type="hidden" class="deliverytime" value="<?php echo $pOrder->delivery_time_product ?>">
 
-                                                            <a href="<?php echo $path.$pOrder->url_product ?>"> <?php echo $pOrder->name_product; ?></a>
+                                                            <a href="<?php echo $path.$pOrder->url_product ?>" class="name_producto"> <?php echo $pOrder->name_product; ?></a>
                                                             <div class="small text_secondary">
                                                                 <div><a href="<?php echo $path.$pOrder->url_store ?>">Sold By:<strong> <?php echo $pOrder->name_store; ?></strong></a></div>
                                                                 <div class="detailsOrder">
@@ -329,7 +330,7 @@ Checkout
                                                                 </div>
                                                                 <div>Quantity:<strong><span class="quantityOrder"> <?php echo $value["quantity"]; ?></span></strong></div>
                                                                 
-                                                                <p class="m-0"><strong>Envio:</strong> $ <span>
+                                                                <p class="m-0"><strong>Envio:</strong> $ <span class="envioOrder">
                                                                     <?php 
                                                                         if($value["quantity"] >= 3 || $totalSC >= 3 || ($value["quantity"] >= 3 && $totalSC >= 3)){
                                                                             $ValorPrecioEnvio=0;
@@ -429,4 +430,121 @@ Checkout
         </div>
 
     </div>
-  
+
+<?php
+    //si se manda por get de payu
+    if(isset($_REQUEST['transactionState']) && $_REQUEST['transactionState']==4  && isset($_REQUEST['reference_pol'])){
+        $idPaiment= $_REQUEST['reference_pol'];
+        endCheckout( $_REQUEST['reference_pol']);
+    }
+
+     //si se manda por POST de payu
+     if(isset($_REQUEST['state_pol']) && $_REQUEST['state_pol']==4  && isset($_REQUEST['reference_pol'])){
+        $idPaiment= $_REQUEST['reference_pol'];
+        endCheckout( $_REQUEST['reference_pol']);
+    }
+
+    // variables de mercado pago
+    if(isset($_COOKIE["mp"])){
+        $mp = json_decode($_COOKIE["mp"], true);
+
+        //codigo de mp 
+        MercadoPago\SDK::setAccessToken("TEST-7365761042195176-101000-170c40e462ef1afe80cb4cd3dd60a420-1207414157");
+ 
+        $payment = new MercadoPago\Payment();
+        $payment->transaction_amount = $mp['total'];
+        $payment->token = $mp['token'];
+        $payment->description = $mp['description'];
+        $payment->installments = $mp['installments'];
+        $payment->payment_method_id = $mp['payment_method_id'];
+        $payment->issuer_id = $mp['issuer_id'];
+        
+        $payer = new MercadoPago\Payer();
+        $payer->email = $mp['email'];
+        $payer->identification = array(
+            "number" => $mp['number']
+        );
+        $payment->payer = $payer;
+        
+        $payment->save();
+        
+        if($payment->status == "approved"){
+            endCheckout($payment->id);
+            echo '
+            <script>
+                document.cookie = "mp=; max-age=0";
+            </script> 
+            ';
+        }
+    }
+
+    function endCheckout($idPaiment){
+        $path = TemplateController::path();
+        $totalProceso=0;
+        if(isset($_COOKIE['idProduct']) && isset($_COOKIE['quantityOrder'])){
+           $idProduct= json_decode($_COOKIE['idProduct'], true);
+           $quantutyOrder= json_decode($_COOKIE['quantityOrder'], true);
+           foreach($idProduct as $key => $value){
+            $url = CurlController::api()."products?linkTo=id_product&equalTo=". $value."&select=stock_product,sales_product";
+            $method = "GET";
+            $field = array();
+            $header = array();
+            
+            $products = CurlController::request($url, $method, $field, $header)->result[0];
+            $stock= $products->stock_product - $quantutyOrder[$key];
+            $sales= $products->sales_product + $quantutyOrder[$key];
+
+            $url = CurlController::api()."products?id=".$value."&nameId=id_product&token=".$_SESSION['user']->token_user;
+            $method = "PUT";
+            $field = "sales_product=".$sales."&stock_product=".$stock;
+            $header = array();
+            $updateProduct= CurlController::request($url, $method, $field, $header);
+
+            if($updateProduct->status == 200){
+                $totalProceso++;
+            }
+           }
+        }
+        if(isset($_COOKIE['idOrder'])){
+             $idOrder= json_decode($_COOKIE['idOrder'], true);
+             foreach($idOrder as $key => $value){
+                $url = CurlController::api()."orders?id=".$value."&nameId=id_order&token=".$_SESSION['user']->token_user;
+                $method = "PUT";
+                $field = "status_order=pending";
+                $header = array();
+                $updateOrders= CurlController::request($url, $method, $field, $header);
+                if($updateOrders->status == 200){
+                    $totalProceso++;
+                }
+             }
+        }
+        if(isset($_COOKIE['idSale'])){
+            $idSale= json_decode($_COOKIE['idSale'], true);
+            foreach($idSale as $key => $value){
+               $url = CurlController::api()."sales?id=".$value."&nameId=id_sale&token=".$_SESSION['user']->token_user;
+               $method = "PUT";
+               $field = "status_sale=pending&id_payment_sale=".$idPaiment;
+               $header = array();
+               $updateSale= CurlController::request($url, $method, $field, $header);
+               
+               if($updateSale->status == 200){
+                   $totalProceso++;
+               }
+            }
+        }
+
+        if($totalProceso == (count($idProduct)+ count($idOrder)+ count($idSale))){
+            echo '
+            <script>
+                document.cookie = "listSC=; max-age=0";
+                document.cookie = "quantityOrder=; max-age=0";
+                document.cookie = "idProduct=; max-age=0";
+                document.cookie = "idOrder=; max-age=0";
+                document.cookie = "idSale=; max-age=0";
+                switAlert("success", "El pago se realizo correctamente...", "'. $path .'acount&my-shopping", null, 1500); 
+            </script> 
+            ';
+           
+        }
+    }
+?>
