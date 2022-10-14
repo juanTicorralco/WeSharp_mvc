@@ -122,7 +122,11 @@ My Account Content
                                             <div class="ps-product__badge out-stock text-danger">Agotado</div>
                                         <?php endif; ?></span></td>
 
-                                    <td><a class="ps-btn" href="#">Add to cart</a></td>
+                                    <td><a class="ps-btn" 
+                                    onclick="addBagCard('<?php echo $value->url_product; ?>', '<?php echo $value->url_category; ?>', '<?php echo $value->image_product; ?>', '<?php echo $value->name_product; ?>', '<?php echo $value->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
+                                    detailSC 
+                                    quantitySC
+                                    >Add to cart</a></td>
                                     <td><a  class="text-danger btn basura-wislist" onclick="removeWishlist('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>', '<?php echo $path; ?>' )"><i class="fas fa-trash-alt"></i></a></td>
                                 </tr>
 
