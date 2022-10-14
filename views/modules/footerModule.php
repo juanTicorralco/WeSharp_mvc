@@ -120,9 +120,11 @@
 
             $menuSubcategories=CurlController::request($url, $method, $field, $header)->result;
             ?>
-             <?php foreach($menuSubcategories as $key => $value): ?>
+             <?php if(isset($menuSubcategories) && $menuSubcategories != "no found"): 
+                foreach($menuSubcategories as $key => $value): ?>
             <a href="<?php echo $path.$value->url_subcategory;?>"> <?php echo $value->name_subcategory;?> </a>
-            <?php endforeach; ?>
+            <?php endforeach; 
+        endif; ?>
         </p>
         <?php endforeach; ?>
 

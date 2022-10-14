@@ -7,7 +7,14 @@ $routesArray = explode("/", $_SERVER['REQUEST_URI']);
 
 //$routeArray= array_filter($routesArray);
 if (!empty(array_filter($routesArray)[1])) {
-    $urlParams = explode("&", array_filter($routesArray)[1]);
+    if(strstr(array_filter($routesArray)[1], "&") != false){
+        $urlParams = explode("&", array_filter($routesArray)[1]);
+    }
+    if(strstr(array_filter($routesArray)[1], "?") != false){
+        $urlParams = explode("?", array_filter($routesArray)[1]);
+    }else{
+        $urlParams = explode("&", array_filter($routesArray)[1]);
+    }
 }
 
 if (!empty($urlParams[0])) {
@@ -187,6 +194,11 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
     <!-- notie Alert -->
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+
+     <!-- leaflet css  -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+   crossorigin=""/>
     <!--=====================================
 	PLUGINS JS
 	======================================-->
@@ -272,6 +284,17 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <script src="https://www.paypal.com/sdk/js?client-id=AYIGSP1y_NKdbIuVGCPHtlW-UBTTkKxWcQiHrauxCHt97CPZ2x7p_Fp_7e2QXuj5Bw-6-SiONTKeD1bo"></script>
 
 
+    <!-- leaflet js -->
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+
+   <!-- md5 -->
+   <script src="js/plugins/md5.min.js"></script>
+
+   <!-- mercado pago -->
+   <script src="https://sdk.mercadopago.com/js/v2"></script>
 
 </head>
 
@@ -300,8 +323,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     ======================================-->
     <?php
     /* choose which page to enter */
+   
     if (!empty($urlParams[0])) {
-        if ($urlParams[0] == "acount" || $urlParams[0] =="shopingBag" || $urlParams[0] =="checkout"){
+        if ($urlParams[0] == "acount" || $urlParams[0] =="shopingBag" || $urlParams[0] == "checkout"){
             include "pages/" . $urlParams[0] . "/" . $urlParams[0] . ".php";
         } else if ($urlCategories->status == 200 || $urlSubcategories->status == 200) {
             include "pages/products/products.php";
@@ -370,6 +394,7 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
     <script src="js/main.js"></script>
     <script src="js/funcionesjs.js"></script>
+    <script src="js/maps.js"></script>
 
 </body>
 

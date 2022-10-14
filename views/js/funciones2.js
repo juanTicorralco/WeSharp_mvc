@@ -53,6 +53,8 @@ function switAlert(type, text, url, icon, time) {
           icon: "success",
           title: "Success",
           text: text,
+          showConfirmButton: false,
+          timer: time,
         }).then((result) => {
           if (result.value) {
             window.open(url, "_top");
