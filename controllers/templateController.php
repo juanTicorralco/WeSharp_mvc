@@ -117,9 +117,11 @@ class TemplateController
                 mkdir($directory, 0755);
             }
             // eliminar todos los archivos que existan en ese directorio
-            $files = glob($directory . "/*");
-            foreach ($files as $file) {
-                unlink($file);
+            if($folder != "img/stores"){
+                $files = glob($directory . "/*");
+                foreach ($files as $file) {
+                    unlink($file);
+                }
             }
             // captur ancho y alto original de la foto
             list($lastWidth, $lastHeight) = getimagesize($image["tmp_name"]);

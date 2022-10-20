@@ -44,7 +44,21 @@
         5. HELPERS
         6. CUSTOM
 */
-
+input.btn.btn-primary.note-btn.note-btn-primary.note-image-btn{
+    padding-bottom: 20px !important;
+    margin-bottom: 20px !important;
+}
+input.note-image-input.form-control-file.note-form-control.note-input{
+    padding-bottom: 40px !important;
+    margin-bottom: 20px !important;
+}
+label.note-form-label{
+    padding-bottom: 20px !important;
+    margin-bottom: 20px !important;
+}   
+h4.modal-title{
+    display: none;
+}
 .preloadFalse{
     opacity:0;
     height:0;

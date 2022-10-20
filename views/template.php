@@ -183,6 +183,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <link rel="stylesheet" href="css/plugins/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="css/plugins/responsive.bootstrap.datatable.min.css">
 
+     <!-- include summernote css/js -->
+     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
     <!-- estilo principal -->
     <link rel="stylesheet" href="css/style.css">
 
@@ -199,6 +202,8 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
    crossorigin=""/>
+
+   
     <!--=====================================
 	PLUGINS JS
 	======================================-->
@@ -296,6 +301,8 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
    <!-- mercado pago -->
    <script src="https://sdk.mercadopago.com/js/v2"></script>
 
+   <!-- include summernote js -->
+   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 </head>
 
 <body>

@@ -807,6 +807,24 @@
         }
     }
 
+    // somernote
+    function summer(){
+        let target = $(".summernote");
+        if(target.length > 0){
+            $(target).summernote({
+                placeholder: 'Descripcion de tu producto...',
+                tabsize: 2,
+                height: 400,
+                toolbar:[
+                    ['misc',['codeview', 'undo', 'redo']],
+                    ['style',['bold','italic','underline','clear']],
+                    ['para',['style','ul','ol','paragraph','height']],
+                    ['insert',['link','picture','hr']]
+                ]
+            });
+        }
+    }
+
     // funciones globales
     $(function() {
         backgroundImage();
@@ -841,6 +859,7 @@
         validacionBS();
         validarLogin();
         dataTable();
+        summer();
     });
 
     $(window).on('load', function() {

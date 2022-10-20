@@ -108,6 +108,7 @@ Checkout
 
                                         <select 
                                             class="form-control select2" 
+                                            style="width: 100%;"
                                             id="countryOrder"
                                             onchange="changeContry(event)"
                                             required>

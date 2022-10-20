@@ -20,7 +20,6 @@ if (!isset($_SESSION['user'])) {
         $header= array();
         $filds= array();
         $shoppingOrder= CurlController::request($url, $method, $header, $filds)->result;
-        echo '<pre>'; print_r($shoppingOrder[0]); echo '</pre>';
     }
 }
 ?>
@@ -49,7 +48,7 @@ My Account Content
                 <ul class="ps-section__links">
                     <li ><a href="<?php echo $path; ?>acount&wishAcount">My Wishlist</a></li>
                     <li class="active"><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
-                    <li><a href="my-account_new-store.html">My Store</a></li>
+                    <li><a href="<?php echo $path; ?>acount&my-store">My Store</a></li>
                     <li><a href="my-account_my-sales.html">My Sales</a></li>
                 </ul>
 
