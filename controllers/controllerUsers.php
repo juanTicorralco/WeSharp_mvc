@@ -93,7 +93,6 @@ class ControllerUser
 
                 $response = CurlController::request($url, $method, $fields, $header);
                 if ($response->status == 200) {
-                    //echo '<pre>'; print_r($response->result[0]->verificated_user); echo '</pre>';
                     if ($response->result[0]->verificated_user > 0) {
                         $_SESSION['user'] = $response->result[0];
                         echo '

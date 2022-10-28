@@ -117,7 +117,7 @@ class TemplateController
                 mkdir($directory, 0755);
             }
             // eliminar todos los archivos que existan en ese directorio
-            if($folder != "img/stores"){
+            if($folder != "img/stores" && $folder != "img/products"){
                 $files = glob($directory . "/*");
                 foreach ($files as $file) {
                     unlink($file);
@@ -131,25 +131,34 @@ class TemplateController
                 $newName = $name . '.jpg';
                 // definimos el directorio a guardar el archivo
                 $folderPath = $directory . "/" . $newName;
-                // crear una copia de la imagen 
-                $start = imagecreatefromjpeg($image["tmp_name"]);
-                // intrucciones para aplicar a la imagen definitiva
-                $end = imagecreatetruecolor($width, $heigt);
-                imagecopyresized($end, $start, 0, 0, 0, 0, $width, $heigt, $lastWidth, $lastHeight);
-                imagejpeg($end, $folderPath);
+              
+                if(isset($image["mode"]) && $image["mode"] == "base64"){
+                    file_put_contents($folderPath, file_get_contents($image["tmp_name"]));
+                }else{
+                    // crear una copia de la imagen 
+                    $start = imagecreatefromjpeg($image["tmp_name"]);
+                    // intrucciones para aplicar a la imagen definitiva
+                    $end = imagecreatetruecolor($width, $heigt);
+                    imagecopyresized($end, $start, 0, 0, 0, 0, $width, $heigt, $lastWidth, $lastHeight);
+                    imagejpeg($end, $folderPath);
+                }
             } else if ($image["type"] == "image/png") {
                 // nombre del archivo
                 $newName = $name . '.png';
                 // definimos el directorio a guardar el archivo
                 $folderPath = $directory . "/" . $newName;
-                // crear una copia de la imagen 
-                $start = imagecreatefrompng($image["tmp_name"]);
-                // intrucciones para aplicar a la imagen definitiva
-                $end = imagecreatetruecolor($width, $heigt);
-                imagealphablending($end, false);
-                imagesavealpha($end, true);
-                imagecopyresampled($end, $start, 0, 0, 0, 0, $width, $heigt, $lastWidth, $lastHeight);
-                imagepng($end, $folderPath);
+                if(isset($image["mode"]) && $image["mode"] == "base64"){
+                    file_put_contents($folderPath, file_get_contents($image["tmp_name"]));
+                }else{
+                    // crear una copia de la imagen 
+                    $start = imagecreatefrompng($image["tmp_name"]);
+                    // intrucciones para aplicar a la imagen definitiva
+                    $end = imagecreatetruecolor($width, $heigt);
+                    imagealphablending($end, false);
+                    imagesavealpha($end, true);
+                    imagecopyresampled($end, $start, 0, 0, 0, 0, $width, $heigt, $lastWidth, $lastHeight);
+                    imagepng($end, $folderPath);
+                }
             }
             return $newName;
         } else {

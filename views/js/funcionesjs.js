@@ -156,6 +156,17 @@ function validatejs(e, tipo) {
       return;
     }
   }
+  if(tipo=="numbers"){
+    let  pattern = /^[.\\,\\0-9]{1,}$/; 
+    if (!pattern.test(e.target.value)) {
+      $(e.target).parent().addClass("was-validated");
+        $(e.target)
+          .parent()
+          .children(".invalid-feedback")
+          .html("Solo se aceptan numeros");
+      return;
+    }
+  }
 }
 
 function validateImageJs(e, input){
@@ -1551,8 +1562,6 @@ function validarStore(){
       $(formStore[i]).parent().addClass("was-validated");
     }
   });
-
-  console.log(error);
   if(error > 0){
     switAlert("error", "Algunos campos faltan o estan mal", null, null);
     return;
@@ -1680,14 +1689,11 @@ function addInput(elem,type){
             <div class="invalid-feedback">Acompleta el campo</div>
         </div>
         <div class="col-12 col-lg-6 form-group__content input-group">
-            <div class="input-group-append">
-                <span class="input-group-text">
-                    Values:
-                </span>
-            </div>
             <input 
-            class="form-control"
+            class="form-control tags-input"
+            data-role="tagsinput"
             type="text"
+            placeholder="Escribe y preciona enter" 
             name="EspesificValuesProduct_`+inputs.length+`"
             required
             pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
@@ -1697,115 +1703,13 @@ function addInput(elem,type){
         </div>
     </div>
     `);
+    fcnTagInput();
 }
+  $('[name="'+type+'"]').val(inputs.length+1);  
   }else{
     switAlert("error", "Solo puedes colocar 5 summarys", null, null);
     return;
   }
-}
-
-function addInputDetails(elem,type){
-  let inputs = $("."+type);
-  if(inputs.length < 5){
-    if(type == "inputDetails"){
-      $(elem).before(`
-          <div class="row mb-3 inputDetails">
-          <div class="col-12 col-lg-6 form-group__content input-group">
-              <div class="input-group-append">
-                  <span class="input-group-text">
-                      <button type="button" class="btn btn-danger" onclick="removedInput(`+inputs.length+`,'inputDetails')">&times;</button>
-                  </span>
-              </div>
-              <div class="input-group-append">
-                  <span class="input-group-text">
-                      Title:
-                  </span>
-              </div>
-              <input 
-              class="form-control"
-              type="text"
-              name="detailsTitleProduct_`+inputs.length+`"
-              required
-              pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
-              onchange="validatejs(event, 'parrafo')">
-              <div class="valid-feedback"></div>
-              <div class="invalid-feedback">Acompleta el campo</div>
-          </div>
-          <div class="col-12 col-lg-6 form-group__content input-group">
-              <div class="input-group-append">
-                  <span class="input-group-text">
-                      Value:
-                  </span>
-              </div>
-              <input 
-              class="form-control"
-              type="text"
-              name="detailsValueProduct_`+inputs.length+`"
-              required
-              pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
-              onchange="validatejs(event, 'parrafo')">
-              <div class="valid-feedback"></div>
-              <div class="invalid-feedback">Acompleta el campo</div>
-          </div>
-      </div>
-      `);
-  }
-}else{
-  switAlert("error", "Solo puedes colocar 5 elementos", null, null);
-  return;
-}
-}
-
-function addInputEspesific(elem,type){
-  let inputs = $("."+type);
-  if(inputs.length < 5){
-    if(type == "inputEspesifications"){
-      $(elem).before(`
-      <div class="row mb-3 inputEspesifications">
-          <div class="col-12 col-lg-6 form-group__content input-group">
-              <div class="input-group-append">
-                  <span class="input-group-text">
-                      <button type="button" class="btn btn-danger" onclick="removedInput(`+inputs.length+`,'inputEspesifications')">&times;</button>
-                  </span>
-              </div>
-              <div class="input-group-append">
-                  <span class="input-group-text">
-                      Type:
-                  </span>
-              </div>
-              <input 
-              class="form-control"
-              type="text"
-              name="EspesificTypeProduct_`+inputs.length+`"
-              required
-              pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
-              onchange="validatejs(event, 'parrafo')">
-              <div class="valid-feedback"></div>
-              <div class="invalid-feedback">Acompleta el campo</div>
-          </div>
-          <div class="col-12 col-lg-6 form-group__content input-group">
-              <div class="input-group-append">
-                  <span class="input-group-text">
-                      Values:
-                  </span>
-              </div>
-              <input 
-              class="form-control"
-              type="text"
-              name="EspesificValuesProduct_`+inputs.length+`"
-              required
-              pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
-              onchange="validatejs(event, 'parrafo')">
-              <div class="valid-feedback"></div>
-              <div class="invalid-feedback">Acompleta el campo</div>
-          </div>
-      </div>
-      `);
-  }
-}else{
-  switAlert("error", "Solo puedes colocar 5 elementos", null, null);
-  return;
-}
 }
 
 function removedInput(indice,type){
@@ -1817,8 +1721,75 @@ function removedInput(indice,type){
         $(inputs[i]).remove();
       }
     });
+    $('[name="'+type+'"]').val(inputs.length-1); 
   }else{
     switAlert("error", "Ya no puedes eliminar ninguno", null, null);
     return;
+  }
+}
+
+function fcnTagInput(){
+  let target = $('.tags-input');
+  if(target.length > 0){
+    $(target).tagsinput();
+  }
+}
+
+fcnTagInput();
+
+Dropzone.autoDiscover = false;
+let arrayFiles=[];
+let countrrayfiles= 0;
+
+$(".dropzone").dropzone({
+  url: "/",
+  addRemoveLinks: true,
+  acceptedFiles: "image/jpeg, image/png",
+  maxFilesSize: 2,
+  maxFiles:10,
+  init: function(){
+    this.on("addedfile", function(file){
+      countrrayfiles++;
+      setTimeout( function(){
+        arrayFiles.push({
+          "file":file.dataURL,
+          "type":file.type,
+          "width":file.width,
+          "height":file.height
+        });
+        $("[name='galeryProduct']").val(JSON.stringify(arrayFiles));
+      },1000*countrrayfiles);
+    });
+    this.on("removedfile", function(file){
+      countrrayfiles++;
+      setTimeout( function(){
+        let index = arrayFiles.indexOf({
+          "file":file.dataURL,
+          "type":file.type,
+          "width":file.width,
+          "height":file.height
+        });
+        arrayFiles.splice(index,1);
+        $("[name='galeryProduct']").val(JSON.stringify(arrayFiles));
+      },1000*countrrayfiles);
+    });
+    myDropzone = this;
+    $(".saveBtn").click(function(){
+      if(arrayFiles.length >= 1 ){
+        myDropzone.processQueue();
+      }else{
+        switAlert("error", "La galeria esta vacia", null, null);
+      }
+    });
+  }
+});
+
+
+function changeOfer(type){
+  if(type.target.value == "Discount"){
+    $(".typeOffer").html("Percent %:");
+  }
+  if(type.target.value == "Fixed"){
+    $(".typeOffer").html("Price $:");
   }
 }

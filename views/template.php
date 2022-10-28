@@ -183,8 +183,8 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <link rel="stylesheet" href="css/plugins/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="css/plugins/responsive.bootstrap.datatable.min.css">
 
-     <!-- include summernote css/js -->
-     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
     <!-- estilo principal -->
     <link rel="stylesheet" href="css/style.css">
@@ -198,11 +198,16 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- notie Alert -->
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
 
-     <!-- leaflet css  -->
-     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-   crossorigin=""/>
+    <!-- leaflet css  -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
 
+    <!-- tagsinput -->
+    <link rel="stylesheet" type="text/css" href="css//plugins/tagsinput.css">
+
+    <!-- drop zone -->
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
    
     <!--=====================================
 	PLUGINS JS
@@ -303,6 +308,12 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
    <!-- include summernote js -->
    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+   <!-- tagsinput js -->
+   <script src="js/plugins/tagsinput.js"></script>
+
+   <!-- drop zone -->
+   <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
 </head>
 
 <body>

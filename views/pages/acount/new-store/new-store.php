@@ -147,7 +147,7 @@ My Account Content
                             <div class="tab-content" id="tabContent">
                                 <?php
                                     include "modules/terms.php";
-                                    // include "modules/form-store.php";
+                                    include "modules/form-store.php";
                                     include "modules/form-product.php";
                                 ?>
                             </div>
