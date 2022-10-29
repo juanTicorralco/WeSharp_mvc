@@ -44,6 +44,12 @@
         5. HELPERS
         6. CUSTOM
 */
+.ps-list--social-color li a.youtube{
+    background-color: #dd2400;
+}
+.ps-list--social-color li a.instagram{
+    background-color: magenta;
+}
 input.btn.btn-primary.note-btn.note-btn-primary.note-image-btn{
     padding-bottom: 20px !important;
     margin-bottom: 20px !important;

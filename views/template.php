@@ -158,9 +158,6 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
-    <!-- Owl Carousel -->
-    <link rel="stylesheet" href="css/plugins/owl.carousel.css">
-
     <!-- Slick -->
     <link rel="stylesheet" href="css/plugins/slick.css">
 
@@ -208,6 +205,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
     <!-- drop zone -->
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="css/plugins/owl.carousel.css">
    
     <!--=====================================
 	PLUGINS JS
@@ -221,9 +221,6 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-    <!-- Owl Carousel -->
-    <script src="js/plugins/owl.carousel.min.js"></script>
 
     <!-- Images Loaded -->
     <script src="js/plugins/imagesloaded.pkgd.min.js"></script>
@@ -314,6 +311,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
    <!-- drop zone -->
    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+
+    <!-- Owl Carousel -->
+    <script src="js/plugins/owl.carousel.min.js"></script>
 </head>
 
 <body>

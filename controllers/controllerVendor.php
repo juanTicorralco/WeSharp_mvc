@@ -40,7 +40,7 @@ class ControllerVendor{
                                 $mapaStore=array();
 
                                 if(isset($_POST["facebookStore"]) && !empty($_POST["facebookStore"])){
-                                    array_push($sosialNetwork,["facebook" => "https://www.facebook.com".$_POST["facebookStore"]]);
+                                    array_push($sosialNetwork,["facebook" => "https://www.facebook.com/".$_POST["facebookStore"]]);
                                 }
                                 if(isset($_POST["youtubeStore"]) && !empty($_POST["youtubeStore"])){
                                     array_push($sosialNetwork,["youtube" => "https://www.youtube.com/".$_POST["youtubeStore"]]);
