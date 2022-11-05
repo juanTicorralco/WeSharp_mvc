@@ -5,6 +5,7 @@ $field10 = array();
 $header10 = array();
 
 $newProduct = CurlController::request($url10, $method10, $field10, $header10)->result;
+
 ?>
 <?php if (count($newProduct) > 1) : ?>
     <div class="ps-block--bought-toggether">
@@ -86,7 +87,8 @@ $newProduct = CurlController::request($url10, $method10, $field10, $header10)->r
 
                 <!-- producto nuevo -->
 
-                <?php foreach ($newProduct as $key => $value) : ?>
+                <?php 
+                foreach ($newProduct as $key => $value) : ?>
                     <?php if ($value->id_product != $producter->id_product) : ?>
                         <div class="ps-block__item">
 
@@ -134,16 +136,30 @@ $newProduct = CurlController::request($url10, $method10, $field10, $header10)->r
                         </div>
 
                         <div class="ps-block__item ps-block__total">
+                            <?php 
+                            if(strpos($price1, ",") != false){
+                                $price1 = explode(",", $price1);
 
-                            <p>Total Precio:<strong class="text-success"> $<?php echo $price1 + $price2 ?></strong></p>
-
+                                if (!empty(array_filter($price1)[1])) {
+                                    $priceuno = ($price1[0]*1000) + $price1[1] ;
+                                }else{
+                                    $priceuno =$price1;
+                                }
+                            }else{
+                                $priceuno =$price1;
+                            }
+                            ?>
+                            <p>Total Precio:<strong class="text-success"> $<?php echo  $priceuno + $price2 ?></strong></p>
+                          
                             <a class="ps-btn"
                             onclick="addBagCardDos('<?php echo $producter->url_product; ?>', '<?php echo $producter->url_category; ?>', '<?php echo $producter->image_product; ?>', '<?php echo $producter->name_product; ?>', '<?php echo $producter->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this, '<?php echo $value->url_product; ?>')"
                             detailSC 
                             quantitySC
                             >Add All to cart</a>
+                            
                             <a class="ps-btn ps-btn--gray ps-btn--outline btn" onclick="addWishListDos('<?php echo $producter->url_product; ?>', '<?php echo CurlController::api(); ?>', '<?php echo $value->url_product; ?>')" >Add All to whishlist</a>
 
+                            
                         </div>
                 
             </div>

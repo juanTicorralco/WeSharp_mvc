@@ -5,16 +5,12 @@ session_start();
 /* Direction Route  */
 $routesArray = explode("/", $_SERVER['REQUEST_URI']);
 
-//$routeArray= array_filter($routesArray);
 if (!empty(array_filter($routesArray)[1])) {
     if(strstr(array_filter($routesArray)[1], "&") != false){
         $urlParams = explode("&", array_filter($routesArray)[1]);
-    }
-    if(strstr(array_filter($routesArray)[1], "?") != false){
-        $urlParams = explode("?", array_filter($routesArray)[1]);
     }else{
-        $urlParams = explode("&", array_filter($routesArray)[1]);
-    }
+        $urlParams = array($routesArray[1]);
+    }   
 }
 
 if (!empty($urlParams[0])) {
@@ -92,7 +88,7 @@ if (!empty($urlParams[0])) {
                 foreach ($linkTo as $key => $value) {
 
                     /* filtrar por busqueda con el parametro url de busqueda*/
-                    $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=" . $value . "&search=" . $urlParams[0] . "&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=" . $selecte;
+                    $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=" . $value . ",approval_product,state_product&search=" . $urlParams[0] . ",approved,show&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=" . $selecte;
                     $method = "GET";
                     $field = array();
                     $header = array();
@@ -118,8 +114,6 @@ $field = array();
 $header = array();
 
 $totalProducts = CurlController::request($url, $method, $field, $header)->total;
-
-//echo '<pre>'; print_r($totalProducts); echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -158,9 +152,6 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
-    <!-- Owl Carousel -->
-    <link rel="stylesheet" href="css/plugins/owl.carousel.css">
-
     <!-- Slick -->
     <link rel="stylesheet" href="css/plugins/slick.css">
 
@@ -183,6 +174,9 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <link rel="stylesheet" href="css/plugins/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="css/plugins/responsive.bootstrap.datatable.min.css">
 
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
     <!-- estilo principal -->
     <link rel="stylesheet" href="css/style.css">
 
@@ -195,10 +189,20 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
     <!-- notie Alert -->
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
 
-     <!-- leaflet css  -->
-     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-   crossorigin=""/>
+    <!-- leaflet css  -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+
+    <!-- tagsinput -->
+    <link rel="stylesheet" type="text/css" href="css//plugins/tagsinput.css">
+
+    <!-- drop zone -->
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="css/plugins/owl.carousel.css">
+   
     <!--=====================================
 	PLUGINS JS
 	======================================-->
@@ -211,9 +215,6 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-    <!-- Owl Carousel -->
-    <script src="js/plugins/owl.carousel.min.js"></script>
 
     <!-- Images Loaded -->
     <script src="js/plugins/imagesloaded.pkgd.min.js"></script>
@@ -296,6 +297,17 @@ $totalProducts = CurlController::request($url, $method, $field, $header)->total;
    <!-- mercado pago -->
    <script src="https://sdk.mercadopago.com/js/v2"></script>
 
+   <!-- include summernote js -->
+   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+   <!-- tagsinput js -->
+   <script src="js/plugins/tagsinput.js"></script>
+
+   <!-- drop zone -->
+   <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+
+    <!-- Owl Carousel -->
+    <script src="js/plugins/owl.carousel.min.js"></script>
 </head>
 
 <body>

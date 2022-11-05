@@ -84,7 +84,7 @@
         <?php if ($producter->video_product != null) : ?>
             <?php $video = json_decode($producter->video_product, true); ?>
             <?php if ($video[0] == "youtube") : ?>
-                <iframe src="https://www.youtube.com/watch?v=<?php echo $video[1]; ?>?rel=0&autoplay=0" height="360" frameborder="0" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/<?php echo $video[1]; ?>?rel=0&autoplay=0" height='360' frameborder='0' allowfullscreen></iframe>
             <?php else : ?>
                 <iframe src="https://player.vimeo.com/video/<?php echo $video[1]; ?>" height="360" frameborder="0" allowfullscreen></iframe>
             <?php endif; ?>

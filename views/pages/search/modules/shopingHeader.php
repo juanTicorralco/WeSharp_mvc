@@ -4,7 +4,7 @@
 
     <div class="ps-shopping__actions">
 
-        <select class="ps-select" data-placeholder="Sort Items" onchange="sortProduct(event)">
+        <select class="select2" data-placeholder="Sort Items" onchange="sortProduct(event)">
 
             <?php if (isset($urlParams[2])) : ?>
 

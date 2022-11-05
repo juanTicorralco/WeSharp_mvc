@@ -112,6 +112,7 @@ if (count($promotionToday) > 10) {
                             Product Deal Home
                             ======================================-->
 
+                            <?php if( count( $promotionToday) > 1 ): ?>
                             <?php foreach ($promotionToday as $key => $value) :
                                 //echo '<pre>'; print_r($value); echo '</pre>';
                             ?>
@@ -269,6 +270,14 @@ if (count($promotionToday) > 10) {
 
                                 </div><!-- End Product Deal Hot -->
                             <?php endforeach; ?>
+                            <?php else: ?>
+                                <h3 class="ps-product__name">
+                                 No hay ofertas el dia de hoy              
+                                </h3>
+                                <h3 class="ps-product__name">
+                                 No hay ofertas el dia de hoy              
+                                </h3>
+                            <?php endif; ?>
 
 
                         </div><!-- End carousel Deal Hot -->

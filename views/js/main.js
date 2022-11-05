@@ -799,10 +799,71 @@
 
     // datatable start
     function dataTable(){
-        var target= $('.dt-responsive');
-        if(target.length>0){
-            $(target).DataTable({
+        let targetClient= $('.dt-responsive.dt-client');
+        if(targetClient.length>0){
+            $(targetClient).DataTable({
                 "order": []
+            });
+        }
+        let targetServer= $('.dt-responsive.dt-server');
+        let path = $("#path").val();
+
+        if(targetServer.length>0){
+            $(targetServer).DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": path+"ajax/data-products.php?idStore="+$("#idStore").val(),
+                    "type":"POST"
+                },
+                "columns":[
+                    {"data":"id_product"},
+                    {"data":"actions", "orderable": false},
+                    {"data":"feedback", "orderable": false},
+                    {"data":"state", "orderable": false},
+                    {"data":"image_product", "orderable": false},
+                    {"data":"name_product"},
+                    {"data":"name_category"},
+                    {"data":"name_subcategory"},
+                    {"data":"price_product"},
+                    {"data":"shipping_product"},
+                    {"data":"stock_product"},
+                    {"data":"delivery_time_product"},
+                    {"data":"offer_product", "orderable": false},
+                    {"data":"summary_product", "orderable": false},
+                    {"data":"specifications_product", "orderable": false},
+                    {"data":"details_product", "orderable": false},
+                    {"data":"description_product", "orderable": false},
+                    {"data":"gallery_product", "orderable": false},
+                    {"data":"top_banner_product", "orderable": false},
+                    {"data":"default_bamer_product", "orderable": false},
+                    {"data":"horizontal_slider_product", "orderable": false},
+                    {"data":"vertical_slider_product", "orderable": false},
+                    {"data":"video_product", "orderable": false},
+                    {"data":"tags_product", "orderable": false},
+                    {"data":"views_product"},
+                    {"data":"sales_product"},
+                    {"data":"reviews_product", "orderable": false},
+                    {"data":"date_create_product"}
+                ]
+            });
+        }
+    }
+
+    // somernote
+    function summer(){
+        let target = $(".summernote");
+        if(target.length > 0){
+            $(target).summernote({
+                placeholder: 'Descripcion de tu producto...',
+                tabsize: 2,
+                height: 400,
+                toolbar:[
+                    ['misc',['codeview', 'undo', 'redo']],
+                    ['style',['bold','italic','underline','clear']],
+                    ['para',['style','ul','ol','paragraph','height']],
+                    ['insert',['link','picture','hr']]
+                ]
             });
         }
     }
@@ -841,6 +902,7 @@
         validacionBS();
         validarLogin();
         dataTable();
+        summer();
     });
 
     $(window).on('load', function() {

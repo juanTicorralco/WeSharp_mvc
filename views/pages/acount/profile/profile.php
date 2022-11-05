@@ -17,18 +17,6 @@
 
             </div>
 
-            <div class="br-wrapper br-theme-fontawesome-stars mt-3">
-
-                <select class="ps-rating" data-read-only="true" style="display: none;">
-                    <option value="1">1</option>
-                    <option value="1">2</option>
-                    <option value="1">3</option>
-                    <option value="1">4</option>
-                    <option value="2">5</option>
-                </select>
-
-            </div>
-
         </div>
 
         <div class="ps-block__user-content text-center text-lg-left">
@@ -143,7 +131,7 @@
                     <small class="helsmall-block small">Dimensiones: 200px x 200px | Tamaño: 2MB | Formato: JPG o PNG</small>
                   
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile"  accept="image/*" maxSize="2000000" name="changePhoto" onchange="validatejs(event, 'image')" required>
+                        <input type="file" class="custom-file-input" id="customFile"  accept="image/*" maxSize="2000000" name="changePhoto" onchange="validateImageJs(event, 'changePhoto')" required>
                         <label for="customFile" class="custom-file-label">Buscar archivo</label>
                     </div>
                     <figure class="text-center py-3">

@@ -47,7 +47,7 @@
     }
 
     /* Bring the products of categories */
-    $url=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0]."&orderBy=id_category&startAt=0&endAt=7&select=views_category,id_category,name_category";
+    $url=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&orderBy=id_category&startAt=0&endAt=7&select=views_category,id_category,name_category";
     $method="GET";
     $field=array();
     $header=array();
@@ -56,12 +56,14 @@
 
     if( $productRelation =="no found"){
         /* Bring the products of subcategories */
-        $url=CurlController::api()."relations?rel=products,subcategories,stores&type=product,subcategory,store&linkTo=url_subcategory&equalTo=".$urlParams[0]."&orderBy=id_category&startAt=0&endAt=7&select=views_subcategory,id_subcategory,name_subcategory";
+        $url=CurlController::api()."relations?rel=products,subcategories,stores&type=product,subcategory,store&linkTo=url_subcategory,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&orderBy=id_category&startAt=0&endAt=7&select=views_subcategory,id_subcategory,name_subcategory";
         $productRelation= CurlController::request($url, $method, $field, $header)->result;
 
+        if( $productRelation != "no found"){
+
         /* Bring all subcategories */
-        $url2=CurlController::api()."relations?rel=products,subcategories,stores&type=product,subcategory,store&linkTo=url_subcategory&equalTo=".$urlParams[0]."&select=id_subcategory";
-        $totalProducts = CurlController::request($url2, $method, $field, $header)->total;
+        $url2=CurlController::api()."relations?rel=products,subcategories,stores&type=product,subcategory,store&linkTo=url_subcategory,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&select=id_subcategory";
+        $totalProductes = CurlController::request($url2, $method, $field, $header)->total;
 
          /* actualizar las vistas de subcategorias */
          $views= $productRelation[0]->views_subcategory+1;
@@ -72,10 +74,11 @@
          $header123=array();
  
          $upDateSubCategory= CurlController::request($url123,$method123,$field123, $header123); 
+        }
     }else{
         /* Bring all categories */
-        $url2=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0]."&select=id_category";
-        $totalProducts = CurlController::request($url, $method, $field, $header)->total;
+        $url2=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&select=id_category";
+        $totalProductes = CurlController::request($url, $method, $field, $header)->total;
 
       /* actualizar las vistas de categorias */
         $views= $productRelation[0]->views_category+1;
@@ -89,23 +92,22 @@
     }
 
     /* Bring the best sales of categories */
-    $url2=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0]."&orderBy=sales_product&orderMode=DESC&startAt=0&endAt=7&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product";
+    $url2=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&orderBy=sales_product&orderMode=DESC&startAt=0&endAt=7&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product";
     $bestSalesItem= CurlController::request($url2, $method, $field, $header)->result;
-    // echo '<pre>'; print_r($); echo '</pre>';
 
     if( $bestSalesItem =="no found"){
         /* Bring the products of subcategories */
-        $url2=CurlController::api()."relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory&equalTo=".$urlParams[0]."&orderBy=sales_product&orderMode=DESC&startAt=0&endAt=7&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product";
+        $url2=CurlController::api()."relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&orderBy=sales_product&orderMode=DESC&startAt=0&endAt=7&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product";
         $bestSalesItem= CurlController::request($url2, $method, $field, $header)->result;
     }
 
     /* Bring the best sales of categories */
-    $url3=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category&equalTo=".$urlParams[0]."&orderBy=views_product&orderMode=DESC&startAt=0&endAt=7&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product";
+    $url3=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&orderBy=views_product&orderMode=DESC&startAt=0&endAt=7&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product";
     $moreViewsItem= CurlController::request($url3, $method, $field, $header)->result;
 
     if( $moreViewsItem =="no found"){
         /* Bring the products of subcategories */
-        $url3=CurlController::api()."relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory&equalTo=".$urlParams[0]."&orderBy=views_product&orderMode=DESC&startAt=0&endAt=7&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product";
+        $url3=CurlController::api()."relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&orderBy=views_product&orderMode=DESC&startAt=0&endAt=7&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product";
         $moreViewsItem= CurlController::request($url3, $method, $field, $header)->result;
     }
 ?>

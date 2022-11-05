@@ -108,6 +108,7 @@ Checkout
 
                                         <select 
                                             class="form-control select2" 
+                                            style="width: 100%;"
                                             id="countryOrder"
                                             onchange="changeContry(event)"
                                             required>
@@ -206,16 +207,17 @@ Checkout
 
                                 </div>
 
-                                 <!-- mandar el map -->
+                                <!-- mandar el map -->
                                 <div class="form-group">
                                 <label>Map<sup>*</sup><small> (Puedes mover el marcador para una mejor localizacion)</small></label>
 
                                 <div id="myMap" style="height: 400px"></div>
-                                <div id="mappp" class="mappp" style="display: none" <?php 
-                                if(isset( $_SESSION["user"]->map_user)){
-                                    echo  'data-value =' . $_SESSION["user"]->map_user;
-                                }
-                                ?>></div>
+                                    <div id="mappp" class="mappp" style="display: none" <?php 
+                                        if(isset( $_SESSION["user"]->map_user)){
+                                            echo  'data-value =' . $_SESSION["user"]->map_user;
+                                        }
+                                        ?>>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
