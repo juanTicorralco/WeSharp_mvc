@@ -165,4 +165,13 @@ class TemplateController
             return "error";
         }
     }
+
+    // funcion paralimpiar html
+    static public function cleanhtml($code){
+        $search = array('/\>[^\S ]+/s','/[^\S ]+\</s','/(\s)+/s');
+        $repalce = array('>','<','\\1');
+        $code = preg_replace($search, $repalce, $code);
+        $code = str_replace("> <", "><", $code);
+        return $code;
+    }
 }

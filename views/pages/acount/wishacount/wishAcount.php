@@ -62,7 +62,7 @@ My Account Content
 
                 <div class="table-responsive ">
 
-                    <table class="table ps-table--whishlist dt-responsive pr-5">
+                    <table class="table ps-table--whishlist dt-responsive dt-client pr-5">
 
                         <thead>
 

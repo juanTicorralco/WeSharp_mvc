@@ -5,16 +5,17 @@ $field = array();
 $header = array();
 
 $menuCategories = CurlController::request($url, $method, $field, $header)->result;
-/* echo '<pre>'; print_r($menuCategories); echo '</pre>'; */
 $wishlist = array();
 if (isset($_SESSION["user"])) {
     $url = CurlController::api() . "users?linkTo=id_user&equalTo=" . $_SESSION["user"]->id_user . "&select=wishlist_user";
     $WisUser = CurlController::request($url, $method, $field, $header)->result[0];
-    if (!empty($WisUser->wishlist_user)) {
+    if (!empty($WisUser->wishlist_user) && $WisUser->wishlist_user != null ) {
         $wishlist = json_decode($WisUser->wishlist_user, true);
     } else {
-        $wishlist = 0;
+        $wishlist = array();
     }
+
+    
 }
 ?>
 

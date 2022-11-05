@@ -1793,3 +1793,157 @@ function changeOfer(type){
     $(".typeOffer").html("Price $:");
   }
 }
+
+function dispararmapa(){
+
+  setTimeout(() => {
+    
+  
+  //mapa
+  if(document.getElementById('mapppp')){
+    let resultList =  document.getElementById('mapppp').value;
+    
+    if(resultList != ""){
+      if(resultList == undefined){
+          resultList = [19.42847,-99.12766];
+      }else{
+        resultList = JSON.parse( resultList);
+      }
+
+      const title = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+      let myMap=0;
+
+      function mapa(resultList){
+
+        if(myMap!=0){
+          myMap.remove();
+        }
+
+      let finalMap= document.getElementById("mapppp");
+      finalMap.setAttribute("value", resultList);
+
+      myMap= L.map('myMapp').setView(resultList, 25);
+
+      L.tileLayer(title,{
+          maxZoom: 18,
+      }).addTo(myMap);
+
+      let iconMarker = L.icon({
+          iconUrl:'img/mark.png',
+          iconSize:[40,40],
+          iconAnchor: [20,20]
+      });
+
+      let marker=  L.marker(resultList, {
+        icon: iconMarker,
+        draggable: true
+      }).addTo(myMap);
+      marker.on("moveend", (e)=> { 
+        document.getElementById("mapppp").setAttribute("value", [e.target._latlng.lat, e.target._latlng.lng ]);  
+      });
+      myMap.doubleClickZoom.disable();
+      }
+
+      mapa(resultList);
+
+      document.getElementById('addresStore').addEventListener('change', () => {
+          const pais= document.getElementById('countryStore').value.split("_")[0];
+          const city= document.getElementById('cityStore').value;
+          const adres= document.getElementById('addresStore').value;
+          const query = pais + ", " + city + ", " + adres;
+
+          fetch('https://nominatim.openstreetmap.org/search?format=json&polygon=1&addressdetails=1&q=' + query)
+              .then(result => result.json())
+              .then(parsedResult => {
+                  resultList=[ parseFloat(parsedResult[0].lat) , parseFloat( parsedResult[0].lon)];
+                  mapa(resultList);
+                  switAlert("success", "Puedes mover el marcador para una mejor localizacion", null, null, 1500);
+              }).catch(error => switAlert("error", "Algun campo esta mal, intenta corregirlo para colocar tu direccion en el mapa...", null,null,null )
+              );
+      });
+    }
+  }
+}, 1000);
+}
+
+function stateCheck(event,idProduct,idview){
+  let state = "";
+  
+  if(event.target.checked){
+    state = "show"; 
+  }else{
+    state = "hidden";
+  }
+  
+  let token = localStorage.getItem("token_user");
+  let settings = {
+    "url" : $("#urlApi").val()+"products?id="+idProduct+"&nameId=id_product&token="+token,
+    "method": "PUT",
+    "timeaot": 0,
+    "headers": {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    "data": {
+      "state_product": state,
+    },
+  };
+  $.ajax(settings).done(function(response){
+    if(response.status==200){}
+  })
+}
+
+if($("[name='galeryProductOld']").length > 0 && $("[name='galeryProductOld']").val() != ''){
+  var arrayFilesOld = JSON.parse($("[name='galeryProductOld']").val());
+}
+var arrayFilesDelete = Array();
+function removeGallery(elem){
+  $(elem).parent().remove();
+  let index = arrayFilesOld.indexOf($(elem).attr("remove"));
+  arrayFilesOld.splice(index, 1);
+  $("[name='galeryProductOld']").val(JSON.stringify(arrayFilesOld));
+  arrayFilesDelete.push($(elem).attr("remove"));
+  $("[name='deleteGaleryProduct']").val(JSON.stringify(arrayFilesDelete));
+}
+
+function removesProducts(idProduct){
+  switAlert("confirm", "Esta seguro de eliminar este producto?", null, null, null).then(resp => {
+    if(resp){
+      let data = new FormData();
+      data.append("idProduct", idProduct);
+      $.ajax({
+        url : $("#path").val() + "ajax/productsDelete.php",
+        method : "POST",
+        data : data,
+        contentType : false,
+        cache : false,
+        processData : false,
+        success : function(response){
+          let settings = {
+            "url" : $("#urlApi").val()+"products?id="+idProduct+"&nameId=id_product&token="+localStorage.getItem("token_user"),
+            "method" : "DELETE",
+            "timeout" : 0,
+            "headers" : {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          };
+
+          console.log(settings);
+
+          $.ajax(settings).done(function(response){
+            console.log(response);
+            if(response.status == 200){
+              switAlert("success", "El producto se añadio a la lista de deseos", null, null, 1500);
+              setTimeout(() => {
+                window.location = $("#path").val()+"acount&my-store";
+              }, 1500);
+            }
+          });
+        },
+        error : function(jqXHR, textStatus, errorThrown){
+          console.log(textStatus + " " + errorThrown);
+        }
+      });
+    }
+
+  })
+}

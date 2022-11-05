@@ -57,42 +57,55 @@ document.getElementById('addresOrder').addEventListener('change', () => {
         );
 });
 }
-if( window.location == "http://wesharp.com/acount&my-store"){
-    let resultList = JSON.parse( document.getElementById('mappp').dataset.value);
+if( window.location == "http://wesharp.com/acount&my-store" ||
+    window.location == "http://wesharp.com/acount&my-store#vendor-store" ||
+    window.location == "http://wesharp.com/acount&my-store?product=new#vendor-store" ||
+    window.location == "http://wesharp.com/acount&my-store?product=edit#vendor-store"||
+    window.location == "http://wesharp.com/acount&my-store?product=new" ||
+    window.location == "http://wesharp.com/acount&my-store?product=edit"
+    ){
 
-    if(resultList == undefined){
-        resultList = [19.42847,-99.12766];
-    }
+    let resultList =  document.getElementById('mappp');
+    if(resultList != null){
 
-    const title = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
-    let myMap=0;
+        resultList = JSON.parse(resultList.dataset.value);
 
-    function mapa(resultList){
+        if(resultList == undefined){
+            resultList = [19.42847,-99.12766];
+        }else{
 
-        if(myMap!=0){
-            myMap.remove();
         }
 
-        let finalMap= document.getElementById("mappp");
-        finalMap.setAttribute("data-value", resultList);
+        const title = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+        let myMap=0;
 
-        myMap= L.map('myMap').setView(resultList, 25);
+        function mapa(resultList){
 
-        L.tileLayer(title,{
-            maxZoom: 18,
-        }).addTo(myMap);
+            if(myMap!=0){
+                myMap.remove();
+            }
 
-        let iconMarker = L.icon({
-            iconUrl:'img/mark.png',
-            iconSize:[40,40],
-            iconAnchor: [20,20]
-        });
+            let finalMap= document.getElementById("mappp");
+            finalMap.setAttribute("data-value", resultList);
 
-        let marker=  L.marker(resultList, {
-            icon: iconMarker,
-        }).addTo(myMap);
-        myMap.doubleClickZoom.disable();
+            myMap= L.map('myMap').setView(resultList, 25);
+
+            L.tileLayer(title,{
+                maxZoom: 18,
+            }).addTo(myMap);
+
+            let iconMarker = L.icon({
+                iconUrl:'img/mark.png',
+                iconSize:[40,40],
+                iconAnchor: [20,20]
+            });
+
+            let marker=  L.marker(resultList, {
+                icon: iconMarker,
+            }).addTo(myMap);
+            myMap.doubleClickZoom.disable();
+        }
+
+        mapa(resultList);
     }
-
-    mapa(resultList);
 }

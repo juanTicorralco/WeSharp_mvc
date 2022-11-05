@@ -9,8 +9,11 @@
             <li><?php 
             if(!empty($productRelation[0]->name_category)){
                 echo $productRelation[0]->name_category;
-            }else{
+            }else if(!empty($productRelation[0]->name_subcategory)){
                 echo $productRelation[0]->name_subcategory;
+            }
+            else{
+                echo $urlParams[0];
             }
             ?></li>
 

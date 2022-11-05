@@ -12,19 +12,6 @@ if (!isset($_SESSION['user'])) {
             
     </script>';
     return;
-    }else{
-        // traer store
-        // $select="url_product,url_category,name_product,image_product,price_product,offer_product,stock_product";
-        // $products= array();
-        // foreach($wishlist as $key => $value){  
-        //     $url= CurlController::api()."relations?rel=products,categories&type=product,category&linkTo=url_product&equalTo=".$value."&select=".$select;
-        //     $method= "GET";
-        //     $header= array();
-        //     $filds= array();
-        //     $response= CurlController::request($url, $method, $header, $filds);
-        //     array_push($products, $response->result[0]);
-        // }
-        // echo '<pre>'; print_r($shoppingOrder[0]); echo '</pre>';
     }
 }
 ?>
@@ -48,7 +35,7 @@ My Account Content
             Nav Account
             ======================================--> 
 
-            <div class="ps-section__content">
+            <div class="ps-section__content" id="vendor-store">
 
                 <ul class="ps-section__links">
                     <li ><a href="<?php echo $path; ?>acount&wishAcount">My Wishlist</a></li>

@@ -1,11 +1,19 @@
 <!-- traer toda la informacion del producto -->
 <?php
-$url9 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_product&equalTo=" . $urlParams[0]."&select=url_category,image_product,name_product,offer_product,price_product,offer_product,views_product,id_product,name_category,url_subcategory,name_subcategory,stock_product,gallery_product,reviews_product,name_store,summary_product,video_product,specifications_product,title_list_product,tags_product,description_product,details_product,about_store,url_store,logo_store,id_store,url_product";
+$url9 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_product,approval_product,state_product&equalTo=" . $urlParams[0].",approved,show&select=url_category,image_product,name_product,offer_product,price_product,offer_product,views_product,id_product,name_category,url_subcategory,name_subcategory,stock_product,gallery_product,reviews_product,name_store,summary_product,video_product,specifications_product,title_list_product,tags_product,description_product,details_product,about_store,url_store,logo_store,id_store,url_product";
 $method9 = "GET";
 $field9 = array();
 $header9 = array();
 
 $producter = CurlController::request($url9, $method9, $field9, $header9)->result[0];
+
+ if($producter == "n"){
+    echo '<script>
+        switAlert("error", "Este articulo no es visible o falta aprovacion", "' . $path . '","");
+            
+    </script>';
+    return;
+ }
 
  /* actualizar las vistas de productos */
  $viewsProduct= $producter->views_product+1;
@@ -17,6 +25,7 @@ $producter = CurlController::request($url9, $method9, $field9, $header9)->result
 
  $upDateProduct= CurlController::request($url12,$method12,$field12, $header12); 
 
+ 
 ?>
 
 <!--=====================================

@@ -5,16 +5,12 @@ session_start();
 /* Direction Route  */
 $routesArray = explode("/", $_SERVER['REQUEST_URI']);
 
-//$routeArray= array_filter($routesArray);
 if (!empty(array_filter($routesArray)[1])) {
     if(strstr(array_filter($routesArray)[1], "&") != false){
         $urlParams = explode("&", array_filter($routesArray)[1]);
-    }
-    if(strstr(array_filter($routesArray)[1], "?") != false){
-        $urlParams = explode("?", array_filter($routesArray)[1]);
     }else{
-        $urlParams = explode("&", array_filter($routesArray)[1]);
-    }
+        $urlParams = array($routesArray[1]);
+    }   
 }
 
 if (!empty($urlParams[0])) {
@@ -92,7 +88,7 @@ if (!empty($urlParams[0])) {
                 foreach ($linkTo as $key => $value) {
 
                     /* filtrar por busqueda con el parametro url de busqueda*/
-                    $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=" . $value . "&search=" . $urlParams[0] . "&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=" . $selecte;
+                    $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=" . $value . ",approval_product,state_product&search=" . $urlParams[0] . ",approved,show&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=" . $selecte;
                     $method = "GET";
                     $field = array();
                     $header = array();
@@ -118,8 +114,6 @@ $field = array();
 $header = array();
 
 $totalProducts = CurlController::request($url, $method, $field, $header)->total;
-
-//echo '<pre>'; print_r($totalProducts); echo '</pre>';
 ?>
 
 <!DOCTYPE html>

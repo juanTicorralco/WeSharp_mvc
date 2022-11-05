@@ -1,10 +1,16 @@
 <div class="ps-shopping__header">
 
-    <p>Total Procuctos: <strong><?php echo $totalProducts; ?></strong></p>
+    <p>Total Procuctos: <strong><?php 
+    if(isset($totalProductes) && $totalProductes != null){
+        echo $totalProductes; 
+    }else{
+        echo 0;
+    }
+    ?></strong></p>
 
     <div class="ps-shopping__actions">
 
-        <select class="ps-select" data-placeholder="Sort Items" onchange="sortProduct(event)">
+        <select class="select2" data-placeholder="Sort Items" onchange="sortProduct(event)">
 
             <?php if (isset($urlParams[2])) : ?>
 

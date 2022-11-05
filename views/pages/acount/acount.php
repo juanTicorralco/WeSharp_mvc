@@ -20,6 +20,11 @@ Breadcrumb
 
 <?php
 if (isset($urlParams[1])) {
+    if (!empty($urlParams[1])) {
+        if(strstr($urlParams[1], "?") != false){
+            $urlParams[1] = explode("?", $urlParams[1])[0];
+        }
+    }
     if ($urlParams[1] == "enrollment" || $urlParams[1] == "login" || $urlParams[1]=="wishAcount" || $urlParams[1]=="logout" || $urlParams[1]=="my-shopping" || $urlParams[1]=="my-store" || $urlParams[1]=="new-store") {
         // if (isset($urlParams[2])) {
             //     if ($urlParams[2] == "facebook") {
