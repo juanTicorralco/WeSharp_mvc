@@ -63,6 +63,11 @@ class ControllerVendor{
                                 }else{
                                     $mapaStore=null;
                                 }
+
+                                date_default_timezone_set('UTC');
+                                date_default_timezone_set("America/Mexico_City");
+
+                                $dateCreated = date("Y-m-d");
                                 
                                 $dataStore = array(
                                     "id_user_store" => $_SESSION["user"]->id_user,
@@ -80,7 +85,7 @@ class ControllerVendor{
                                     "map_store" =>  json_encode($mapaStore),
                                     "socialnetwork_store" => $sosialNetwork,
                                     "products_store" => 1,
-                                    "date_created_store" => date("Y-m-d")
+                                    "date_created_store" => $dateCreated
                                 );
 
                                $url = CurlController::api()."stores?token=".$_SESSION["user"]->token_user;
@@ -395,6 +400,10 @@ class ControllerVendor{
                             isset($_POST["stock"]) && preg_match('/^[0-9]{1,}$/', $_POST["stock"])
                         ){
 
+                            date_default_timezone_set('UTC');
+                            date_default_timezone_set("America/Mexico_City");
+                            $dateCreate = date("Y-m-d");
+
                             $dataProduct = array(
                                 "approval_product" => "review",
                                 "feedback_product" => "your product is under review",
@@ -422,7 +431,7 @@ class ControllerVendor{
                                 "shipping_product" => $_POST["envio"],
                                 "delivery_time_product" => $_POST["entrega"],
                                 "stock_product" => $_POST["stock"],
-                                "date_create_product" => date("Y-m-d") 
+                                "date_create_product" => $dateCreate
                             );
         
                             $url = CurlController::api()."products?token=".$_SESSION["user"]->token_user;
@@ -915,6 +924,181 @@ class ControllerVendor{
                         notiAlert(3, "Error: al salvar en la sintaxis de los precios");
                     </script>'; 
                     return;
+                }
+            }
+        }
+    }
+
+    public function orderUpdates(){
+        if(isset($_POST["stage"])){
+            $process = json_decode(base64_decode($_POST["processOrder"]), true);
+            $changeProcess = array();
+            $tipo = "";
+
+            foreach($process as $key => $value){
+                if($value["stage"] == $_POST["stage"]){
+                    $value["date"] = $_POST["date"]; 
+                    $value["status"] = $_POST["status"]; 
+                    $value["comment"] = $_POST["comment"]; 
+                    $tipo = $_POST["stage"];
+                }
+                array_push($changeProcess, $value);
+            }
+
+            $url = CurlController::api()."orders?id=".$_POST["idOrder"]."&nameId=id_order&token=".$_SESSION["user"]->token_user;
+            $method = "PUT";
+            if($_POST["stage"] == "delivered" && $_POST["status"] == "ok"){
+                $fields = "status_order=ok&process_order=". json_encode($changeProcess);
+                $url2 = CurlController::api()."sales?id=".$_POST["idOrder"]."&nameId=id_order_sale&token=".$_SESSION["user"]->token_user;
+                $method2 = "PUT";
+                $fields2 = "id_store_sale=".$_POST["idStores"]."&name_product_sale=".$_POST["namessProduct"]."&status_sale=ok";
+                $headers2 = array(
+                    "Content-Type" => "application/x-www-form-urlencoded"
+                );
+                $saleUpdate = CurlController::request($url2,$method2,$fields2,$headers2);
+
+                if($saleUpdate->status != 200){
+                    echo '<script>
+                            formatearAlertas();
+                            switAlert("error", "Se produjo un error", null,null);
+                        </script>';
+                    return;
+                }
+            }else{
+                $fields = "process_order=". json_encode($changeProcess);
+            }
+            $headers= array(
+                "Content-Type" => "application/x-www-form-urlencoded"
+            );
+            $orderUpdate = CurlController::request($url,$method,$fields,$headers);
+
+            if($orderUpdate->status == 200){
+                $name = $_POST["clientOrder"];
+                $subject = "Su producto esta".$tipo;
+                $email = $_POST["emailOrder"];
+                $message = "Su producto se ".$tipo." correctamente!";
+                $url = TemplateController::path()."acount&my-shopping";
+                $post = "Ver su producto";
+                $sendEmail = TemplateController::sendEmail($name,$subject,$email,$message,$url,$post);
+                if($sendEmail == "ok"){
+                    echo '
+                    <script>
+                        formatearAlertas();
+                        switAlert("success", "Se actualizo correctamente la orden", null, null, 1500);
+                    </script>'; 
+                }
+            }
+        }
+    } 
+
+    public function disputeAnswer(){
+
+        if(isset($_POST["idDispute"])){
+
+            if(isset($_POST["answerDisput"])){
+                if(preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}$/', $_POST["answerDisput"])){
+                    date_default_timezone_set('UTC');
+                    date_default_timezone_set("America/Mexico_City");
+
+                    $url = CurlController::api()."disputes?id=".$_POST["idDispute"]."&nameId=id_dispute&token=".$_SESSION["user"]->token_user;
+                    $method = "PUT";
+                    $fields ="answer_dispute=".$_POST["answerDisput"]."&date_answer_dispute=".date("Y-m-d"); 
+                    $headers= array(
+                        "Content-Type" => "application/x-www-form-urlencoded"
+                    );
+
+                    $dispute = CurlController::request($url,$method,$fields,$headers);
+
+                    if($dispute->status == 200){
+                        $name = $_POST["clientDispute"];
+                        $subject = "Se respondio tu disputa";
+                        $email = $_POST["emailDispute"];
+                        $message = "La tienda ".$_POST["nameStore"]." respondio a tu disputa.";
+                        $url = TemplateController::path()."acount&my-store&disputes";
+                        $post = "Ver resuesta";
+                        $sendEmail = TemplateController::sendEmail($name,$subject,$email,$message,$url,$post);
+                        if($sendEmail == "ok"){
+                            echo '
+                            <script>
+                                formatearAlertas();
+                                switAlert("success", "Se envio tu respuesta correctamente", null, null, 1500);
+                            </script>'; 
+                        }else{
+                            echo '
+                        <script>
+                            formatearAlertas();
+                            notiAlert(3, "Error al enviar por correo");
+                        </script>';    
+                        }
+                    }else{
+                        echo '
+                        <script>
+                            formatearAlertas();
+                            notiAlert(3, "Error al hacer la peticion");
+                        </script>';
+                    }
+                }else{
+                    echo '
+                    <script>
+                        formatearAlertas();
+                        notiAlert(3, "Error en la sintaxis de los campos");
+                    </script>';
+                }
+            }
+        }
+    }
+
+    public function messageAnswer(){
+        if(isset($_POST["idMessage"])){
+
+            if(isset($_POST["answerMessage"])){
+                if(preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}$/', $_POST["answerMessage"])){
+                    date_default_timezone_set('UTC');
+                    date_default_timezone_set("America/Mexico_City");
+
+                    $url = CurlController::api()."messages?id=".$_POST["idMessage"]."&nameId=id_message&token=".$_SESSION["user"]->token_user;
+                    $method = "PUT";
+                    $fields ="answer_message=".$_POST["answerMessage"]."&date_answer_message=".date("Y-m-d"); 
+                    $headers= array(
+                        "Content-Type" => "application/x-www-form-urlencoded"
+                    );
+
+                    $messages = CurlController::request($url,$method,$fields,$headers);
+
+                    if($messages->status == 200){
+                        $name = $_POST["clientMessage"];
+                        $subject = "Se respondio tu pregunta";
+                        $email = $_POST["emailMessage"];
+                        $message = "La tienda ".$_POST["nameStore"]." respondio a tu pregunta.";
+                        $url = TemplateController::path().$_POST["urlProduct"];
+                        $post = "Ver resuesta";
+                        $sendEmail = TemplateController::sendEmail($name,$subject,$email,$message,$url,$post);
+                        if($sendEmail == "ok"){
+                            echo '
+                            <script>
+                                formatearAlertas();
+                                switAlert("success", "Se envio tu respuesta correctamente", null, null, 1500);
+                            </script>'; 
+                        }else{
+                            echo '
+                        <script>
+                            formatearAlertas();
+                            notiAlert(3, "Error al enviar por correo");
+                        </script>';    
+                        }
+                    }else{
+                        echo '
+                        <script>
+                            formatearAlertas();
+                            notiAlert(3, "Error al hacer la peticio");
+                        </script>';
+                    }
+                }else{
+                    echo '
+                    <script>
+                        formatearAlertas();
+                        notiAlert(3, "Error en la sintaxis de los campos");
+                    </script>';
                 }
             }
         }

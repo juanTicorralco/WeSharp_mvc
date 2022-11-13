@@ -114,7 +114,6 @@ if (count($promotionToday) > 10) {
 
                             <?php if( count( $promotionToday) > 1 ): ?>
                             <?php foreach ($promotionToday as $key => $value) :
-                                //echo '<pre>'; print_r($value); echo '</pre>';
                             ?>
 
                                 <div class="ps-product--detail ps-product--hot-deal">

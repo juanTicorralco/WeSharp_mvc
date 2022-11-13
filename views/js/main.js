@@ -848,6 +848,81 @@
                 ]
             });
         }
+
+        let targetServerOrders= $('.dt-responsive.dt-server-orders');
+
+        if(targetServerOrders.length>0){
+            $(targetServerOrders).DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": path+"ajax/data-orders.php?idStore="+$("#idStore").val(),
+                    "type":"POST"
+                },
+                "columns":[
+                    {"data":"id_order"},
+                    {"data":"status_order"},
+                    {"data":"displayname_user"},
+                    {"data":"email_order"},
+                    {"data":"country_order"},
+                    {"data":"city_order"},
+                    {"data":"address_order", "orderable": false},
+                    {"data":"phone_order", "orderable": false},
+                    {"data":"name_product"},
+                    {"data":"quantity_order"},
+                    {"data":"details_order", "orderable": false},
+                    {"data":"price_order"},
+                    {"data":"process_order", "orderable": false},
+                    {"data":"date_created_order"}      
+                ]
+            });
+        }
+
+        let targetServerDisputes= $('.dt-responsive.dt-server-disputes');
+
+        if(targetServerDisputes.length>0){
+            $(targetServerDisputes).DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": path+"ajax/data-disputes.php?idStore="+$("#idStore").val(),
+                    "type":"POST"
+                },
+                "columns":[
+                    {"data":"id_dispute"},
+                    {"data":"id_order_dispute"},
+                    {"data":"displayname_user"},
+                    {"data":"email_user"},
+                    {"data":"content_dispute", "orderable": false},
+                    {"data":"date_created_dispute"},
+                    {"data":"answer_dispute", "orderable": false},
+                    {"data":"date_answer_dispute"}
+                ]
+            });
+        }
+
+        let targetServerMessages= $('.dt-responsive.dt-server-messages');
+
+        if(targetServerMessages.length>0){
+            $(targetServerMessages).DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": path+"ajax/data-messages.php?idStore="+$("#idStore").val(),
+                    "type":"POST"
+                },
+                "columns":[
+                    {"data":"id_message"},
+                    {"data":"name_product"},
+                    {"data":"displayname_user"},
+                    {"data":"email_user"},
+                    {"data":"content_message", "orderable": false},
+                    {"data":"date_created_message"},
+                    {"data":"answer_message", "orderable": false},
+                    {"data":"date_answer_message"}
+                ]
+            });
+        }
     }
 
     // somernote

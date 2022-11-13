@@ -839,7 +839,6 @@ function totalp(index){
 
   if(price.length>0){
     price.each(function(i){
-
     
       if(index != null){
 
@@ -851,8 +850,22 @@ function totalp(index){
           
       }
 
-      let subt= parseFloat(($(price[i]).html()*$(quantity[i]).val()) + parseFloat( $(envio[i]).html()));
-    
+      let priceSub = $(price[i]).html().trim();
+
+      if(priceSub.lastIndexOf(",", 1) >= 0){
+        let re = new RegExp ("(^.*?),(.*)$");
+         priceSub = re.exec(priceSub);
+          if (priceSub.length > 0) {
+            priceSub = ( parseFloat( priceSub[1]*1000)) + parseFloat(priceSub[2]) ;
+          }else{
+            priceSub =priceSub;
+          }
+      }else{
+        priceSub = priceSub;
+       
+      }
+   
+      let subt= parseFloat((priceSub*$(quantity[i]).val()) + parseFloat( $(envio[i]).html()));
       totalPri += subt;
       $(subtotal[i]).html(`$${subt.toFixed(2)}`);
 
@@ -1947,3 +1960,177 @@ function removesProducts(idProduct){
 
   })
 }
+
+$(document).on("click", ".nextProcess", function(){
+  $(".orderBody").html("");
+  let idStores = $(this).attr("idStores");
+  let namessProduct = $(this).attr("namessProduct");
+  let idOrder = $(this).attr("idOrder");
+  let clientOrder = $(this).attr("clientOrder");
+  let emailOrder = $(this).attr("emailOrder");
+  let productOrder = $(this).attr("productOrder");
+  let processOrder = JSON.parse(atob($(this).attr("processOrder")));
+
+  $(".modal-title span").html("Order N. " + idOrder);
+
+  if(processOrder[1].status == "pending"){
+    processOrder.splice(2,1);
+  }
+
+  processOrder.forEach((value, index) => {
+    let date = "";
+    let status = "";
+    let comment = "";
+
+    if(value.status == "ok"){
+      date = `
+        <div class="col-10">
+          <input 
+          type="date" 
+          class="form-control" 
+          value="`+value.date+`" 
+          readonly
+          pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
+          onchange="validatejs(event, 'parrafo')">
+          <div class="valid-feedback"></div>
+          <div class="invalid-feedback">El nombre es requerido</div>
+        </div>
+      `;
+      status = `
+        <div class="col-10 mt-3">
+          <div class="text-uppercase">`+value.status+`</div>
+        </div>
+      `;
+      comment = `
+        <div class="col-10 mt-3">
+          <textarea 
+          class="form-control" 
+          placeholder="Escribe un comentario" 
+          readonly
+          pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
+          onchange="validatejs(event, 'parrafo')"
+          >`+value.comment+`</textarea>
+          <div class="valid-feedback"></div>
+          <div class="invalid-feedback">El nombre es requerido</div>
+        </div>
+      `;
+    }else{
+      date = `
+      <div class="col-10">
+        <input 
+        type="date" 
+        class="form-control" 
+        name="date" 
+        value="`+value.date+`" 
+        required
+        pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
+        onchange="validatejs(event, 'parrafo')">
+        <div class="valid-feedback"></div>
+        <div class="invalid-feedback">El nombre es requerido</div>
+      </div>
+    `;
+    status = `
+        <div class="col-10 mt-3">
+          <input type="hidden" name="stage" value="`+value.stage+`">
+          <input type="hidden" name="processOrder" value="`+$(this).attr("processOrder")+`">
+          <input type="hidden" name="idOrder" value="`+idOrder+`">
+          <input type="hidden" name="namessProduct" value="`+namessProduct+`">
+          <input type="hidden" name="idStores" value="`+idStores+`">
+          <input type="hidden" name="clientOrder" value="`+clientOrder+`">
+          <input type="hidden" name="emailOrder" value="`+emailOrder +`">
+          <input type="hidden" name="productOrder" value="`+productOrder+`">
+          
+          <div class="custom-control custom-radio custom-control-inline">
+            <input
+              id="status-pending"
+              type="radio"
+              class="custom-control-input"
+              value="pending"
+              name="status"
+              checked>
+              <label class="custom-control-label" for="status-pending">Pending</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input
+              id="status-ok"
+              type="radio"
+              class="custom-control-input"
+              value="ok"
+              name="status">
+              <label class="custom-control-label" for="status-ok">OK</label>
+          </div>
+        </div>
+      `;
+      comment = `
+      <div class="col-10 mt-3">
+        <textarea 
+        class="form-control" 
+        placeholder="Escribe un comentario" 
+        name="comment" 
+        required
+        value="`+value.date+`" required
+        pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
+        onchange="validatejs(event, 'parrafo')">
+        </textarea>
+        <div class="valid-feedback"></div>
+        <div class="invalid-feedback">El nombre es requerido</div>
+      </div>
+    `;
+    }
+
+    $(".orderBody").append(`
+      <div class="card-header text-uppercase">`+value.stage+`</div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="col-2 text-right">
+            <label class="p-3 lead text-right">Date: </label>
+          </div>
+          `+date+`
+        </div>
+        <div class="form-row">
+          <div class="col-2 text-right">
+            <label class="p-3 lead">Status: </label>
+          </div>
+          `+status+`
+        </div>
+        <div class="form-row">
+          <div class="col-2 text-right">
+            <label class="p-3 lead">Comment: </label>
+          </div>
+          `+comment+`
+        </div>
+      </div>
+    `);
+  });
+  $("#nextProcess").modal();
+});
+
+$(document).on("click", ".openDisputes", function(){
+  $("[name='idOrder']").val($(this).attr("idOrder"));
+  $("[name='idUser']").val($(this).attr("idUser"));
+  $("[name='idStore']").val($(this).attr("idStore"));
+  $("[name='emailStore']").val($(this).attr("emailStore"));
+  $("[name='nameStore']").val($(this).attr("nameStore"));
+  $("#newDispute").modal();
+});
+
+$(document).on("click", ".answerDiput", function(){
+  $("[name='idDispute']").val($(this).attr("idDispute"));
+  $("[name='clientDispute']").val($(this).attr("clientDispute"));
+  $("[name='emailDispute']").val($(this).attr("emailDispute"));
+  $("#answerDisput").modal();
+});
+
+$(document).on("click", ".answerMessage", function(){
+  $("[name='idMessage']").val($(this).attr("idMessage"));
+  $("[name='clientMessage']").val($(this).attr("clientMessage"));
+  $("[name='emailMessage']").val($(this).attr("emailMessage"));
+  $("[name='urlProduct']").val($(this).attr("urlProduct"));
+  $("#answerMessage").modal();
+});
+
+$(document).on("click", ".CommentStars", function(){
+  $("[name='idProduct']").val($(this).attr("idProduct"));
+  $("[name='idUser']").val($(this).attr("idUser"));
+  $("#newComment").modal();
+});

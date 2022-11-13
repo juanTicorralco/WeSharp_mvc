@@ -9,7 +9,7 @@ class ControllerDelete{
         $fields = array();
         $headers = array();
         $deleteProduct = CurlController::request($url,$method,$fields,$headers)->result[0];
-        // echo '<pre>'; print_r($deleteProduct); echo '</pre>';
+       
         if(file_exists("../views/img/products/".$deleteProduct->url_category."/".$deleteProduct->image_product)){
             unlink("../views/img/products/".$deleteProduct->url_category."/".$deleteProduct->image_product);
         }

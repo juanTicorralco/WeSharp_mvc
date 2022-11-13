@@ -44,6 +44,9 @@
         5. HELPERS
         6. CUSTOM
 */
+.modal{
+    z-index: 10000;
+}
 .ps-list--social-color li a.youtube{
     background-color: #dd2400;
 }

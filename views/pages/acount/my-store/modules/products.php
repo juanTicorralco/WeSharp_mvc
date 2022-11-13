@@ -20,19 +20,19 @@
             <ul class="nav nav-tabs">  
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link active" href="<?php echo TemplateController::path() ?>acount&my-store">Products</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Orders</a>
+                    <a class="nav-link" href="<?php echo TemplateController::path() ?>acount&my-store&orders">Orders</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Disputes</a>
+                    <a class="nav-link" href="<?php echo TemplateController::path() ?>acount&my-store&disputes">Disputes</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Messages</a>
+                    <a class="nav-link" href="<?php echo TemplateController::path() ?>acount&my-store&messages">Messages</a>
                 </li>
                 
             </ul>

@@ -94,7 +94,7 @@ if (!empty($urlParams[0])) {
                     $header = array();
 
                     $urlSearch = CurlController::request($url, $method, $field, $header);
-                    if ($urlSearch->status != 404) {
+                    if ($urlSearch->status == 200) {
                         $totalSearch = $urlSearch->total;
                         break;
                     }
@@ -113,7 +113,12 @@ $method = "GET";
 $field = array();
 $header = array();
 
-$totalProducts = CurlController::request($url, $method, $field, $header)->total;
+$totalPro = CurlController::request($url, $method, $field, $header);
+if($totalPro->status == 200){
+    $totalProducts = $totalPro->total;
+}else{
+    $totalProducts = 0;
+}
 ?>
 
 <!DOCTYPE html>

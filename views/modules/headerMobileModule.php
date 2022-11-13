@@ -148,9 +148,6 @@
                                         $header = array();
 
                                         $result = CurlController::request($url, $method, $fields, $header)->result[0];
-
-                                        //  echo '<pre>'; print_r($result); echo '</pre>';
-
                                     ?>
 
                                         <div class="ps-product--cart-mobile">
@@ -199,8 +196,22 @@
                                                             $preceProduct= $result->price_product;
                                                             echo $preceProduct; ?>
                                                     <?php endif; ?>
+
+                                                    <?php 
+                                                        if(strpos($preceProduct, ",") != false){
+                                                            $preceProduct = explode(",", $preceProduct);
+
+                                                            if (!empty(array_filter($preceProduct)[1])) {
+                                                                $priceuno = ($preceProduct[0]*1000) + $preceProduct[1] ;
+                                                            }else{
+                                                                $priceuno =$preceProduct;
+                                                            }
+                                                        }else{
+                                                            $priceuno =$preceProduct;
+                                                        }
+                                                    ?>
                                                     
-                                                    <?php $totalPriceSC += $ValorPrecioEnvio + ($preceProduct * $value["quantity"]); ?>
+                                                    <?php $totalPriceSC += $ValorPrecioEnvio + ($priceuno * $value["quantity"]); ?>
                                                 </small>
                                             </div>
 
