@@ -358,8 +358,22 @@ Checkout
                                                                     $preceProduct= $pOrder->price_product;
                                                                     echo $preceProduct; ?>
                                                             <?php endif; ?>
+
+                                                            <?php 
+                                                                if(strpos($preceProduct, ",") != false){
+                                                                    $preceProduct = explode(",", $preceProduct);
+
+                                                                    if (!empty(array_filter($preceProduct)[1])) {
+                                                                        $priceuno = ($preceProduct[0]*1000) + $preceProduct[1] ;
+                                                                    }else{
+                                                                        $priceuno =$preceProduct;
+                                                                    }
+                                                                }else{
+                                                                    $priceuno =$preceProduct;
+                                                                }
+                                                            ?>
                                                             
-                                                            <?php $totalPriceSC2 += $ValorPrecioEnvio + ($preceProduct * $value["quantity"]); ?>
+                                                            <?php $totalPriceSC2 += $ValorPrecioEnvio + ($priceuno * $value["quantity"]); ?>
                                                            </span></div>
                                                         </td>
                                                        

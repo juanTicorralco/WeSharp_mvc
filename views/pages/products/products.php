@@ -63,7 +63,12 @@
 
         /* Bring all subcategories */
         $url2=CurlController::api()."relations?rel=products,subcategories,stores&type=product,subcategory,store&linkTo=url_subcategory,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&select=id_subcategory";
-        $totalProductes = CurlController::request($url2, $method, $field, $header)->total;
+        $totalProduc = CurlController::request($url2, $method, $field, $header);
+        if($totalProduc->status == 200){
+            $totalProductes = $totalProduc->total;
+        }else{
+            $totalProductes = 0;
+        }
 
          /* actualizar las vistas de subcategorias */
          $views= $productRelation[0]->views_subcategory+1;
@@ -78,7 +83,12 @@
     }else{
         /* Bring all categories */
         $url2=CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category,approval_product,state_product&equalTo=".$urlParams[0].",approved,show&select=id_category";
-        $totalProductes = CurlController::request($url, $method, $field, $header)->total;
+        $totalProduc = CurlController::request($url, $method, $field, $header);
+        if($totalProduc->status == 200){
+            $totalProductes = $totalProduc->total;
+        }else{
+            $totalProductes = 0;
+        }
 
       /* actualizar las vistas de categorias */
         $views= $productRelation[0]->views_category+1;

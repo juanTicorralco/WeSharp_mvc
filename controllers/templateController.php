@@ -36,9 +36,9 @@ class TemplateController
     {
         if ($type == "Discount") {
             $offerPrice = $price - ($price * $offer) / 100;
-            return  number_format($offerPrice, 2);
+            return  round($offerPrice, 2);
         } else if ($type == "Fixed") {
-            return number_format($offer, 2);
+            return round($offer, 2);
         }
     }
 

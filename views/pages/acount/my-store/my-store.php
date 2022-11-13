@@ -41,7 +41,7 @@ My Account Content
                     <li ><a href="<?php echo $path; ?>acount&wishAcount">My Wishlist</a></li>
                     <li ><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
                     <li class="active"><a href="<?php echo $path; ?>acount&my-store">My Store</a></li>
-                    <li><a href="my-account_my-sales.html">My Sales</a></li>
+                    <li><a href="<?php echo $path; ?>acount&my-sales">My Sales</a></li>
                 </ul>
 
                 <!--=====================================
@@ -63,8 +63,17 @@ My Account Content
                             Products
                             ======================================--> 
 
-                           <?php include "modules/products.php"; ?>
-                           
+                            <?php
+                             if(isset($urlParams[2])){
+                                if($urlParams[2] == "orders" || $urlParams[2] == "disputes" || $urlParams[2] == "messages"){
+                                    include "modules/".$urlParams[2].".php";
+                                }else{
+                                    include "modules/products.php";   
+                                }
+                             }else{ 
+                                 include "modules/products.php";
+                             }
+                            ?>
                         </div>
                     </div>
                 </div>

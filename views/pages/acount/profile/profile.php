@@ -1,3 +1,55 @@
+<?php
+$idStores="";
+$select = "id_store";
+$url = CurlController::api()."stores?linkTo=id_user_store&equalTo=".$_SESSION["user"]->id_user."&select=".$select;
+$method = "GET";
+$fields = array();
+$headers = array();
+$store = CurlController::request($url,$method,$fields,$headers);
+
+if($store->status == 200){
+    $idStores = $store->result[0]->id_store;
+
+    $url = CurlController::api()."orders?linkTo=id_store_order,status_order&equalTo=".$idStores.",pending&select=id_order";
+    $ordersid = CurlController::request($url,$method,$fields,$headers);
+    if($ordersid->status == 200){
+        $totalOrders = $ordersid->total;
+    }else{
+        $totalOrders = 0;
+    }
+
+    $url = CurlController::api()."products?linkTo=id_store_product&equalTo=".$idStores."&select=id_product";
+    $productsid = CurlController::request($url,$method,$fields,$headers);
+    if($productsid->status == 200){
+        $totalProducts = $productsid->total;
+    }else{
+        $totalProducts = 0;
+    }
+
+    $url = CurlController::api()."disputes?linkTo=id_store_dispute&equalTo=".$idStores."&select=answer_dispute";
+    $disputesid = CurlController::request($url,$method,$fields,$headers);
+    $totalDisputes = 0;
+    if($disputesid->status == 200){
+        foreach($disputesid->result as $key => $value){
+            if($value->answer_dispute == null){
+                $totalDisputes++;
+            }
+        }
+    }
+
+    $url = CurlController::api()."messages?linkTo=id_store_message&equalTo=".$idStores."&select=answer_message";
+    $messagesId = CurlController::request($url,$method,$fields,$headers);
+    $totalMessages = 0;
+    if($messagesId->status == 200){
+        foreach($messagesId->result as $key => $value){
+            if($value->answer_message == null){
+                $totalMessages++;
+            }
+        }
+    }
+}
+
+?>
 <aside class="ps-block--store-banner">
 
     <div class="ps-block__user">
@@ -33,44 +85,46 @@
 
         </div>
 
+        <?php if($idStores != ""): ?>
         <div class="row ml-lg-auto pt-5">
 
             <div class="col-lg-3 col-6">
                 <div class="text-center">
-                    <a href="#">
+                    <a href="<?php echo TemplateController::path(); ?>acount&my-store&orders">
                         <h1><i class="fas fa-shopping-cart text-white"></i></h1>
-                        <h4 class="text-white">Orders <span class="badge badge-secondary rounded-circle">51</span></h4>
+                        <h4 class="text-white">Orders <span class="badge badge-secondary rounded-circle"><?php echo $totalOrders; ?></span></h4>
                     </a>
                 </div>
             </div><!-- box /-->
 
             <div class="col-lg-3 col-6">
                 <div class="text-center">
-                    <a href="#">
+                    <a href="<?php echo TemplateController::path(); ?>acount&my-store">
                         <h1><i class="fas fa-shopping-bag text-white"></i></h1>
-                        <h4 class="text-white">Products <span class="badge badge-secondary rounded-circle">51</span></h4>
+                        <h4 class="text-white">Products <span class="badge badge-secondary rounded-circle"><?php echo $totalProducts; ?></span></h4>
                     </a>
                 </div>
             </div><!-- box /-->
 
             <div class="col-lg-3 col-6">
                 <div class="text-center">
-                    <a href="#">
+                    <a href="<?php echo TemplateController::path(); ?>acount&my-store&disputes">
                         <h1><i class="fas fa-bell text-white"></i></h1>
-                        <h4 class="text-white">Disputes <span class="badge badge-secondary rounded-circle">51</span></h4>
+                        <h4 class="text-white">Disputes <span class="badge badge-secondary rounded-circle"><?php echo  $totalDisputes; ?></span></h4>
                     </a>
                 </div>
             </div><!-- box /-->
 
             <div class="col-lg-3 col-6">
                 <div class="text-center">
-                    <a href="#">
+                    <a href="<?php echo TemplateController::path(); ?>acount&my-store&messages">
                         <h1><i class="fas fa-comments text-white"></i></h1>
-                        <h4 class="text-white">Messages <span class="badge badge-secondary rounded-circle">51</span></h4>
+                        <h4 class="text-white">Messages <span class="badge badge-secondary rounded-circle"><?php echo $totalMessages; ?></span></h4>
                     </a>
                 </div>
             </div><!-- box /-->
         </div>
+        <?php endif; ?>
 
     </div>
 

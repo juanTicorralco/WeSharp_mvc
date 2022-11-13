@@ -116,7 +116,6 @@ Header Content
                                                     $header = array();
 
                                                     $menuSubcategories = CurlController::request($url, $method, $field, $header)->result;
-                                                    //echo '<pre>'; print_r($menuSubcategories); echo '</pre>';
                                                     ?>
 
                                                     <?php foreach ($menuSubcategories as $key => $value) : ?>
@@ -260,8 +259,20 @@ Header Content
                                                             $preceProduct= $result->price_product;
                                                             echo $preceProduct; ?>
                                                     <?php endif; ?>
-                                                    
-                                                    <?php $totalPriceSC += $ValorPrecioEnvio + ($preceProduct * $value["quantity"]); ?>
+                                                    <?php 
+                                                        if(strpos($preceProduct, ",") != false){
+                                                            $preceProduct = explode(",", $preceProduct);
+
+                                                            if (!empty(array_filter($preceProduct)[1])) {
+                                                                $priceuno = ($preceProduct[0]*1000) + $preceProduct[1] ;
+                                                            }else{
+                                                                $priceuno =$preceProduct;
+                                                            }
+                                                        }else{
+                                                            $priceuno =$preceProduct;
+                                                        }
+                                                    ?>
+                                                    <?php $totalPriceSC += $ValorPrecioEnvio + ($priceuno * $value["quantity"]); ?>
                                                 </small>
                                             </div>
 

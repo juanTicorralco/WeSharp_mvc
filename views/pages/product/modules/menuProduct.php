@@ -182,64 +182,41 @@
                 </div>
 
                 <hr class="mt-5">
-
-                <div class="my-5">
-                    <form class="ps-form--review">
-
-                        <h4>Submit Your Review</h4>
-
-                        <p>Your email address will not be published. Required fields are marked<sup>*</sup></p>
-
-                        <div class="form-group form-group__rating">
-
-                            <label>Your rating of this product</label>
-
-                            <select class="ps-rating" data-read-only="false">
-
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <textarea class="form-control" rows="6" placeholder="Write your review here">
-
-                        </textarea>
-
-                        </div>
-
-                        <div class="form-group submit">
-
-                            <button class="ps-btn">Submit Review</button>
-
-                        </div>
-
-                    </form>
-                </div>
             </div>
 
             <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12 ">
-                <!-- tomar 4 reseñas aleatoriamente -->
+                <!-- tomar 5 reseñas aleatoriamente -->
                 <?php if ($producter->reviews_product != null) : ?>
                     <?php
-                    $rand = array_rand($allReview, 4);
+                    $rand = array_rand($allReview, 5);
                     foreach ($rand as $key => $value) : ?>
 
                         <div class="media border p-3 mb-3">
                             <?php if (empty($allReview[$value]["user"])) : ?>
-                                <img class="mr-5 mt-1 rounded-circle" style="width: 120px;" src="img/users/default/default.png" alt="<?php echo $producter->name_user; ?>">
+                                <img class="mr-5 mt-1 rounded-circle" style="width: 80px;" src="img/users/default/default.png" alt="<?php echo $producter->name_user; ?>">
+                            <?php else: ?>
+                                <?php
+                                    $select = "displayname_user,picture_user,method_user";
+                                    $url = CurlController::api()."users?linkTo=id_user&equalTo=".$allReview[$value]["user"]."&select=".$select;
+                                    $method = "GET";
+                                    $fields = array();
+                                    $headers = array();
+                                    $infoUser = CurlController::request($url,$method,$fields,$headers)->result[0];
+                                ?>
+                                <?php if($infoUser->method_user == "direct"): ?>
+                                    <?php if($infoUser->picture_user == ""): ?>
+                                        <img class="mr-5 mt-1 rounded-circle" style="width: 80px;" src="img/users/default/default.png" alt="<?php echo $producter->name_user; ?>">
+                                    <?php else: ?>
+                                        <img class="mr-5 mt-1 rounded-circle" style="width: 80px;" src="img/users/<?php echo $allReview[$value]["user"] ?>/<?php echo $infoUser->picture_user ?>" alt="<?php echo $producter->name_user; ?>">
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             <?php endif; ?>
                             <div class="media-body ml-3 ">
 
                                 <?php if (empty($allReview[$value]["user"])) : ?>
                                     <h4 class="mt-0"><?php echo $producter->name_store; ?></h4>
+                                <?php else: ?>
+                                    <h4 class="mt-0"><?php echo $infoUser->displayname_user; ?></h4>
                                 <?php endif; ?>
                                 <select class="ps-rating" data-read-only="true">
 
@@ -281,11 +258,89 @@
 
             <h3>Questions and Answers</h3>
 
-            <div class="form-group">
+            <form method="POST" class="needs-validation" novalidate>
 
-                <input class="form-control" type="text" placeholder="Have a question? Search for answer?">
+                <input type="hidden" name="idProduct" value="<?php echo $producter->id_product; ?>">
 
-            </div>
+                <?php if(isset($_SESSION["user"])): ?>
+                    <input type="hidden" name="idUser" value="<?php echo $_SESSION["user"]->id_user; ?>" >
+                <?php else: ?>
+                    <input type="hidden" name="idUser" value="">
+                <?php endif; ?>
+
+                <input type="hidden" name="idStore" value="<?php echo $producter->id_store; ?>">
+                <input type="hidden" name="nameStore" value="<?php echo $producter->name_store; ?>">
+                <input type="hidden" name="emailStore" value="<?php echo $producter->email_store; ?>">
+
+                <div class="input-group">
+
+                    <input 
+                    class="form-control" 
+                    type="text" 
+                    name="Request" 
+                    placeholder="Have a question? Search for answer?"
+                    required
+                    pattern = '[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,}'
+                    onchange="validatejs(event, 'parrafo')">
+                    <div class="valid-feedback"></div>
+                    <div class="invalid-feedback">Debes escribir tu pregunta</div>
+
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-warning">Enviar</button>
+                    </div>
+
+                </div>
+
+                <?php
+                    $question = new ControllerUser();
+                    $question -> newQuestion();
+                ?>
+
+            </form>
+
+            <?php
+                $select="id_product_message,content_message,answer_message,date_answer_message,date_created_message,method_user,id_user,picture_user,displayname_user";
+                $url= CurlController::api()."relations?rel=messages,products,users&type=message,product,user&linkTo=id_product_message&equalTo=".$producter->id_product."&select=".$select."&orderBy=id_product&orderMode=DESC";
+                $method= "GET";
+                $header= array();
+                $filds= array();
+                $messages = CurlController::request($url, $method, $header, $filds)->result;
+
+                if(!is_array($messages)){
+                   $messages = array();
+                }
+            ?>
+
+            <?php if(count($messages) > 0): ?>
+                <?php foreach($messages as $index => $item): ?>
+                    <?php if($producter->id_product == $item->id_product_message): ?>
+                        <div class="my-3">
+                            <div class="media border p-3">
+                                <div class="media-body">
+                                    <h4><small>Pregunto el dia <?php echo $item->date_created_message; ?> | Por: <?php echo $item->displayname_user ?></small></h4>
+                                    <p><?php echo $item->content_message; ?></p>
+                                </div>
+                                <?php if($item->method_user == "direct"): ?>
+                                    <?php if($item->picture_user == ""): ?>
+                                        <img class="img-fluid rounded-circle ml-auto" src="img/users/default/default.png" style="width: 60px;">
+                                    <?php else: ?>
+                                        <img class="img-fluid rounded-circle ml-auto" src="img/users/<?php echo $item->id_user?>/<?php echo $item->picture_user?>" style="width: 60px;">
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+                            <?php if( $item->date_answer_message != null && $item->answer_message != null ): ?>
+                                <div class="media border p-3">
+                                <img class="img-fluid rounded-circle ml-3 mt-3" src="img/stores/<?php echo $producter->url_store?>/<?php echo $producter->logo_store ?>" style="width: 60px;">
+                                    <div class="media-body text-right">
+                                        <h4><small>Respondio el dia <?php echo $item->date_answer_message; ?> | Por: <?php echo $producter->name_store ?></small></h4>
+                                        <p><?php echo $item->answer_message; ?></p>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
 
         </div>
 
