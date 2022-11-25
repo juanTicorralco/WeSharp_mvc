@@ -188,7 +188,23 @@
                 <!-- tomar 5 reseñas aleatoriamente -->
                 <?php if ($producter->reviews_product != null) : ?>
                     <?php
+                   
+                    if(count($allReview)>5){
                     $rand = array_rand($allReview, 5);
+                    }else{
+                        if(count($allReview)==1){
+                            $rand = array(0);
+                        }else if(count($allReview)==2){
+                            $rand = array(0,1);
+                        }else if(count($allReview)==3){
+                            $rand = array(0,1,2);
+                        }else if(count($allReview)==4){
+                            $rand = array(0,1,2,3);
+                        }else if(count($allReview)==5){
+                            $rand = array(0,1,2,3,4);
+                        }
+                    }
+                    // echo '<pre>'; print_r($rand); echo '</pre>'; 
                     foreach ($rand as $key => $value) : ?>
 
                         <div class="media border p-3 mb-3">
@@ -300,7 +316,7 @@
 
             <?php
                 $select="id_product_message,content_message,answer_message,date_answer_message,date_created_message,method_user,id_user,picture_user,displayname_user";
-                $url= CurlController::api()."relations?rel=messages,products,users&type=message,product,user&linkTo=id_product_message&equalTo=".$producter->id_product."&select=".$select."&orderBy=id_product&orderMode=DESC";
+                $url= CurlController::api()."relations?rel=messages,products,users&type=message,product,user&linkTo=id_product_message&equalTo=".$producter->id_product."&select=".$select."&orderBy=id_product&orderMode=DESC&token=tokenGlobal";
                 $method= "GET";
                 $header= array();
                 $filds= array();

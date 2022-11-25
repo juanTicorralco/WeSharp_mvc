@@ -141,7 +141,6 @@ $bestcategory = CurlController::request($url, $method, $field, $header)->result;
                                     <div class="ps-product__rating">
 
                                         <?php $reviews = TemplateController::calificationStars(json_decode($value3->reviews_product, true));
-                                        //echo '<pre>'; print_r($reviews); echo '</pre>'
                                         ?>
 
                                         <select class="ps-rating" data-read-only="true">

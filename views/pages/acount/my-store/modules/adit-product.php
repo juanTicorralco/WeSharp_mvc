@@ -88,7 +88,12 @@
             <div class="form-group">
                 <label>Description Product<sup class="text-danger">*</sup></label>
                 <div class="form-group__content">
-                    <textarea class="summernote" name="descriptionProduct" required><?php echo html_entity_decode($editProduct->description_product) ?></textarea>
+                    <textarea 
+                        class="summernote editSummerNote" 
+                        name="descriptionProduct"
+                        idProduct="<?php echo $editProduct->id_product ?>" 
+                        required>
+                    </textarea>
                     <div class="valid-feedback"></div>
                     <div class="invalid-feedback">Acompleta el campo</div>
                 </div>

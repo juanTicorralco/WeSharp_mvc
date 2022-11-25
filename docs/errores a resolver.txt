@@ -1,4 +1,3 @@
 errores a revertir 
-.- En el proceso de compra se estan enviando dos veces o mas por cada producto los valores de los productos como tamaño y color
-.- Ya no mete el valor del precio dentro de la orden al hacer un pago, por lo que se debe modificar en el check out y javascript
-.- Guardar en una cookie la pagina que la persona esta navegando y si le pide logearse mandarlo a la pagina en la que estaba
+.-checar la pagina para el celular
+.--crear el login y logout para celular

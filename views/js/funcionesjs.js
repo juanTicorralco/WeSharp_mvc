@@ -1,3 +1,20 @@
+let urlMaster = window.location.href;
+if(localStorage.getItem("token_user")){
+  let myCookie = document.cookie;
+     let listCookie = myCookie.split(";");
+     let count = 0;
+
+     for (let i in listCookie) {
+       var list = listCookie[i].search("UrlPage");
+       // si list es mayor a -1 es por qu se ncontro la cooki
+       if (list > -1) {
+        document.cookie = "UrlPage" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+       } 
+     }
+}
+if(urlMaster != "http://wesharp.com/acount&login" && urlMaster != "http://wesharp.com/acount&enrollment" && !localStorage.getItem("token_user")){
+  setCookie("UrlPage", urlMaster, 1);
+}
 /* funcion para resetear url de los filtros */
 function sortProduct(event) {
   let url = event.target.value.split("+")[0];
@@ -88,6 +105,17 @@ function changeQualyty(quantity, move, stock, index) {
   totalp(index);
 }
 
+if(window.location == "http://wesharp.com/acount&enrollment"){
+  window.onload = function() {
+    var myInput = document.getElementById('passRep');
+    myInput.onpaste = function(e) {
+      e.preventDefault();
+    }
+    myInput.oncopy = function(e) {
+      e.preventDefault();
+    }
+  }
+}
 /* funcion para validar un formiulario */
 function validatejs(e, tipo) {
   if (tipo == "text") {
@@ -133,7 +161,32 @@ function validatejs(e, tipo) {
       e.target.value = "";
       return;
     }
+    if(e.target.value.length < 9){
+      $(e.target).parent().addClass("was-validated");
+      $(e.target)
+        .parent()
+        .children(".invalid-feedback")
+        .html(
+          "La contraseña debe tener almenos 8 caracteres"
+        );
+        e.target.value = "";
+      return;
+    }
   } 
+  if (tipo == "passEnt") {
+    let pattern = /^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/;
+    if (!pattern.test(e.target.value)) {
+      $(e.target).parent().addClass("was-validated");
+      $(e.target)
+        .parent()
+        .children(".invalid-feedback")
+        .html(
+          "No se admiten espacios ni tampoco algunos caracteres especiales"
+        );
+      e.target.value = "";
+      return;
+    }
+  }
   if(tipo=="phone"){
     let  pattern = /^[-\\(\\)\\0-9 ]{1,}$/; 
     if (!pattern.test(e.target.value)) {
@@ -164,6 +217,17 @@ function validatejs(e, tipo) {
           .parent()
           .children(".invalid-feedback")
           .html("Solo se aceptan numeros");
+      return;
+    }
+  }
+  if(tipo == "repeatPass"){
+
+    let validar = e.target;
+    let valor = $("#createPassword").val();
+    if(validar.value !== valor){
+      $(validar).parent().addClass("was-validated");
+      $(validar).parent().children(".invalid-feedback").html("Las contraseñas no coinciden");
+      validar.value = "";
       return;
     }
   }
@@ -446,7 +510,9 @@ function removeBagSC(urlProduct, urlPagina){
               arrayList.splice(index,1);
             }
           });
+
           setCookie("listSC", JSON.stringify(arrayList), 1);
+          urlPagina = window.location.href;
           switAlert("success", "El producto se elimino de el carrito", urlPagina, null, 1500);
         }
       }
@@ -566,7 +632,7 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
 
           // creamos una cookie
           setCookie("listSC", JSON.stringify(arrayList), 1);
-          switAlert("success", "El producto se agrego a la lista de deseos", null, null, 1500);
+          switAlert("success", "El producto se agrego al carrito", null, null, 1500);
 
           // precio
           function priceFun(offer, price) {
@@ -617,19 +683,18 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
 
           function resetFinishEnv(varer, varer2, varer3, varer4){
            if(varer==0){
-            let priceSum;
+              let priceSum;
 
-            priceSum = (varer3 * varer4);
-            priceSum = priceSum.toFixed(2)
-            return priceSum;
-          }else{
-            let priceSum;
+              priceSum = (varer3 * varer4);
+              priceSum = priceSum.toFixed(2)
+              return priceSum;
+            }else{
+              let priceSum;
 
-            priceSum = varer2 + (varer4);
-            priceSum = priceSum.toFixed(2)
-            return priceSum;
-          }
-
+              priceSum = varer2 + (varer4);
+              priceSum = priceSum.toFixed(2)
+              return priceSum;
+            }
           }
 
           function resetenvio(var1, var2) {
@@ -671,7 +736,6 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
 
             let var1 = parseFloat(priceFun(JSON.parse(response.result[0].offer_product), price));
             let var2 = parseInt(JSON.parse(response.result[0].shipping_product));
-            let var3 = Number($(`.${urlProduct}`).html());
             let var5= arrayList.length - 1 ;
 
             let envios = JSON.parse(response.result[0].shipping_product);
@@ -790,6 +854,10 @@ function addBagCard(urlProduct, category, image, name, price, path, urlApi, tag)
       }
     }
   });
+}
+
+function bagCkeck(){
+  window.location = "http://wesharp.com/checkout";
 }
 
 // seleccionar detalles al producto
@@ -945,184 +1013,185 @@ function checkout(){
     }
     // pagar con mercado pago
     if(metodpay=="mercado-pago"){
-      const mp = new MercadoPago("TEST-bc5703df-47d0-418c-ad63-3ac657df2e02");
-      let formMP = `
-                  <style>
-                    #form-checkout {
-                      display: flex;
-                      flex-direction: column;
-                      max-width: 600px;
-                    }
-                
-                    .container {
-                      height: 18px;
-                      display: inline-block;
-                      border: 1px solid rgb(118, 118, 118);
-                      border-radius: 2px;
-                      padding: 1px 2px;
-                    }
-                  </style>
-                  <img src="img/payment-method/mercadopagoLogo.png" class="m-3" style="width:100px"/>
-                  <form id="form-checkout">
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">  
-                        <span class="input-group-text"><i class="far fa-credit-card"></i></span>
+
+      let settings = {
+        "url":"https://free.currconv.com/api/v7/convert?q=USD_MXN&compact=ultra&apiKey=d30bf7aea983c90e05fe",
+        "method":"GET",
+        "timeout": 0
+      };
+
+      $.ajax(settings).error(function(response){
+        if(response.status == 400){
+          switAlert("error", "Ocurrio un error al hacer la cnversion", null,null,null );
+          return;
+        }
+      })
+
+
+      $.ajax(settings).done(function(response){
+        let newTotal = Math.round( Number(response["USD_MXN"])*Number(total));
+        
+        const mp = new MercadoPago("TEST-bc5703df-47d0-418c-ad63-3ac657df2e02");
+        let formMP = `
+                    <style>
+                      #form-checkout {
+                        display: flex;
+                        flex-direction: column;
+                        max-width: 600px;
+                      }
+                  
+                      .container {
+                        display: inline-block;
+                        border: 1px solid rgb(118, 118, 118);
+                        border-radius: 2px;
+                        padding: 1px 2px;
+                      }
+                    </style>
+                    <img src="img/payment-method/mercadopagoLogo.png" class="m-3" style="width:100px"/>
+                    <form id="form-checkout">
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">  
+                          <span class="input-group-text"><i class="far fa-credit-card"></i></span>
+                        </div>
+                        <div id="form-checkout__cardNumber" class="container form-control input-group-text"></div>
                       </div>
-                      <div id="form-checkout__cardNumber" class="container form-control"></div>
-                    </div>
-                    <div class="form-row">
-                      <div class="col">
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">  
-                            <span class="input-group-text">FECHA</span>
+                      <div class="form-row">
+                        <div class="col">
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">  
+                              <span class="input-group-text">FECHA</span>
+                            </div>
+                            <div id="form-checkout__expirationDate" class="container form-control"></div>
                           </div>
-                          <div id="form-checkout__expirationDate" class="container form-control"></div>
+                        </div>
+                        <div class="col">
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">  
+                              <span class="input-group-text">CVV/CVC</span>
+                              </div>
+                              <div id="form-checkout__securityCode" class="container form-control"></div>
+                            </div>
                         </div>
                       </div>
-                      <div class="col">
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">  
-                            <span class="input-group-text">CVV/CVC</span>
-                            </div>
-                            <div id="form-checkout__securityCode" class="container form-control"></div>
-                          </div>
-                      </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">  
-                        <span class="input-group-text"><i class="far fa-credit-card"></i></span>
-                      </div>
-                    <input class="form-control" type="text" id="form-checkout__cardholderName" />
-                    </div>
-
-                    <select class="form-control mb-3" id="form-checkout__issuer"></select>
-                    <select class="form-control mb-3" id="form-checkout__installments"></select>
-                    <select class="form-control mb-3" id="form-checkout__identificationType"></select>
-
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">  
-                        <span class="input-group-text"><i class="far fa-credit-card"></i></span>
-                      </div>
-                      <input class="form-control" type="text" id="form-checkout__identificationNumber" />
-                    </div>
-
-                    <div class="input-group mb-3">
-                    <div class="input-group-prepend">  
-                      <span class="input-group-text"><i class="far fa-credit-card"></i></span>
-                    </div>
-                     <input type="email" id="form-checkout__cardholderEmail" />
-                    </div>
-                
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" id="form-checkout__submit">Pagar</button>
-                    <progress value="0" class="mt-3 w-100 progress-bar">Carregando...</progress>
-                  </form>
-      `;
-
-      switAlert("html", formMP, null, null,null);
-      const cardForm = mp.cardForm({
-        amount: "100.5",
-        iframe: true,
-        form: {
-          id: "form-checkout",
-          cardNumber: {
-            id: "form-checkout__cardNumber",
-            placeholder: "Numero de tarjeta",
-          },
-          expirationDate: {
-            id: "form-checkout__expirationDate",
-            placeholder: "MM/YY",
-          },
-          securityCode: {
-            id: "form-checkout__securityCode",
-            placeholder: "Código de seguridad",
-          },
-          cardholderName: {
-            id: "form-checkout__cardholderName",
-            placeholder: "Titular de la tarjeta",
-          },
-          issuer: {
-            id: "form-checkout__issuer",
-            placeholder: "Banco emisor",
-          },
-          installments: {
-            id: "form-checkout__installments",
-            placeholder: "Cuotas",
-          },        
-          identificationType: {
-            id: "form-checkout__identificationType",
-            placeholder: "Tipo de documento",
-          },
-          identificationNumber: {
-            id: "form-checkout__identificationNumber",
-            placeholder: "Número del documento",
-          },
-          cardholderEmail: {
-            id: "form-checkout__cardholderEmail",
-            placeholder: "E-mail",
-          },
-        },
-        callbacks: {
-          onFormMounted: error => {
-            if (error) return console.warn("Form Mounted handling error: ", error);
-            console.log("Form mounted");
-          },
-          onSubmit: event => {
-            event.preventDefault();
   
-            const {
-              paymentMethodId: payment_method_id,
-              issuerId: issuer_id,
-              cardholderEmail: email,
-              amount,
-              token,
-              installments,
-              identificationNumber,
-              identificationType,
-            } = cardForm.getCardFormData();
-
-            let response = {
-              token,
-              issuer_id,
-              payment_method_id,
-              transaction_amount: Number(amount),
-              installments: Number(installments),
-              type: identificationType,
-              number: identificationNumber,
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">  
+                          <span class="input-group-text"><i class="far fa-credit-card"></i></span>
+                        </div>
+                      <input class="form-control" type="text" id="form-checkout__cardholderName" />
+                      </div>
+  
+                      <select class="form-control mb-3" id="form-checkout__issuer"></select>
+                      <select class="form-control mb-3" id="form-checkout__installments"></select>
+                      <select class="form-control mb-3" id="form-checkout__identificationType"></select>
+  
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">  
+                          <span class="input-group-text"><i class="far fa-credit-card"></i></span>
+                        </div>
+                        <input class="form-control" type="text" id="form-checkout__identificationNumber" />
+                      </div>
+  
+                      <div class="input-group mb-3">
+                      <div class="input-group-prepend">  
+                        <span class="input-group-text"><i class="far fa-credit-card"></i></span>
+                      </div>
+                       <input class="form-control" type="email" id="form-checkout__cardholderEmail" />
+                      </div>
+                  
+                      <button type="submit" class="btn btn-primary btn-lg btn-block" id="form-checkout__submit">Pagar</button>
+                      <progress value="0" class="mt-3 w-100 progress-bar">Carregando...</progress>
+                    </form>
+        `;
+  
+        switAlert("html", formMP, null, null,null);
+        const cardForm = mp.cardForm({
+          amount: newTotal.toString(),
+          iframe: true,
+          form: {
+            id: "form-checkout",
+            cardNumber: {
+              id: "form-checkout__cardNumber",
+              placeholder: "Numero de tarjeta",
+            },
+            expirationDate: {
+              id: "form-checkout__expirationDate",
+              placeholder: "MM/YY",
+            },
+            securityCode: {
+              id: "form-checkout__securityCode",
+              placeholder: "Código de seguridad",
+            },
+            cardholderName: {
+              id: "form-checkout__cardholderName",
+              placeholder: "Titular de la tarjeta",
+            },
+            issuer: {
+              id: "form-checkout__issuer",
+              placeholder: "Banco emisor",
+            },
+            installments: {
+              id: "form-checkout__installments",
+              placeholder: "Cuotas",
+            },        
+            identificationType: {
+              id: "form-checkout__identificationType",
+              placeholder: "Tipo de documento",
+            },
+            identificationNumber: {
+              id: "form-checkout__identificationNumber",
+              placeholder: "Número del documento",
+            },
+            cardholderEmail: {
+              id: "form-checkout__cardholderEmail",
+              placeholder: "E-mail",
+            },
+          },
+          callbacks: {
+            onFormMounted: error => {
+              if (error) return console.warn("Form Mounted handling error: ", error);
+              console.log("Form mounted");
+            },
+            onSubmit: event => {
+              event.preventDefault();
+    
+              const {
+                paymentMethodId: payment_method_id,
+                issuerId: issuer_id,
+                cardholderEmail: email,
+                amount,
+                token,
+                installments,
+                identificationNumber,
+                identificationType,
+              } = cardForm.getCardFormData();
+  
+              let response = {
+                token,
+                issuer_id,
+                payment_method_id,
+                transaction_amount: Number(amount),
+                installments: Number(installments),
+                type: identificationType,
+                number: identificationNumber,
+              }
+              response["total"]= newTotal;  
+              newOrden("mercado-pago","test", null, response);
+            },
+            onFetching: (resource) => {
+              console.log("Fetching resource: ", resource);
+    
+              // Animate progress bar
+              const progressBar = document.querySelector(".progress-bar");
+              progressBar.removeAttribute("value");
+    
+              return () => {
+                progressBar.setAttribute("value", "0");
+              };
             }
-
-
-            var myHeaders = new Headers();
-            myHeaders.append("apikey", "MTLtEHrT6SgbEh1Fq0tYJNf0Ali32xb4");
-
-            var requestOptions = {
-              method: 'GET',
-              redirect: 'follow',
-              headers: myHeaders
-            };
-
-            fetch("https://api.apilayer.com/exchangerates_data/convert?to=MXN&from=USD&amount=" + total , requestOptions)
-              .then(response => response.text())
-              .then(result => {
-                result = JSON.parse(result);
-                response["total"]= Math.ceil(result.result);
-               
-                newOrden("mercado-pago","test", null, response);
-              }).catch(error => console.log('error', error));
           },
-          onFetching: (resource) => {
-            console.log("Fetching resource: ", resource);
-  
-            // Animate progress bar
-            const progressBar = document.querySelector(".progress-bar");
-            progressBar.removeAttribute("value");
-  
-            return () => {
-              progressBar.setAttribute("value", "0");
-            };
-          }
-        },
-      });  
+        });  
+      })
     }
     return false;
   }else{
@@ -1137,6 +1206,29 @@ function formatFecha(fecha){
 
   return año + '-' + Mes + '-' + day;
 }
+
+  // cantidad de productos
+  let envioOrderClass= $(".envioOrder");
+  let envioOrder =[];
+
+  envioOrderClass.each(i=>{
+  envioOrder.push( parseFloat( $(envioOrderClass[i]).html()));
+  });
+
+  let quantityOrderClass= $(".quantityOrder");
+  let quantityOrder =[];
+
+  quantityOrderClass.each(i=>{
+    quantityOrder.push($(quantityOrderClass[i]).html());
+  });
+
+  // precio de cada producto 
+  let priceProductClass= $(".priceProd");
+  let priceProduct =[];
+
+  priceProductClass.each(i=>{
+    priceProduct.push(($(priceProductClass[i]).html().replace(/\s+/gi,'')* quantityOrder[i]) + envioOrder[i]);
+  });
 
 // crear orden
 function newOrden(metodo,status,id,totals){
@@ -1189,30 +1281,6 @@ function newOrden(metodo,status,id,totals){
     detailsOrder.push($(detailOrderClass[i]).html().replace(/\s+/gi,''));
   });
 
-  // cantidad de productos
-  let envioOrderClass= $(".envioOrder");
-  let envioOrder =[];
-
-  envioOrderClass.each(i=>{
-  envioOrder.push( parseFloat( $(envioOrderClass[i]).html()));
-  });
-
-  let quantityOrderClass= $(".quantityOrder");
-  let quantityOrder =[];
-
-  quantityOrderClass.each(i=>{
-    quantityOrder.push($(quantityOrderClass[i]).html());
-  });
-
-  // precio de cada producto 
-  let priceProductClass= $(".priceProd");
-  let priceProduct =[];
-
-  priceProductClass.each(i=>{
-    priceProduct.push(($(priceProductClass[i]).html().replace(/\s+/gi,'')* quantityOrder[i]) + envioOrder[i]);
-  });
-
-  // let totalOrder = $(".totalOrder").attr("total");
 
   // Inforacion del usuario
   let emailOrder = $("#emailOrder").val();
@@ -1270,6 +1338,11 @@ function newOrden(metodo,status,id,totals){
 
   let nameProduct= $(".name_producto");
   let descriptions="";
+  let nameProducter =[];
+
+  nameProduct.each(i=>{
+    nameProducter.push($(nameProduct[i]).html());
+  });
 
   nameProduct.each(i => {
     descriptions += $(nameProduct[i]).html() + " x " +quantityOrder[i] + ", ";
@@ -1319,7 +1392,7 @@ function newOrden(metodo,status,id,totals){
         "id_store_order": idStore[i],
         "id_user_order": idUser,
         "id_product_order": value,
-        "details_order": JSON.stringify(detailsOrder),
+        "details_order": JSON.stringify(detailsOrder[i]),
         "quantity_order": quantityOrder[i],
         "price_order": priceProduct[i],
         "email_order": emailOrder,
@@ -1333,8 +1406,6 @@ function newOrden(metodo,status,id,totals){
         "date_created_order": formatFecha(new Date())  
       },
     };
-
-
 
     $.ajax(settings).done(function (response) {
       idOrder.push(response.result.idlast);
@@ -1374,6 +1445,8 @@ function newOrden(metodo,status,id,totals){
           },
           "data": {
             "id_order_sale": response.result.idlast,
+            "id_store_sale": idStore[i],
+            "name_product_sale": nameProducter[i],
             "unit_price_sale": unitPrice,
             "commission_sale": commissionPrice,
             "payment_method_sale": metodo,
@@ -1382,7 +1455,7 @@ function newOrden(metodo,status,id,totals){
             "date_created_sale": formatFecha(new Date())  
           },
         };
-
+        
         $.ajax(settings).done(function (response) {
           idSale.push(response.result.idlast);
           if(response.status==200){
@@ -1462,7 +1535,9 @@ function newOrden(metodo,status,id,totals){
       }
     });
   });
+  
 }
+
 
 function goTermins(){
   $("html, body").animate({
@@ -1501,7 +1576,9 @@ function urlCreate(e,urlStore){
     //mapa
     let resultList =  document.getElementById('mappp').value;
 
-    if(resultList == undefined){
+    console.log(resultList);
+
+    if(resultList == undefined || resultList == null || resultList == "" ){
         resultList = [19.42847,-99.12766];
     }else{
       resultList = JSON.parse( resultList);
@@ -1940,10 +2017,7 @@ function removesProducts(idProduct){
             },
           };
 
-          console.log(settings);
-
           $.ajax(settings).done(function(response){
-            console.log(response);
             if(response.status == 200){
               switAlert("success", "El producto se añadio a la lista de deseos", null, null, 1500);
               setTimeout(() => {

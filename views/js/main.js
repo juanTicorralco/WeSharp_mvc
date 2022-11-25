@@ -856,7 +856,7 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
-                    "url": path+"ajax/data-orders.php?idStore="+$("#idStore").val(),
+                    "url": path+"ajax/data-orders.php?idStore="+$("#idStore").val()+"&token="+localStorage.getItem("token_user"),
                     "type":"POST"
                 },
                 "columns":[
@@ -885,7 +885,7 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
-                    "url": path+"ajax/data-disputes.php?idStore="+$("#idStore").val(),
+                    "url": path+"ajax/data-disputes.php?idStore="+$("#idStore").val()+"&token="+localStorage.getItem("token_user"),
                     "type":"POST"
                 },
                 "columns":[
@@ -908,7 +908,7 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
-                    "url": path+"ajax/data-messages.php?idStore="+$("#idStore").val(),
+                    "url": path+"ajax/data-messages.php?idStore="+$("#idStore").val()+"&token="+localStorage.getItem("token_user"),
                     "type":"POST"
                 },
                 "columns":[
@@ -940,6 +940,35 @@
                     ['insert',['link','picture','hr']]
                 ]
             });
+        }
+    }
+
+    function editSummer(){
+        let target = $('.editSummerNote');
+        if(target.length > 0){
+            target.each(function(i){
+                let el = $(this);
+                $(el).ready(function(){
+                    let settings = {
+                        "url" : $("#urlApi").val()+"products?linkTo=id_product&equalTo="+$(el).attr("idProduct")+"&select=description_product",
+                        "method" : "GET",
+                        "timeout" : 0,
+                    };
+                    $.ajax(settings).done(function(response){
+                        if(response.status == 200){
+                            $(el).summernote('pasteHTML', response.result[0].description_product);
+                        }
+                    });
+                });
+            });
+        }
+    }
+
+    // shape share
+    function shapeSha(){
+        let target = $(".social-share");
+        if(target.length > 0){
+            target.shapeShare();
         }
     }
 
@@ -978,6 +1007,8 @@
         validarLogin();
         dataTable();
         summer();
+        editSummer();
+        shapeSha();
     });
 
     $(window).on('load', function() {

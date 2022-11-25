@@ -13,7 +13,7 @@ class ControllerDataTableOrders{
             $length = $_POST["length"];
 
             $select = "id_order";
-            $url = CurlController::api()."orders?linkTo=id_store_order&equalTo=".$_GET["idStore"]."&select=".$select;
+            $url = CurlController::api()."orders?linkTo=id_store_order&equalTo=".$_GET["idStore"]."&select=".$select."&token=".$_GET["token"];
             $method ="GET";
             $fields = array();
             $headers = array();
@@ -29,7 +29,7 @@ class ControllerDataTableOrders{
                     $search = str_replace(" ", "_", $_POST["search"]["value"]);
 
                     foreach($linkTo as $key => $value){
-                        $url = CurlController::api()."relations?rel=orders,stores,users,products&type=order,store,user,product&linkTo=".$value.",id_store_order&search=".$search.",".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select;
+                        $url = CurlController::api()."relations?rel=orders,stores,users,products&type=order,store,user,product&linkTo=".$value.",id_store_order&search=".$search.",".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select."&token=".$_GET["token"];
                         $searchOrder = CurlController::request($url,$method,$fields,$headers)->result;
                         if($searchOrder == "no found"){
                             $totalOrder = array();
@@ -40,7 +40,7 @@ class ControllerDataTableOrders{
                         }
                     }
                 }else{
-                    $url = CurlController::api()."relations?rel=orders,stores,users,products&type=order,store,user,product&linkTo=id_store_order&equalTo=".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select;
+                    $url = CurlController::api()."relations?rel=orders,stores,users,products&type=order,store,user,product&linkTo=id_store_order&equalTo=".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select."&token=".$_GET["token"];
                     $totalOrder = CurlController::request($url, $method, $fields, $headers);
                     $recordsFiltered = $totalData;
                     if($totalOrder->status != 200){
@@ -84,11 +84,8 @@ class ControllerDataTableOrders{
 
                     $quantity_order = $value->quantity_order;
 
-                    $details_order = '';
-                    foreach(json_decode($value->details_order, true) as $k => $item){
-                        $details_order .= $item;
-                    }
-                    // $details_order .= '"';
+                    $details_order = preg_replace("/\"/", "'", $value->details_order);;
+                    $details_order = TemplateController::cleanhtml($details_order);
 
                     $price_order = $value->price_order;
 

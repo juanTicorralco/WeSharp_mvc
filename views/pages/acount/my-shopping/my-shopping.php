@@ -15,7 +15,7 @@ if (!isset($_SESSION['user'])) {
     }else{
         // traer las ordenes
         $select="quantity_order,price_order,details_order,process_order,id_order,name_store,url_store,id_category_product,name_product,url_product,image_product,reviews_product,id_store_order,email_store,id_user_order,id_product,reviews_product";
-        $url= CurlController::api()."relations?rel=orders,stores,products&type=order,store,product&linkTo=id_user_order&equalTo=".$_SESSION["user"]->id_user."&select=".$select."&orderBy=id_order&orderMode=DESC";
+        $url= CurlController::api()."relations?rel=orders,stores,products&type=order,store,product&linkTo=id_user_order&equalTo=".$_SESSION["user"]->id_user."&select=".$select."&orderBy=id_order&orderMode=DESC&token=".$_SESSION["user"]->token_user;
         $method= "GET";
         $header= array();
         $filds= array();
@@ -23,7 +23,7 @@ if (!isset($_SESSION['user'])) {
 
          // traer disputas
          $select="id_order_dispute,content_dispute,answer_dispute,date_answer_dispute,date_created_dispute,method_user,logo_store,url_store";
-         $url= CurlController::api()."relations?rel=disputes,orders,users,stores&type=dispute,order,user,store&linkTo=id_user_dispute&equalTo=".$_SESSION["user"]->id_user."&select=".$select."&orderBy=id_dispute&orderMode=DESC";
+         $url= CurlController::api()."relations?rel=disputes,orders,users,stores&type=dispute,order,user,store&linkTo=id_user_dispute&equalTo=".$_SESSION["user"]->id_user."&select=".$select."&orderBy=id_dispute&orderMode=DESC&token=".$_SESSION["user"]->token_user;
          $method= "GET";
          $header= array();
          $filds= array();
@@ -60,7 +60,7 @@ My Account Content
                     <li ><a href="<?php echo $path; ?>acount&wishAcount">My Wishlist</a></li>
                     <li class="active"><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
                     <li><a href="<?php echo $path; ?>acount&my-store">My Store</a></li>
-                    <li><a href="my-account_my-sales.html">My Sales</a></li>
+                    <li><a href="<?php echo $path; ?>acount&my-sales">My Sales</a></li>
                 </ul>
 
                 <!--=====================================
@@ -122,7 +122,7 @@ My Account Content
                                                     <a href="<?php echo $path.$value->url_product?>"><?php echo $value->name_product; ?></a>
                                                     <div><a href="<?php echo $path.$value->url_store ?>"><small> <?php echo $value->name_store; ?></small></a></div>
                                                     
-                                                    <small><?php echo json_decode($value->details_order)[0]; ?></small>
+                                                    <small><?php echo json_decode($value->details_order); ?></small>
                                                 </div>
 
                                             </div>
@@ -208,7 +208,6 @@ My Account Content
                                                         $rating = 0;
                                                         $comment = "";
                                                         $reviews = json_decode($value->reviews_product, true);
-
                                                         foreach($reviews as $index => $item){
                                                             if(isset($item["user"])){
                                                                 if($item["user"] == $value->id_user_order){
@@ -217,6 +216,8 @@ My Account Content
                                                                 }
                                                             }
                                                         }
+                                                    }else{
+                                                        $rating = 0;    
                                                     }
                                                 ?>
 
@@ -244,7 +245,9 @@ My Account Content
 
                                                 </div>
 
+                                                <?php  if($value->reviews_product != null): ?>
                                                 <p>Comentario: <?php echo $comment ?></p>
+                                                <?php endif; ?>
 
                                                 <a 
                                                 class="btn btn-warning btn-lg CommentStars"

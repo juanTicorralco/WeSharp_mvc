@@ -18,31 +18,34 @@ if (!isset($_SESSION['user'])) {
         $method= "GET";
         $header= array();
         $filds= array();
-        $idStore = CurlController::request($url1, $method, $header, $filds)->result[0]->id_store;
+        $idStore = CurlController::request($url1, $method, $header, $filds);
+        if($idStore->status == 200){
+            $idStore = $idStore->result[0]->id_store;
 
-        if( isset($_GET["date1"]) && isset($_GET["date2"])){
-            if($_GET["date1"] != null && $_GET["date2"] != null && substr_count($_GET["date1"], "/") === 2 && substr_count($_GET["date2"], "/") === 2 ){
-                $between1 = date("Y-m-d", strtotime($_GET["date1"]));
-                $between2 = date("Y-m-d", strtotime($_GET["date2"]));
-                $select="unit_price_sale,commission_sale,date_created_sale,quantity_order,name_product_sale";
-                $url= CurlController::api()."relations?rel=sales,orders&type=sale,order&linkTo=date_created_sale&between1=".$between1."&between2=".$between2."&filterTo=id_store_sale&inTo=".$idStore."&select=".$select."&orderBy=date_created_sale&orderMode=ASC";
-                $sales= CurlController::request($url, $method, $header, $filds)->result;
+            if( isset($_GET["date1"]) && isset($_GET["date2"])){
+                if($_GET["date1"] != null && $_GET["date2"] != null && substr_count($_GET["date1"], "/") === 2 && substr_count($_GET["date2"], "/") === 2 ){
+                    $between1 = date("Y-m-d", strtotime($_GET["date1"]));
+                    $between2 = date("Y-m-d", strtotime($_GET["date2"]));
+                    $select="unit_price_sale,commission_sale,date_created_sale,quantity_order,name_product_sale";
+                    $url= CurlController::api()."relations?rel=sales,orders&type=sale,order&linkTo=date_created_sale&between1=".$between1."&between2=".$between2."&filterTo=id_store_sale&inTo=".$idStore."&select=".$select."&orderBy=date_created_sale&orderMode=ASC&token=".$_SESSION["user"]->token_user;
+                    $sales= CurlController::request($url, $method, $header, $filds)->result;
+                }else{
+                    echo '<script>
+                            formatearAlertas();
+                            switAlert("error", "Se produjo un error", null,null);
+                        </script>';
+                    return;
+                }
             }else{
-                echo '<script>
-                        formatearAlertas();
-                        switAlert("error", "Se produjo un error", null,null);
-                    </script>';
-                return;
+            // traer las ventas
+            $select="unit_price_sale,commission_sale,date_created_sale,quantity_order,name_product_sale";
+            $url= CurlController::api()."relations?rel=sales,orders&type=sale,order&linkTo=id_store_sale&equalTo=".$idStore."&select=".$select."&orderBy=date_created_sale&orderMode=ASC&token=".$_SESSION["user"]->token_user;
+            $sales= CurlController::request($url, $method, $header, $filds)->result;
             }
-        }else{
-        // traer las ventas
-        $select="unit_price_sale,commission_sale,date_created_sale,quantity_order,name_product_sale";
-        $url= CurlController::api()."relations?rel=sales,orders&type=sale,order&linkTo=id_store_sale&equalTo=".$idStore."&select=".$select."&orderBy=date_created_sale&orderMode=ASC";
-        $sales= CurlController::request($url, $method, $header, $filds)->result;
-        }
-
-        if(!is_array($sales)){
-            $sales = array();
+        
+            if(!is_array($sales)){
+                $sales = array();
+            }
         }
     }
 }

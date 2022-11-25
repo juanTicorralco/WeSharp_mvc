@@ -1,3 +1,11 @@
+<?php
+if (isset($_SESSION['user'])) {
+    echo '<script>
+            window.location="' . $path . 'acount&wishAcount";
+    </script>';
+    return;
+}
+?>
 <!--=====================================
 Login - Register Content
 ======================================-->
@@ -18,7 +26,7 @@ Login - Register Content
             $fields = array();
 
             $resultVerify = CurlController::request($url, $metod, $header, $fields);
-            //echo '<pre>'; print_r($resultVerify->status); echo '</pre>';
+        
             if (isset($resultVerify)) {
                 if ($resultVerify->status == 200) {
                     $url = CurlController::api() . "users?id=" . $resultVerify->result[0]->id_user . "&nameId=id_user&token=no&except=verificated_user";
@@ -87,7 +95,7 @@ Login - Register Content
 
                         <div class="form-group form-forgot">
 
-                            <input class="form-control" type="password" name="logPassword" placeholder="Password..." required pattern="[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}" onchange="validatejs(event, 'pass')">
+                            <input class="form-control" type="password" name="logPassword" placeholder="Password..." required pattern="[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}" onchange="validatejs(event, 'passEnt')">
                             <a href="#resetUserPassword" data-toggle="modal">Recuperar</a>
                             <div class="valid-feedback"></div>
                             <div class="invalid-feedback">El password es requerido</div>

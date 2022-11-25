@@ -77,7 +77,7 @@
                     <input type="hidden" name="clientMessage">
                     <input type="hidden" name="emailMessage">
                     <input type="hidden" name="urlProduct">
-                    <input type="hidden" id="nameStore"  name="nameStore" value="<?php echo $storeResult[0]->id_store; ?>">
+                    <input type="hidden" id="nameStore"  name="nameStore" value="<?php echo $storeResult[0]->name_store; ?>">
                    
                     <div class="form-group">
                         <label>Type your Answer</label>

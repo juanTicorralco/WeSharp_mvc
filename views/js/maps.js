@@ -59,6 +59,7 @@ if(window.location == "http://wesharp.com/checkout"){
             );
     });
 }
+
 if( window.location == "http://wesharp.com/acount&my-store" ||
     window.location == "http://wesharp.com/acount&my-store#vendor-store" ||
     window.location == "http://wesharp.com/acount&my-store?product=new#vendor-store" ||
@@ -70,15 +71,9 @@ if( window.location == "http://wesharp.com/acount&my-store" ||
     window.location == "http://wesharp.com/acount&my-store&messages"
     ){
 
-    let resultList =  document.getElementById('mappp');
-    if(resultList != null){
-
-        resultList = JSON.parse(resultList.dataset.value);
-
-        if(resultList == undefined){
-            resultList = [19.42847,-99.12766];
-        }
-
+    let resultList =  document.getElementById('mappp').dataset.value;
+    if(resultList !== null || resultList !== undefined || resultList !== "" || resultList !== "undefined"){
+        resultList = JSON.parse(resultList);
         const title = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
         let myMap=0;
 

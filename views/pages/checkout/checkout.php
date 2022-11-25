@@ -483,12 +483,13 @@ Checkout
         $payment->payer = $payer;
         
         $payment->save();
-        
-        if($payment->status == "approved"){
+
+        if($payment->status == "approved" && isset($payment->id) && $payment->id != ""){
             endCheckout($payment->id);
             echo '
             <script>
                 document.cookie = "mp=; max-age=0";
+                window.location="' . TemplateController::path() . 'acount&my-shopping";
             </script> 
             ';
         }

@@ -16,11 +16,11 @@
 
             <ul class="navigation__extra">
 
-                <li><a href="#">Sell on MarketPlace</a></li>
-                <li><a href="#">Store List</a></li>
+                <li><a href="/become-vendor">Sell on MarketPlace</a></li>
+                <li><a href="/store-list">Store List</a></li>
                 <li><i class="icon-telephone"></i> Hotline:<strong> 1-800-234-5678</strong></li>
 
-                <li>
+                <!-- <li>
 
                     <div class="ps-dropdown language"><a href="#"><img src="img/template/en.png" alt="">English</a>
 
@@ -32,7 +32,7 @@
 
                     </div>
 
-                </li>
+                </li> -->
 
             </ul>
 
@@ -50,7 +50,7 @@
 
             <div class="menu--product-categories">
 
-                <div class="ps-shop__filter-mb mt-4" id="filter-sidebar">
+                <div class="ps-shop__filter-mb mt-4 mr-4" id="filter-sidebar">
                     <i class="icon-menu "></i>
                 </div>
 
@@ -119,9 +119,20 @@
                         $totalPriceSC= 0;
                         $ValorPrecioEnvio=0;
                         $preceProduct=0;
-                        if (isset($_COOKIE["listSC"])) {
+                        // print_r(}($_COOKIE["listSC"]) . " -------");
+                        if (isset($_COOKIE["listSC"]) && $shopinCard != NULL) {
                             $shopinCard = json_decode($_COOKIE["listSC"], true);
-                            $totalSC = count($shopinCard);
+                            if(is_array($shopinCard)){
+                                foreach ($shopinCard as $key => $value) {
+                                    if(is_integer($value["quantity"]) && $value["quantity"] > 0 && is_string($value["product"]) && is_string($value["details"])){
+                                        $totalSC = count($shopinCard);
+                                    }else{
+                                        $totalSC = 0;
+                                    }
+                                }
+                            }else{
+                                $totalSC = 0;
+                            }
                         } else {
                             $totalSC = 0;
                         }
@@ -137,9 +148,9 @@
 
                                 <div class="ps-cart__items" id="bagTok">
                                     <?php if ($totalSC > 0) : ?>
-
                                     <?php foreach ($shopinCard as $key => $value) :
-
+                                    
+                                    if(is_integer($value["quantity"]) && $value["quantity"] > 0 && is_string($value["product"]) && is_string($value["details"])):
                                         // traer productos al carrito
                                         $select = "url_product,url_category,name_product,image_product,price_product,offer_product,shipping_product";
                                         $url = CurlController::api() . "relations?rel=products,categories&type=product,category&linkTo=url_product&equalTo=" . $value["product"] . "&select=" . $select;
@@ -216,8 +227,9 @@
                                             </div>
 
                                         </div>
-                                    <?php endforeach; ?>
-                                    
+                                        <?php endif; ?>
+                                        <?php endforeach; ?>
+                                   
                                     <?php endif; ?>
                                 </div>
                             
@@ -259,7 +271,7 @@
                         </div>
                     </div>
                 <?php else : ?>
-                    <!--=====================================
+                <!--=====================================
                 Login and Register fuera
                 ======================================-->
 
@@ -287,10 +299,10 @@
 
     <div class="ps-search--mobile">
 
-        <form class="ps-form--search-mobile" action="index.html" method="get">
+        <form class="ps-form--quick-search">
             <div class="form-group--nest">
-                <input class="form-control" type="text" placeholder="Search something...">
-                <button><i class="icon-magnifier"></i></button>
+                <input class="form-control inputSearch" type="text" placeholder="Buscar por...">
+                <button type="button" class="btnSearch" path="<?php echo $path; ?>">Buscar</button>
             </div>
         </form>
 

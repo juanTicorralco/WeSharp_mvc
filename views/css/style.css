@@ -45,7 +45,7 @@
         6. CUSTOM
 */
 .modal{
-    z-index: 10000;
+    z-index: 9999;
 }
 .ps-list--social-color li a.youtube{
     background-color: #dd2400;
