@@ -33,7 +33,7 @@ if (!empty($urlParams[0])) {
 
         if ($urlSubcategories->status == 404) {
             /* filter porducts whidt URL paremers */
-            $url = CurlController::api() . "products?linkTo=url_product&equalTo=" . $urlParams[0] . "&select=url_product";
+            $url = CurlController::api() . "relations?rel=products,categories&type=product,category&linkTo=url_product&equalTo=" . $urlParams[0] . "&select=url_product,name_product,url_category,image_product,tags_product,summary_product";
             $method = "GET";
             $field = array();
             $header = array();
@@ -41,34 +41,48 @@ if (!empty($urlParams[0])) {
             $urlProduct = CurlController::request($url, $method, $field, $header);
 
             if ($urlProduct->status == 404) {
+                
+                 /* filter porducts whidt URL paremers */
+                $url = CurlController::api() . "stores?linkTo=url_store&equalTo=" . $urlParams[0] . "&select=id_store";
+                $method = "GET";
+                $field = array();
+                $header = array();
 
-                /* valdate if there is pagination */
-                if (isset($urlParams[1])) {
-                    if (is_numeric($urlParams[1])) {
-                        /* aqui se cambia la paginacion */
-                        $starAt = ($urlParams[1] * 24) - 24;
+                $urlStores = CurlController::request($url, $method, $field, $header);
+
+                if ($urlStores->status == 404) {                
+
+                    /* valdate if there is pagination */
+                    if (isset($urlParams[1])) {
+                        if (is_numeric($urlParams[1])) {
+                            /* aqui se cambia la paginacion */
+                            $starAt = ($urlParams[1] * 24) - 24;
+                        } else {
+                            $starAt = null;
+                        }
                     } else {
-                        $starAt = null;
+                        $starAt = 0;
                     }
-                } else {
-                    $starAt = 0;
-                }
 
-                /* validar que haya parametros de orden */
-                if (isset($urlParams[2])) {
-                    if (is_string($urlParams[2])) {
-                        if ($urlParams[2] == "new") {
-                            $orderBy = "id_product";
-                            $orderMode = "DESC";
-                        } else if ($urlParams[2] == "latets") {
-                            $orderBy = "id_product";
-                            $orderMode = "ASC";
-                        } else if ($urlParams[2] == "low") {
-                            $orderBy = "price_product";
-                            $orderMode = "ASC";
-                        } else if ($urlParams[2] == "higt") {
-                            $orderBy = "price_product";
-                            $orderMode = "DESC";
+                    /* validar que haya parametros de orden */
+                    if (isset($urlParams[2])) {
+                        if (is_string($urlParams[2])) {
+                            if ($urlParams[2] == "new") {
+                                $orderBy = "id_product";
+                                $orderMode = "DESC";
+                            } else if ($urlParams[2] == "latets") {
+                                $orderBy = "id_product";
+                                $orderMode = "ASC";
+                            } else if ($urlParams[2] == "low") {
+                                $orderBy = "price_product";
+                                $orderMode = "ASC";
+                            } else if ($urlParams[2] == "higt") {
+                                $orderBy = "price_product";
+                                $orderMode = "DESC";
+                            } else {
+                                $orderBy = "id_product";
+                                $orderMode = "DESC";
+                            }
                         } else {
                             $orderBy = "id_product";
                             $orderMode = "DESC";
@@ -77,26 +91,26 @@ if (!empty($urlParams[0])) {
                         $orderBy = "id_product";
                         $orderMode = "DESC";
                     }
-                } else {
-                    $orderBy = "id_product";
-                    $orderMode = "DESC";
-                }
 
-                $linkTo = ["name_product", "title_list_product", "tags_product", "summary_product"];
-                $selecte = "url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product,views_category,name_category,id_category,views_subcategory,name_subcategory,id_subcategory,summary_product";
+                    $linkTo = ["name_product", "title_list_product", "tags_product", "summary_product", "name_store"];
+                    $selecte = "url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product,views_category,name_category,id_category,views_subcategory,name_subcategory,id_subcategory,summary_product";
 
-                foreach ($linkTo as $key => $value) {
+                    foreach ($linkTo as $key => $value) {
 
-                    /* filtrar por busqueda con el parametro url de busqueda*/
-                    $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=" . $value . ",approval_product,state_product&search=" . $urlParams[0] . ",approved,show&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=" . $selecte;
-                    $method = "GET";
-                    $field = array();
-                    $header = array();
+                        /* filtrar por busqueda con el parametro url de busqueda*/
+                        $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=" . $value . ",approval_product,state_product&search=" . $urlParams[0] . ",approved,show&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=" . $selecte;
+                        $method = "GET";
+                        $field = array();
+                        $header = array();
 
-                    $urlSearch = CurlController::request($url, $method, $field, $header);
-                    if ($urlSearch->status == 200) {
-                        $totalSearch = $urlSearch->total;
-                        break;
+                        $urlSearch = CurlController::request($url, $method, $field, $header);
+                        if ($urlSearch->status == 200) {
+                            $select = "id_product";
+                            $url = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=" . $value . ",approval_product,state_product&search=" . $urlParams[0] . ",approved,show&&select=" . $select;
+                            
+                            $totalSearch =  CurlController::request($url, $method, $field, $header)->total;
+                            break;
+                        }
                     }
                 }
             }
@@ -135,7 +149,70 @@ if($totalPro->status == 200){
     <meta name="keywords" content="">
     <meta name="description" content="">
 
-    <title>MarketPlace | Home</title>
+    <?php
+
+        if(!empty($urlParams[0])){
+            if(isset($urlProduct->status) && $urlProduct->status == 200){
+                $name = $urlProduct->result[0]->name_product;
+                $title = "MarketPlace | ". $urlProduct->result[0]->name_product;
+                $description = "";
+                foreach(json_decode($urlProduct->result[0]->summary_product, true) as $key => $value){
+                    $description .= $value.", ";
+                }
+                $description = substr($description, 0, -2);
+                $keywords = "";
+                foreach(json_decode($urlProduct->result[0]->tags_product, true) as $key => $value){
+                    $keywords .= $value.", ";
+                }
+                $keywords = substr($keywords, 0, -2);
+                $imagen =  $path."/views/img/products/".$urlProduct->result[0]->url_category."/".$urlProduct->result[0]->image_product;
+                $url = $path.$urlProduct->result[0]->url_product;
+            }else{
+                $title = "MarketPlace";
+                $name = "MarketPlace | Home";
+                $description = "Pagina de mercadeo de compra y venta de articulos y la creacion de tiendas";
+                $keywords = "market, products, sales, store, shell";
+                $imagen =  $path."/views/img/bg/about-us.jpg";
+                $url = $path;
+            }
+        }else{
+            $title = "MarketPlace";
+            $name = "MarketPlace | Home";
+            $description = "Pagina de mercadeo de compra y venta de articulos y la creacion de tiendas";
+            $keywords = "market, products, sales, store, shell";
+            $imagen =  $path."/views/img/bg/about-us.jpg";
+            $url = $path;
+        }
+    ?>
+    
+    <title><?php echo $title; ?></title>
+    <meta name="description" content="<?php echo $description; ?>">
+    <meta name="keywords" content="<?php echo $keywords; ?>">
+
+    <!-- metadatos facebook -->
+    <meta property="og:site_name" content="<?php echo $title; ?>">
+    <meta property="og:title" content="<?php echo $name; ?>">
+    <meta property="og:description" content="<?php echo $description; ?>">
+    <meta property="og:type" content="Type">
+    <meta property="og:image" content="<?php echo $imagen; ?>">
+    <meta property="og:url" content="<?php echo $url; ?>">
+
+    <!-- metadatod twiter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@wesharp">
+    <meta name="twitter:creator" content="@wesharp">
+    <meta name="twitter:title" content="<?php echo $name; ?>">
+    <meta name="twitter:description" content="<?php echo $description; ?>">
+    <meta name="twitter:image" content="<?php echo $imagen; ?>">
+    <meta name="twitter:image:width" content="800">
+    <meta name="twitter:image:height" content="418">
+    <meta name="twitter:image:alt" content="<?php echo $description; ?>">
+
+    <!-- metadatos google -->
+    <meta itemprop="name" content="<?php echo $description; ?>">
+    <meta itemprop="url" content="<?php echo $url; ?>">
+    <meta itemprop="description" content="<?php echo $description; ?>">
+    <meta itemprop="image" content="<?php echo $imagen; ?>">
 
     <base href="views/">
 
@@ -291,7 +368,7 @@ if($totalPro->status == 200){
 
 
     <!-- leaflet js -->
-     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
@@ -313,6 +390,9 @@ if($totalPro->status == 200){
 
     <!-- Owl Carousel -->
     <script src="js/plugins/owl.carousel.min.js"></script>
+
+    <!-- shape Share -->
+    <script src="js/plugins/shape.share.js"></script>
 </head>
 
 <body>
@@ -342,12 +422,14 @@ if($totalPro->status == 200){
     /* choose which page to enter */
    
     if (!empty($urlParams[0])) {
-        if ($urlParams[0] == "acount" || $urlParams[0] =="shopingBag" || $urlParams[0] == "checkout"){
+        if ($urlParams[0] == "acount" || $urlParams[0] =="shopingBag" || $urlParams[0] == "checkout" || $urlParams[0] == "become-vendor" || $urlParams[0] == "store-list"){
             include "pages/" . $urlParams[0] . "/" . $urlParams[0] . ".php";
         } else if ($urlCategories->status == 200 || $urlSubcategories->status == 200) {
             include "pages/products/products.php";
         } else if ($urlProduct->status == 200) {
             include "pages/product/product.php";
+        }else if($urlStores->status == 200){
+            include "pages/store/store.php";
         } else if ($urlSearch->status == 200) {
             include "pages/search/search.php";
         } else {

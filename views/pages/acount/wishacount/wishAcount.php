@@ -89,7 +89,7 @@ My Account Content
                             <?php
                            foreach ($products as $key => $value):?>
 
-                                <tr class="<?php echo $value->url_product; ?>">
+                                <tr >
 
                                     <td>
                                         <div class="ps-product--cart">
@@ -103,11 +103,12 @@ My Account Content
                                     </td>
 
                                     <td>  
-                                    <?php if ($value->offer_product != null) : ?>
-                                        <p class="ps-product__price sale text-success">$<?php echo TemplateController::offerPrice($value->price_product, json_decode($value->offer_product, true)[1], json_decode($value->offer_product, true)[0]); ?> <del class="text-danger">$<?php echo $value->price_product; ?></del></p>
-                                    <?php else : ?>
-                                        <p class="ps-product__price text-dark">$<?php echo $value->price_product; ?></p>
-                                    <?php endif; ?> </td>
+                                        <?php if ($value->offer_product != null) : ?>
+                                            <p class="ps-product__price sale text-success">$<?php echo TemplateController::offerPrice($value->price_product, json_decode($value->offer_product, true)[1], json_decode($value->offer_product, true)[0]); ?> <del class="text-danger">$<?php echo $value->price_product; ?></del></p>
+                                        <?php else : ?>
+                                            <p class="ps-product__price text-dark">$<?php echo $value->price_product; ?></p>
+                                        <?php endif; ?> 
+                                    </td>
 
                                     <td><span class="ps-tag ps-tag--in-stock">
                                         <?php                                     
@@ -122,12 +123,16 @@ My Account Content
                                             <div class="ps-product__badge out-stock text-danger">Agotado</div>
                                         <?php endif; ?></span></td>
 
-                                    <td><a class="ps-btn" 
-                                    onclick="addBagCard('<?php echo $value->url_product; ?>', '<?php echo $value->url_category; ?>', '<?php echo $value->image_product; ?>', '<?php echo $value->name_product; ?>', '<?php echo $value->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
-                                    detailSC 
-                                    quantitySC
-                                    >Add to cart</a></td>
-                                    <td><a  class="text-danger btn basura-wislist" onclick="removeWishlist('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>', '<?php echo $path; ?>' )"><i class="fas fa-trash-alt"></i></a></td>
+                                    <td>
+                                        <a class="ps-btn" 
+                                        onclick="addBagCard('<?php echo $value->url_product; ?>', '<?php echo $value->url_category; ?>', '<?php echo $value->image_product; ?>', '<?php echo $value->name_product; ?>', '<?php echo $value->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
+                                        detailSC 
+                                        quantitySC
+                                        >Add to cart</a>
+                                    </td>
+                                    <td>
+                                        <a  class="text-danger btn basura-wislist" onclick="removeWishlist('<?php echo $value->url_product; ?>', '<?php echo CurlController::api(); ?>', '<?php echo $path; ?>' )"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
                                 </tr>
 
                             <?php endforeach; ?>

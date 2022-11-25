@@ -169,9 +169,7 @@
 
                                 <div class="ps-product__rating">
 
-                                    <?php $reviews = TemplateController::calificationStars(json_decode($value->reviews_product, true));
-                                    //echo '<pre>'; print_r($reviews); echo '</pre>'
-                                    ?>
+                                    <?php $reviews = TemplateController::calificationStars(json_decode($value->reviews_product, true));?>
 
                                     <select class="ps-rating" data-read-only="true">
 

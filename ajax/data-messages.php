@@ -13,7 +13,7 @@ class ControllerDataTableMessage{
             $length = $_POST["length"];
 
             $select = "id_message";
-            $url = CurlController::api()."messages?linkTo=id_store_message&equalTo=".$_GET["idStore"]."&select=".$select;
+            $url = CurlController::api()."messages?linkTo=id_store_message&equalTo=".$_GET["idStore"]."&select=".$select."&token=".$_GET["token"];
             $method ="GET";
             $fields = array();
             $headers = array();
@@ -27,7 +27,7 @@ class ControllerDataTableMessage{
                     $search = str_replace(" ", "_", $_POST["search"]["value"]);
 
                     foreach($linkTo as $key => $value){
-                        $url = CurlController::api()."relations?rel=messages,users,products&type=message,user,product&linkTo=".$value.",id_store_message&search=".$search.",".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select;
+                        $url = CurlController::api()."relations?rel=messages,users,products&type=message,user,product&linkTo=".$value.",id_store_message&search=".$search.",".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select."&token=".$_GET["token"];
                         $searchMessage = CurlController::request($url,$method,$fields,$headers)->result;
                         if($searchMessage == "no found"){
                             $totalMessage = array();
@@ -38,7 +38,7 @@ class ControllerDataTableMessage{
                         }
                     }
                 }else{
-                    $url = CurlController::api()."relations?rel=messages,users,products&type=message,user,product&linkTo=id_store_message&equalTo=".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select;
+                    $url = CurlController::api()."relations?rel=messages,users,products&type=message,user,product&linkTo=id_store_message&equalTo=".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select."&token=".$_GET["token"];
                     $totalMessage = CurlController::request($url, $method, $fields, $headers);
                     $recordsFiltered = $totalData;
                     if($totalMessage->status != 200){

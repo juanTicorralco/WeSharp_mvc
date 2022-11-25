@@ -60,6 +60,7 @@ function switAlert(type, text, url, icon, time) {
             window.open(url, "_top");
           }
         });
+        window.location = url;
       }
       break;
 

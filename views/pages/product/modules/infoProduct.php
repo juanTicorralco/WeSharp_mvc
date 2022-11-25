@@ -44,6 +44,15 @@
                     ?> reseñas)
             </span>
 
+            <span><?php
+                    if ($producter->sales_product != null) {
+                        echo $producter->sales_product;
+                    } else {
+                        echo "0";
+                    }
+                    ?> Vendidos
+            </span>
+
         </div>
 
     </div>
@@ -218,7 +227,7 @@
         >Add to cart</a>
 
         <a class="ps-btn" 
-        onclick="addBagCard('<?php echo $producter->url_product; ?>', '<?php echo $producter->url_category; ?>', '<?php echo $producter->image_product; ?>', '<?php echo $producter->name_product; ?>', '<?php echo $producter->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this)"
+        onclick="addBagCard('<?php echo $producter->url_product; ?>', '<?php echo $producter->url_category; ?>', '<?php echo $producter->image_product; ?>', '<?php echo $producter->name_product; ?>', '<?php echo $producter->price_product; ?>', '<?php echo $path ?>', '<?php echo CurlController::api(); ?>', this), bagCkeck()"
         detailSC 
         quantitySC
         >Buy Now</a>
@@ -277,21 +286,17 @@
 
     <div class="ps-product__sharing">
 
-        <a class="facebook" href="#">
+        <a class="facebook social-share" data-share="facebook" href="#">
             <i class="fab fa-facebook"></i>
         </a>
 
-        <a class="twitter" href="#">
+        <a class="twitter social-share" data-share="twitter" href="#">
             <i class="fab fa-twitter"></i>
         </a>
 
 
-        <a class="linkedin" href="#">
+        <a class="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $path.$producter->url_product ?>" target="_blank">
             <i class="fab fa-linkedin"></i>
-        </a>
-
-        <a class="instagram" href="#">
-            <i class="fab fa-instagram"></i>
         </a>
 
     </div>

@@ -7,55 +7,67 @@ class ControllerUser
         if (isset($_POST["createEmail"])) {
             /* validar los campos */
             if (
-                preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ ]{1,}$/', $_POST["createNombre"]) &&
-                preg_match('/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/', $_POST["createEmail"]) &&
-                preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ ]{1,}$/', $_POST["createApellido"]) &&
-                preg_match('/^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/', $_POST["createPassword"])
+               isset($_POST["createNombre"]) && preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ ]{1,}$/', $_POST["createNombre"]) &&
+               isset($_POST["createEmail"]) && preg_match('/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/', $_POST["createEmail"]) &&
+               isset($_POST["createApellido"]) && preg_match('/^[A-Za-zñÑáéíóúÁÉÍÓÚ ]{1,}$/', $_POST["createApellido"]) &&
+               isset($_POST["createPassword"]) && preg_match('/^[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}$/', $_POST["createPassword"])
             ) {
 
                 $displayName = TemplateController::capitalize(strtolower($_POST["createNombre"])) . " " . TemplateController::capitalize(strtolower($_POST["createApellido"]));
                 $user = TemplateController::capitalize(strtolower(explode("@", $_POST["createEmail"])[0]));
                 $email = strtolower($_POST["createEmail"]);
+               
+                if($_POST["createPassword"] == $_POST["repeatPassword"] && strlen($_POST["createPassword"]) >= 8){
+                    $url = CurlController::api() . "users?register=true";
+                    $method = "POST";
+                    $fields = array(
+                        "rol_user" => "default",
+                        "displayname_user" => $displayName,
+                        "username_user" => $user,
+                        "email_user" => $email,
+                        "password_user" => $_POST["createPassword"],
+                        "method_user" => "direct",
+                        "date_created_user" => date("Y-m-d")
+                    );
+                    $header = array(
+                        "Content-Type" => "application/x-www-form-urlencoded"
+                    );
 
-                $url = CurlController::api() . "users?register=true";
-                $method = "POST";
-                $fields = array(
-                    "rol_user" => "default",
-                    "displayname_user" => $displayName,
-                    "username_user" => $user,
-                    "email_user" => $email,
-                    "password_user" => $_POST["createPassword"],
-                    "method_user" => "direct",
-                    "date_created_user" => date("Y-m-d")
-                );
-                $header = array(
-                    "Content-Type" => "application/x-www-form-urlencoded"
-                );
 
+                    $response = CurlController::request($url, $method, $fields, $header);
 
-                $response = CurlController::request($url, $method, $fields, $header);
+                    if ($response->status == 200) {
 
-                if ($response->status == 200) {
+                        // registrar email
+                        $name = $displayName;
+                        $subject = "Registro WeSharp";
+                        $message = "Confirma tu email para crear una cuenta en WeSharp";
+                        $url = TemplateController::path() . "acount&login&" . base64_encode($email);
+                        $post = "Confirmar Email";
+                        $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
 
-                    // registrar email
-                    $name = $displayName;
-                    $subject = "Registro WeSharp";
-                    $message = "Confirma tu email para crear una cuenta en WeSharp";
-                    $url = TemplateController::path() . "acount&login&" . base64_encode($email);
-                    $post = "Confirmar Email";
-                    $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
-
-                    if ($sendEmail == "ok") {
-                        echo '<div class="alert alert-success">Tu usuario se registro correctamente, confirma tu cuenta en email (aveces esta en spam)</div>
-                        <script>
-                        formatearAlertas()
-                    </script>';
-                    } else {
-                        echo '<div class="alert alert-danger">' . $sendEmail . '</div>
-                        <script>
-                        formatearAlertas()
-                    </script>';
+                        if ($sendEmail == "ok") {
+                            echo '<div class="alert alert-success">Tu usuario se registro correctamente, confirma tu cuenta en tu email (aveces esta en spam)</div>
+                            <script>
+                            formatearAlertas()
+                        </script>';
+                        } else {
+                            echo '<div class="alert alert-danger">Error al enviar a tu correo</div>
+                            <script>
+                            formatearAlertas()
+                        </script>';
+                        }
+                    }else{
+                        echo '<div class="alert alert-danger alert-dismissible">Error: al mandar los datos</div>
+                                <script>
+                                formatearAlertas()
+                            </script>';
                     }
+                }else{
+                    echo '<div class="alert alert-danger alert-dismissible">Error: las contraseñas no coinciden</div>
+                            <script>
+                            formatearAlertas()
+                        </script>';
                 }
             } else {
                 echo '<div class="alert alert-danger alert-dismissible">Error en la sintaxis de los campos</div>
@@ -95,11 +107,17 @@ class ControllerUser
                 if ($response->status == 200) {
                     if ($response->result[0]->verificated_user > 0) {
                         $_SESSION['user'] = $response->result[0];
+                        $urlsVist = "";
+                        if(isset($_COOKIE["UrlPage"])){
+                            $urlsVist = $_COOKIE["UrlPage"];
+                        }else{
+                            $urlsVist =  TemplateController::path() . 'acount&wishAcount';
+                        }
                         echo '
                         <script> 
                         formatearAlertas();
                         localStorage.setItem("token_user", "' . $_SESSION["user"]->token_user . '");
-                        window.location="' . TemplateController::path() . 'acount&wishAcount";
+                        window.location="' . $urlsVist . '";
                         </script>
                         ';
                         
@@ -158,7 +176,7 @@ class ControllerUser
         if (isset($_POST["resetPassword"])) {
             /* validar los campos */
             if (
-                preg_match('/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/', $_POST["resetPassword"])
+                isset($_POST["resetPassword"]) && preg_match('/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/', $_POST["resetPassword"])
             ) {
                 $url = CurlController::api() . "users?linkTo=email_user&equalTo=" . $_POST["resetPassword"] . "&select=email_user,id_user,displayname_user,method_user";
                 $method = "GET";
@@ -167,65 +185,68 @@ class ControllerUser
 
                 $user = CurlController::request($url, $method, $fields, $header);
                 if ($user->status == 200) {
-                    if ($user->result[0]->method_user == "direct") {
-                        function genPassword($Length)
-                        {
-                            $password = "";
-                            $chain = "123456789abcdefghijklmnopqrstuvwxyz";
-                            $max = strlen($chain) - 1;
+                    if($_POST["newPassword"] == $_POST["repeatPassword"] && strlen($_POST["newPassword"]) >= 8){
+                        if ($user->result[0]->method_user == "direct") {
+                            function genPassword($Length)
+                            {
+                                $password = "";
+                                $chain = "123456789abcdefghijklmnopqrstuvwxyz";
+                                $max = strlen($chain) - 1;
 
-                            for ($i = 0; $i < $Length; $i++) {
-                                $password .= substr($chain, mt_rand(0, $max), 1);
+                                for ($i = 0; $i < $Length; $i++) {
+                                    $password .= substr($chain, mt_rand(0, $max), 1);
+                                }
+                                return $password;
                             }
-                            return $password;
-                        }
 
-                        $newPassword = genPassword(11);
-                        $crypt = crypt($newPassword, '$2a$07$pdgtwzaldisoqrtrswqpxzasdte$');
+                            $newPassword = genPassword(11);
+                            $crypt = crypt($newPassword, '$2a$07$pdgtwzaldisoqrtrswqpxzasdte$');
 
-                        $url = CurlController::api() . "users?id=" . $user->result[0]->id_user . "&nameId=id_user&token=no&except=password_user";
-                        $method = "PUT";
-                        $fields = "password_user=" . $crypt;
-                        $header = array();
+                            $url = CurlController::api() . "users?id=" . $user->result[0]->id_user . "&nameId=id_user&token=no&except=password_user";
+                            $method = "PUT";
+                            $fields = "password_user=" . $crypt;
+                            $header = array();
 
-                        $respuesta = CurlController::request($url, $method, $fields, $header);
-                        if ($respuesta->status == 200) {
+                            $respuesta = CurlController::request($url, $method, $fields, $header);
+                            if ($respuesta->status == 200) {
 
-                            // Email donde esta la nueva contraseña
-                            $email = $_POST["resetPassword"];
-                            $name = $user->result[0]->displayname_user;
-                            $subject = "Nueva contraseña WeSharp";
-                            $message = "Confirma tu nueva contraseña para ingresar a WeSharp... Tu nueva contraseña es: " . $newPassword;
-                            $url = TemplateController::path() . "acount&login";
-                            $post = "Confirmar Nueva Contraseña";
-                            $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
+                                // Email donde esta la nueva contraseña
+                                $email = $_POST["resetPassword"];
+                                $name = $user->result[0]->displayname_user;
+                                $subject = "Nueva contraseña WeSharp";
+                                $message = "Confirma tu nueva contraseña para ingresar a WeSharp... Tu nueva contraseña es: " . $newPassword;
+                                $url = TemplateController::path() . "acount&login";
+                                $post = "Confirmar Nueva Contraseña";
+                                $sendEmail = TemplateController::sendEmail($name, $subject, $email, $message, $url, $post);
 
-                            if ($sendEmail == "ok") {
-                                echo '
-                                    <script>
-                                    formatearAlertas();
-                                    notiAlert(1, "Tu nueva contraseña se envio correctamente, confirma en tu cuenta email (aveces esta en spam)");
-                                </script>';
+                                if ($sendEmail == "ok") {
+                                    echo '
+                                        <script>
+                                        formatearAlertas();
+                                        notiAlert(1, "Tu nueva contraseña se envio correctamente, confirma en tu cuenta email (aveces esta en spam)");
+                                    </script>';
+                                    
+                                } else {
+                                    echo '
+                                        <script>
+                                        formatearAlertas();
+                                        notiAlert(3, "' . $sendEmail . '");
+                                    </script>';
+                                }
                             } else {
                                 echo '
-                                    <script>
-                                    formatearAlertas();
-                                    notiAlert(3, "' . $sendEmail . '");
-                                </script>';
+                                <script>
+                                formatearAlertas();
+                                notiAlert(3, "no se pudo resetear la contraseña");
+                            </script>';
                             }
                         } else {
                             echo '
-                            <script>
-                            formatearAlertas();
-                            notiAlert(3, "no se pudo resetear la contraseña");
-                        </script>';
+                                <script>
+                                formatearAlertas();
+                                notiAlert(3, "Te registraste por face o por gmail");
+                            </script>';
                         }
-                    } else {
-                        echo '
-                            <script>
-                            formatearAlertas();
-                            notiAlert(3, "Te registraste por face o por gmail");
-                        </script>';
                     }
                 } else {
                     echo '
@@ -511,7 +532,7 @@ class ControllerUser
                 echo '
                     <script>
                         formatearAlertas();
-                        switAlert("success", "Se envio tu disputa", null, null, 1500);
+                        switAlert("success", "Se envio tu reseña con exito", null, null, 1500);
                         window.location="' . TemplateController::path() . 'acount&my-shopping";
                     </script>'; 
             }else{

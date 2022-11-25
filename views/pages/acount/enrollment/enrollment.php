@@ -1,6 +1,14 @@
+<?php
+if (isset($_SESSION['user'])) {
+    echo '<script>
+            window.location="' . $path . 'acount&wishAcount";
+    </script>';
+    return;
+}
+?>
 <!--=====================================
-    Login - Register Content
-    ======================================-->
+Login - Register Content
+======================================-->
 
 <div class="ps-my-account">
 
@@ -60,7 +68,15 @@
 
                         <div class="form-group">
 
-                            <input class="form-control" type="password" name="createPassword" placeholder="Password..." required pattern="[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}" onchange="validatejs(event, 'pass')">
+                            <input class="form-control" id="createPassword" type="password" name="createPassword" placeholder="Password..." required pattern="[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}" onchange="validatejs(event, 'pass')">
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback">El password es requerido</div>
+
+                        </div>
+
+                        <div class="form-group ">
+
+                            <input class="form-control" type="password" id="passRep" name="repeatPassword" placeholder="Repeat Password..." required onchange="validatejs(event, 'repeatPass')">
                             <div class="valid-feedback"></div>
                             <div class="invalid-feedback">El password es requerido</div>
 

@@ -10,7 +10,7 @@ $store = CurlController::request($url,$method,$fields,$headers);
 if($store->status == 200){
     $idStores = $store->result[0]->id_store;
 
-    $url = CurlController::api()."orders?linkTo=id_store_order,status_order&equalTo=".$idStores.",pending&select=id_order";
+    $url = CurlController::api()."orders?linkTo=id_store_order,status_order&equalTo=".$idStores.",pending&select=id_order&token=".$_SESSION["user"]->token_user;
     $ordersid = CurlController::request($url,$method,$fields,$headers);
     if($ordersid->status == 200){
         $totalOrders = $ordersid->total;
@@ -26,7 +26,7 @@ if($store->status == 200){
         $totalProducts = 0;
     }
 
-    $url = CurlController::api()."disputes?linkTo=id_store_dispute&equalTo=".$idStores."&select=answer_dispute";
+    $url = CurlController::api()."disputes?linkTo=id_store_dispute&equalTo=".$idStores."&select=answer_dispute&token=".$_SESSION["user"]->token_user;
     $disputesid = CurlController::request($url,$method,$fields,$headers);
     $totalDisputes = 0;
     if($disputesid->status == 200){
@@ -37,7 +37,7 @@ if($store->status == 200){
         }
     }
 
-    $url = CurlController::api()."messages?linkTo=id_store_message&equalTo=".$idStores."&select=answer_message";
+    $url = CurlController::api()."messages?linkTo=id_store_message&equalTo=".$idStores."&select=answer_message&token=".$_SESSION["user"]->token_user;
     $messagesId = CurlController::request($url,$method,$fields,$headers);
     $totalMessages = 0;
     if($messagesId->status == 200){
@@ -146,10 +146,17 @@ if($store->status == 200){
             <div class="modal-body">
                 <form class="ps-form--account ps-tab-root needs-validation" novalidate method="post">
                     <div class="form-group form-forgot">
-
-                        <input class="form-control" type="password" name="newPassword" placeholder="Nuevo Password..." required pattern="[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}" onchange="validatejs(event, 'pass')">
+                        <input class="form-control" type="password" id="createPassword" name="newPassword" placeholder="Nuevo Password..." required pattern="[#\\=\\$\\;\\*\\_\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-Z]{1,}" onchange="validatejs(event, 'pass')">
                         <div class="valid-feedback"></div>
                         <div class="invalid-feedback">El nuevo password es requerido</div>
+                    </div>
+
+                    <div class="form-group ">
+
+                        <input class="form-control" type="password" id="passRep" name="repeatPassword" placeholder="Repeat Password..." required onchange="validatejs(event, 'repeatPass')">
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">El password es requerido</div>
+
                     </div>
 
                     <div class="form-group submtit">

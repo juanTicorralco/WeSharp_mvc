@@ -1,13 +1,14 @@
 <?php
 /* Bring the products of categories */
 /* aqui tambien se cambai la paginacion */
+$endAt = 24;
 if($productRelation != "no found" ){
-    $url4 = CurlController::api() . "relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category,approval_product,state_product&equalTo=" . $urlParams[0] . ",approved,show&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product,summary_product";
+    $url4 = CurlController::api() . "relations?rel=products,categories,stores&type=product,category,store&linkTo=url_category,approval_product,state_product&equalTo=" . $urlParams[0] . ",approved,show&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=".$endAt."&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product,summary_product";
     $totalResultProducts = CurlController::request($url4, $method, $field, $header)->result;
             
     if ($totalResultProducts == "no found") {
         /* Bring the products of categories */
-        $url4 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory,approval_product,state_product&equalTo=" . $urlParams[0] . ",approved,show&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=24&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product,summary_product";
+        $url4 = CurlController::api() . "relations?rel=products,categories,subcategories,stores&type=product,category,subcategory,store&linkTo=url_subcategory,approval_product,state_product&equalTo=" . $urlParams[0] . ",approved,show&orderBy=" . $orderBy . "&orderMode=" . $orderMode . "&startAt=" . $starAt . "&endAt=".$endAt."&select=url_product,url_category,image_product,name_product,stock_product,offer_product,price_product,url_store,name_store,reviews_product,summary_product";
         $totalResultProducts = CurlController::request($url4, $method, $field, $header)->result;
     }
 }
@@ -34,10 +35,10 @@ if($productRelation != "no found" ){
                     <div class="row">
 
                         <!--=====================================
-                            Product
-                                 ======================================-->
+                        Product
+                        ======================================-->
 
-                            <?php if(isset($totalResultProducts) && $totalResultProducts != null && $totalResultProducts != "no found"  ) :  ?>
+                        <?php if(isset($totalResultProducts) && $totalResultProducts != null && $totalResultProducts != "no found"  ) :  ?>
                             <div class="container-fluid preloadTrue">
                                 <div class="row">
                                     <div class="clo-xl-2 col-lg-3 clo-sm-4 col-6">
@@ -111,7 +112,6 @@ if($productRelation != "no found" ){
                                 </div>
                             </div>
 
-                        
                             <?php foreach ($totalResultProducts as $key => $value) : ?>
                                 <div class="col-lg-2 col-md-4 col-6  preloadFalse">
 
@@ -258,7 +258,7 @@ if($productRelation != "no found" ){
                         $CurrentPage = 1;
                     } ?>
 
-                    <ul class="pagination" data-total-page="<?php echo ceil($totalProductes / 24) ?>" data-current-page="<?php echo $CurrentPage; ?>" data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+                    <ul class="pagination" data-total-page="<?php echo ceil($totalProductes / $endAt) ?>" data-current-page="<?php echo $CurrentPage; ?>" data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">
                     </ul>
 
                 </div>
@@ -416,11 +416,10 @@ if($productRelation != "no found" ){
                                     $CurrentPage = 1;
                                 } ?>
 
-                                <ul class="pagination" data-total-page="<?php echo ceil($totalProductes / 24) ?>" data-current-page="<?php echo $CurrentPage; ?>" data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+                                <ul class="pagination" data-total-page="<?php echo ceil($totalProductes / $endAt) ?>" data-current-page="<?php echo $CurrentPage; ?>" data-url-page="<?php echo $_SERVER["REQUEST_URI"]; ?>">
                                 </ul>
 
                             </div>
+                        </div>
 
-                            </div>
-
-                            </div>
+                    </div>

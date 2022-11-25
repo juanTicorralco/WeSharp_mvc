@@ -407,9 +407,7 @@ if (count($promotionToday) > 10) {
                                     <!--=====================================
                                 Product
                                 ======================================-->
-                                    <?php foreach ($value as $key2 => $value2) :
-                                        //echo '<pre>'; print_r($value2); echo '</pre>';
-                                    ?>
+                                    <?php foreach ($value as $key2 => $value2) :?>
                                         <div class="ps-product--horizontal">
 
                                             <div class="ps-product__thumbnail">

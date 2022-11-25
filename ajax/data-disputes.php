@@ -13,7 +13,7 @@ class ControllerDataTableDispute{
             $length = $_POST["length"];
 
             $select = "id_dispute";
-            $url = CurlController::api()."disputes?linkTo=id_store_dispute&equalTo=".$_GET["idStore"]."&select=".$select;
+            $url = CurlController::api()."disputes?linkTo=id_store_dispute&equalTo=".$_GET["idStore"]."&select=".$select."&token=".$_GET["token"];
             $method ="GET";
             $fields = array();
             $headers = array();
@@ -27,7 +27,7 @@ class ControllerDataTableDispute{
                     $search = str_replace(" ", "_", $_POST["search"]["value"]);
 
                     foreach($linkTo as $key => $value){
-                        $url = CurlController::api()."relations?rel=disputes,users&type=dispute,user&linkTo=".$value.",id_store_dispute&search=".$search.",".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select;
+                        $url = CurlController::api()."relations?rel=disputes,users&type=dispute,user&linkTo=".$value.",id_store_dispute&search=".$search.",".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select."&token=".$_GET["token"];
                         $searchDispute = CurlController::request($url,$method,$fields,$headers)->result;
                         if($searchDispute == "no found"){
                             $totalDispute = array();
@@ -38,7 +38,7 @@ class ControllerDataTableDispute{
                         }
                     }
                 }else{
-                    $url = CurlController::api()."relations?rel=disputes,users&type=dispute,user&linkTo=id_store_dispute&equalTo=".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select;
+                    $url = CurlController::api()."relations?rel=disputes,users&type=dispute,user&linkTo=id_store_dispute&equalTo=".$_GET["idStore"]."&orderBy=".$orderBy."&orderMode=".$orderType."&startAt=".$start."&endAt=".$length."&select=".$select."&token=".$_GET["token"];
                     $totalDispute = CurlController::request($url, $method, $fields, $headers);
                     $recordsFiltered = $totalData;
                     if($totalDispute->status != 200){
