@@ -515,15 +515,15 @@ Breadcrumb
 
                                                                 </select>
 
-                                                                <span>
+                                                                <p>
                                                                     (<?php
                                                                         if ($value->reviews_product != null) {
                                                                             echo count(json_decode($value->reviews_product, true));
                                                                         } else {
                                                                             echo "0";
                                                                         }
-                                                                        ?>)
-                                                                </span>
+                                                                        ?> review)
+                                                                </p>
                                                             </div>
                                                             <?php if ($value->offer_product != null) : ?>
                                                                 <p class="ps-product__price sale">$<?php echo TemplateController::offerPrice($value->price_product, json_decode($value->offer_product, true)[1], json_decode($value->offer_product, true)[0]); ?> <del>$<?php echo $value->price_product; ?></del></p>

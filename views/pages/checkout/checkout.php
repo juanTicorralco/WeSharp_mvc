@@ -14,6 +14,33 @@ if (!isset($_SESSION['user'])) {
     }
 }
 
+if (isset($_COOKIE["listSC"]) && $shopinCard != NULL) {
+    $shopinCard = json_decode($_COOKIE["listSC"], true);
+    if(is_array($shopinCard)){
+        foreach ($shopinCard as $key => $value) {
+            if(!is_integer($value["quantity"]) || $value["quantity"] <= 0 || !is_string($value["product"]) || !is_string($value["details"])){
+                echo '<script>
+                document.cookie = "listSC=; max-age=0";
+                switAlert("error", "No puedes hacer esto por el momento...", "' . $path . '","");
+                </script>';
+                return;
+            }
+        }
+    }else{
+        echo '<script>
+        document.cookie = "listSC=; max-age=0";
+        switAlert("error", "No puedes hacer esto por el momento...", "' . $path . '","");
+        </script>';
+        return;
+    }
+} else {
+    echo '<script>
+    document.cookie = "listSC=; max-age=0";
+    switAlert("error", "No puedes hacer esto por el momento...", "' . $path . '","");
+    </script>';
+    return;
+}
+
 $totalPriceSC2= 0;
 ?>
 

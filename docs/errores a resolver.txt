@@ -1,3 +1,2 @@
 errores a revertir 
-.-checar la pagina para el celular
-.--crear el login y logout para celular
+.- las pasarelas de pago no fucnionan en produccion (mercado pago y payu)

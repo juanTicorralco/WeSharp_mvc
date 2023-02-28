@@ -21,10 +21,10 @@
                 </p>
 
                 <ul class="ps-list--social">
-                    <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
-                    <li><a class="google-plus" href="#"><i class="fab fa-youtube"></i></a></li>
-                    <li><a class="instagram" href="#"><i class="fab fa-instagram"></i></a></li>
+                    <li><a class="facebook" ><i class="fab fa-facebook-f"></i></a></li>
+                    <li><a class="twitter" ><i class="fab fa-twitter"></i></a></li>
+                    <li><a class="google-plus" ><i class="fab fa-youtube"></i></a></li>
+                    <li><a class="instagram" ><i class="fab fa-instagram"></i></a></li>
                 </ul>
 
             </div>
@@ -41,15 +41,15 @@
 
             <ul class="ps-list--link">
 
-                <li><a href="#">Policy</a></li>
+                <li><a >Policy</a></li>
 
-                <li><a href="#">Term &amp; Condition</a></li>
+                <li><a >Term &amp; Condition</a></li>
 
-                <li><a href="#">Shipping</a></li>
+                <li><a >Shipping</a></li>
 
-                <li><a href="#">Return</a></li>
+                <li><a >Return</a></li>
 
-                <li><a href="faqs.html">FAQs</a></li>
+                <li><a >FAQs</a></li>
 
             </ul>
 
@@ -65,13 +65,13 @@
 
             <ul class="ps-list--link">
 
-                <li><a href="about-us.html">About Us</a></li>
+                <li><a >About Us</a></li>
 
-                <li><a href="#">Affilate</a></li>
+                <li><a >Affilate</a></li>
 
-                <li><a href="#">Career</a></li>
+                <li><a >Career</a></li>
 
-                <li><a href="contact-us.html">Contact</a></li>
+                <li><a >Contact</a></li>
 
             </ul>
 
@@ -87,13 +87,13 @@
 
             <ul class="ps-list--link">
 
-                <li><a href="#">Our Press</a></li>
+                <li><a >Our Press</a></li>
 
-                <li><a href="checkout.html">Checkout</a></li>
+                <li><a >Checkout</a></li>
 
-                <li><a href="my-account.html">My account</a></li>
+                <li><a >My account</a></li>
 
-                <li><a href="shop-default.html">Shop</a></li>
+                <li><a >Shop</a></li>
 
             </ul>
 
@@ -141,23 +141,23 @@
         <p>
             <span>Usamos pagos seguros con:</span>
 
-            <a href="#">
+            <a >
                 <img src="img/payment-method/1.jpg" alt="">
             </a>
 
-            <a href="#">
+            <a >
                 <img src="img/payment-method/2.jpg" alt="">
             </a>
 
-            <a href="#">
+            <a >
                 <img src="img/payment-method/3.jpg" alt="">
             </a>
 
-            <a href="#">
+            <a >
                 <img src="img/payment-method/4.jpg" alt="">
             </a>
 
-            <a href="#">
+            <a >
                 <img src="img/payment-method/5.jpg" alt="">
             </a>
 

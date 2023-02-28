@@ -42,7 +42,11 @@ class ControllerDataTableMessage{
                     $totalMessage = CurlController::request($url, $method, $fields, $headers);
                     $recordsFiltered = $totalData;
                     if($totalMessage->status != 200){
-                        echo '{"data":[]}';
+                        echo '{
+                            "draw": 0,
+                            "recordsTotal": 0, 
+                            "recordsFiltered":0,
+                            "data":[]}';
                         return;
                     }
                     $totalMessage = $totalMessage->result;
@@ -89,7 +93,11 @@ class ControllerDataTableMessage{
                 $dataJson .= ']}';
                 echo $dataJson;
             }else{
-                echo '{"data":[]}';
+                echo '{"
+                    "draw": 0,
+                    "recordsTotal": 0, 
+                    "recordsFiltered":0,
+                    data":[]}';
                 return;
             }
         }

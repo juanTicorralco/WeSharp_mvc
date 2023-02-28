@@ -46,7 +46,11 @@ class ControllerDataTable{
                     $totalProducts = CurlController::request($url, $method, $fields, $headers);
                     $recordsFiltered = $totalData;
                     if($totalProducts->status != 200){
-                        echo '{"data":[]}';
+                        echo '{
+                            "draw": 0,
+                            "recordsTotal": 0, 
+                            "recordsFiltered":0,
+                            "data":[]}';
                         return;
                     }
                     $totalProducts = $totalProducts->result;
@@ -230,14 +234,14 @@ class ControllerDataTable{
                                         if ($reviews > 0) {
                                             for ($i = 0; $i < 5; $i++) {
                                                 if ($reviews < ($i + 1)) {
-                                                    $reviews_product .= "<a href='#' data-rating-value='1' data-rating-text='".($i +1)."'></a>";
+                                                    $reviews_product .= "<a data-rating-value='1' data-rating-text='".($i +1)."'></a>";
                                                 } else {
-                                                    $reviews_product .= "<a href='#' data-rating-value='2' data-rating-text='".($i +1)."' class='br-selected br-current'></a>";
+                                                    $reviews_product .= "<a data-rating-value='2' data-rating-text='".($i +1)."' class='br-selected br-current'></a>";
                                                 }
                                             }
                                         } else {
                                             for ($i = 0; $i < 5; $i++) {
-                                                $reviews_product .= "<a href='#' data-rating-value='1' data-rating-text='".($i +1)."'></a>";
+                                                $reviews_product .= "<a data-rating-value='1' data-rating-text='".($i +1)."'></a>";
                                             }
                                         }
                     $reviews_product .= "<div class='br-current-rating'>".$reviews."</div>
@@ -282,7 +286,11 @@ class ControllerDataTable{
                 $dataJson .= ']}';
                 echo $dataJson;
             }else{
-                echo '{"data":[]}';
+                echo '{"
+                    "draw": 0,
+                    "recordsTotal": 0, 
+                    "recordsFiltered":0,
+                    data":[]}';
                 return;
             }
             

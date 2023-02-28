@@ -44,6 +44,22 @@
         5. HELPERS
         6. CUSTOM
 */
+.swal2-container.swal2-top, .swal2-container.swal2-center, .swal2-container.swal2-bottom {
+	top: 115px;
+}
+.swal2-container.swal2-top-end>.swal2-popup, .swal2-container.swal2-top-right>.swal2-popup {
+	top: 210px;
+}
+
+.swal2-container.swal2-top-end>.swal2-popup, .swal2-container.swal2-top-right>.swal2-popup {
+    top: 60px;
+}
+
+.acomodado{
+    height: auto !important;
+    margin-bottom: 30px !important;
+}
+
 .modal{
     z-index: 9999;
 }
@@ -1983,8 +1999,8 @@ button.ps-btn.ps-btn--black.ps-btn--outline:hover {
 .ps-btn:active,
 button.ps-btn:hover,
 button.ps-btn:active {
-    background-color: #222;
-    color: #fff;
+    background-color: #222 !important;
+    color: #fff !important;
 }
 
 .ps-btn:hover.ps-btn--black,
@@ -4318,8 +4334,10 @@ textarea.form-control {
 
 .ps-block--testimonial .ps-block__header {
     position: relative;
-    top: -45px;
-    margin-bottom: -45px;
+    top: -50px;
+    max-width: 100px;
+    margin-left: 100px;
+    margin-bottom: -53px;
     z-index: 10;
 }
 
@@ -11652,8 +11670,8 @@ textarea.form-control {
 
 .ps-cart--mini .ps-cart__content {
     position: absolute;
-    min-width: 370px;
-    right: -30px;
+    min-width: 300px;
+    right: 0px;
     z-index: 30;
     padding-top: 10px;
     -webkit-transform: translate(0 20px);
@@ -16060,7 +16078,7 @@ textarea.form-control {
 }
 
 .header--mobile {
-    position: relative;
+    position: initial;
     top: 0;
     width: 100%;
     left: 0;

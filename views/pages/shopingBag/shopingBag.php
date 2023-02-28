@@ -1,20 +1,40 @@
 <?php
 if(isset($_COOKIE["listSC"])){
     $shoppingBag= json_decode($_COOKIE["listSC"], true);
-    $select= "url_product,url_category,name_product,image_product,price_product,offer_product,stock_product,name_store,shipping_product";
-    $productsSC= array();
-    $totalSC = count($shoppingBag);
+    if(is_array($shopinCard)){
+        $select= "url_product,url_category,name_product,image_product,price_product,offer_product,stock_product,name_store,shipping_product";
+        $productsSC= array();
+        $totalSC = count($shoppingBag);
 
-    foreach($shoppingBag as $key => $value){
-        $url= CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_product&equalTo=".$value["product"]."&select=".$select;
-        $method = "GET";
-        $fields=array();
-        $header= array();
+        foreach($shoppingBag as $key => $value){
+            if(!is_integer($value["quantity"]) || $value["quantity"] <= 0 || !is_string($value["product"]) || !is_string($value["details"])){
+                echo '<script>
+                    document.cookie = "listSC=; max-age=0";
+                    switAlert("error", "No puedes hacer esto por el momento...", "' . $path . '","");
+                    </script>';
+                    return;
+            }else{
+                $url= CurlController::api()."relations?rel=products,categories,stores&type=product,category,store&linkTo=url_product&equalTo=".$value["product"]."&select=".$select;
+                $method = "GET";
+                $fields=array();
+                $header= array();
 
-        array_push($productsSC, CurlController::request($url,$method,$fields,$header)->result[0]);
-    }
+                array_push($productsSC, CurlController::request($url,$method,$fields,$header)->result[0]);
+            }
+        }
+    }else {
+   		echo '<script>
+    	document.cookie = "listSC=; max-age=0";
+    	switAlert("error", "No puedes hacer esto por el momento...", "' . $path . '","");
+    	</script>';
+   		return;
+	}
 }else{
-    $productsSC=0;
+     echo '<script>
+    document.cookie = "listSC=; max-age=0";
+    switAlert("error", "No puedes hacer esto por el momento...", "' . $path . '","");
+    </script>';
+    return;
 }
 
 ?>
@@ -191,7 +211,7 @@ Shopping Car
 
             <div class="ps-section__cart-actions">
 
-                <a class="ps-btn" href="categories.html.html">
+                <a class="ps-btn" onclick="PageAtras()">
                     <i class="icon-arrow-left"></i> Back to Shop
                 </a>
 

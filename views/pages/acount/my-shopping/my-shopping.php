@@ -60,7 +60,9 @@ My Account Content
                     <li ><a href="<?php echo $path; ?>acount&wishAcount">My Wishlist</a></li>
                     <li class="active"><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
                     <li><a href="<?php echo $path; ?>acount&my-store">My Store</a></li>
-                    <li><a href="<?php echo $path; ?>acount&my-sales">My Sales</a></li>
+                    <?php  if($idStores != ""): ?>
+                        <li><a href="<?php echo $path; ?>acount&my-sales">My Sales</a></li>
+                    <?php  endif; ?>
                 </ul>
 
                 <!--=====================================
@@ -92,7 +94,7 @@ My Account Content
                         <tbody>
 
                             <!-- Product -->
-                            <?php if(isset($shoppingOrder) && $shoppingOrder != null && $shoppingOrder != "no found"): ?>
+                            <?php if(isset($shoppingOrder) && $shoppingOrder != null && $shoppingOrder != "no found" && is_array($shoppingOrder)): ?>
                                 <?php foreach($shoppingOrder as $key => $value): ?>
 
                                     <tr>
@@ -220,7 +222,6 @@ My Account Content
                                                         $rating = 0;    
                                                     }
                                                 ?>
-
     
                                                 <div class="br-theme-fontawesome-stars">
 

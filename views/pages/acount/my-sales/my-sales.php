@@ -46,7 +46,14 @@ if (!isset($_SESSION['user'])) {
             if(!is_array($sales)){
                 $sales = array();
             }
-        }
+        }else{
+            echo '<script>
+                 formatearAlertas();
+                 switAlert("error", "No tienes una tienda", null,null);
+                 window.location="' . $path . 'acount&my-store";
+                 </script>';
+             return;
+       }
     }
 }
 ?>

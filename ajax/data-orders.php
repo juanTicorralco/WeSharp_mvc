@@ -51,7 +51,11 @@ class ControllerDataTableOrders{
                 }
 
                 if(count($totalOrder) == 0){
-                    echo '{"data":[]}';
+                    echo '{
+                        "draw": 0,
+                        "recordsTotal": 0, 
+                        "recordsFiltered":0,
+                        "data":[]}';
                     return;
                 }
 
@@ -134,7 +138,11 @@ class ControllerDataTableOrders{
                 $dataJson .= ']}';
                 echo $dataJson;
             }else{
-                echo '{"data":[]}';
+                echo '{
+                    "draw": 0,
+                    "recordsTotal": 0, 
+                    "recordsFiltered":0,
+                    "data":[]}';
                 return;
             }
         }

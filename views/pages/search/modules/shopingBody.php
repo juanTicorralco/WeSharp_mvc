@@ -203,15 +203,15 @@ if ($totalResultProducts == "no found") {
 
                                                 </select>
 
-                                                <span>
+                                                <p>
                                                     (<?php
                                                         if ($value->reviews_product != null) {
                                                             echo count(json_decode($value->reviews_product, true));
                                                         } else {
                                                             echo "0";
                                                         }
-                                                        ?>)
-                                                </span>
+                                                        ?> review)
+                                                </p>
                                             </div>
 
                                             <?php if ($value->offer_product != null) : ?>

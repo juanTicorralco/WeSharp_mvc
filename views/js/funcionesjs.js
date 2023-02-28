@@ -1,18 +1,23 @@
-let urlMaster = window.location.href;
+let urlMaster = window.location.pathname;
+
+if(localStorage.getItem("token_user") && localStorage.getItem("token_user") == ""){
+	switAlert("error", "Ocurrio un error... por favor vuelve a logearte", null, null, 3000);
+}
+
 if(localStorage.getItem("token_user")){
   let myCookie = document.cookie;
-     let listCookie = myCookie.split(";");
-     let count = 0;
+  let listCookie = myCookie.split(";");
 
-     for (let i in listCookie) {
-       var list = listCookie[i].search("UrlPage");
-       // si list es mayor a -1 es por qu se ncontro la cooki
-       if (list > -1) {
-        document.cookie = "UrlPage" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-       } 
-     }
+  for (let i in listCookie) {
+    var list = listCookie[i].search("UrlPage");
+    // si list es mayor a -1 es por qu se ncontro la cooki
+    if (list > -1) {
+    document.cookie = "UrlPage" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    } 
+  }
 }
-if(urlMaster != "http://wesharp.com/acount&login" && urlMaster != "http://wesharp.com/acount&enrollment" && !localStorage.getItem("token_user")){
+
+if(urlMaster != "/acount&login" && urlMaster != "/acount&enrollment" && !localStorage.getItem("token_user")){
   setCookie("UrlPage", urlMaster, 1);
 }
 /* funcion para resetear url de los filtros */
@@ -90,6 +95,7 @@ for (let i = 0; i < inputSearch.length; i++) {
 /* funcion para cambiar la cantidad del carrito */
 function changeQualyty(quantity, move, stock, index) {
   let number = 1;
+  
   if (Number(quantity) > stock - 1) {
     quantity = stock - 1;
   }
@@ -2208,3 +2214,7 @@ $(document).on("click", ".CommentStars", function(){
   $("[name='idUser']").val($(this).attr("idUser"));
   $("#newComment").modal();
 });
+
+function PageAtras(){
+  window.history.back();
+}

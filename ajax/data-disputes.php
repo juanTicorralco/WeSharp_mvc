@@ -49,7 +49,11 @@ class ControllerDataTableDispute{
                 }
 
                 if(count($totalDispute) == 0){
-                    echo '{"data":[]}';
+                    echo '{
+                        "draw": 0,
+                        "recordsTotal": 0, 
+                        "recordsFiltered":0,
+                        "data":[]}';
                     return;
                 }
 
@@ -89,7 +93,11 @@ class ControllerDataTableDispute{
                 $dataJson .= ']}';
                 echo $dataJson;
             }else{
-                echo '{"data":[]}';
+                echo '{
+                    "draw": 0,
+                    "recordsTotal": 0, 
+                    "recordsFiltered":0,
+                    "data":[]}';
                 return;
             }
         }

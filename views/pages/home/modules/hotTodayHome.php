@@ -87,7 +87,7 @@ if (count($promotionToday) > 10) {
 
                 </div>
 
-                <div class="ps-block--deal-hot preloadFalse" data-mh="dealhot">
+                <div class="ps-block--deal-hot preloadFalse acomodado" data-mh="dealhot">
 
                     <div class="ps-block__header">
 
